@@ -54,12 +54,13 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     float fingernX2;
     float fingernY2;
 
-
-
     float alignLeft = 0.0f;
     float alignTop = 0.0f;
     float loupeX = 1.0f;
     float loupeY = 1.0f;
+    float oldLoupeX = 1.0f;
+    float oldLoupeY = 1.0f;
+
     public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
         super(context);
         getHolder().addCallback(this);
@@ -111,10 +112,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             y2 = y;
         }
         Log.d("trol", "tg1");
-        Rect resultRect = new Rect((int)(x1 - alignLeft),
-                (int)(y1 - alignTop),
-                (int)(x2 - alignLeft),
-                (int)(y2 - alignTop));
+        Rect resultRect = new Rect(
+                (int)((x1 - alignLeft) / loupeX),
+                (int)((y1 - alignTop) / loupeY),
+                (int)((x2 - alignLeft) / loupeX),
+                (int)((y2 - alignTop) / loupeY));
         Log.d("trol", "tg2");
         return resultRect;
 
@@ -234,10 +236,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     Log.d("101525", "fingernX1: " + String.valueOf( fingernX1));
                     Log.d("101525", "fingernX2: " + String.valueOf( fingernX2));
 
-                    loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1));
+                    loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
                     loupeY = loupeX;
                     Log.d("101525", "lopueX: " + String.valueOf(loupeX));
 
+                    break;
+                }
+                case MotionEvent.ACTION_POINTER_UP: {
+                    oldLoupeX = loupeX;
+                    oldLoupeY = loupeY;
                     break;
                 }
             }
