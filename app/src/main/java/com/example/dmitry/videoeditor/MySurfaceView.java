@@ -34,15 +34,17 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
     Bitmap bitmap;
+    ImageHolder imageHolder;
 
     double x1;
     double y1;
     double x2;
     double y2;
 
-    public MySurfaceView(Context context, Uri inputUri) {
+    public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
         super(context);
         getHolder().addCallback(this);
+        this.imageHolder = imageHolder;
         this.cR = context.getContentResolver();
         this.context = context;
         this.inputUri = inputUri;
@@ -89,10 +91,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    public Bitmap getImageBitmap() {
-        return bitmap;
-
-    }
     public void mediaPlayerStart() {
         if(mediaPlayer != null) {
             mediaPlayer.start();
@@ -108,12 +106,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     public boolean mediaPlayerIsPlaying() {
             return (mediaPlayer != null) && mediaPlayer.isPlaying();
-
-    }
-
-    public void updateImage(Bitmap freshImage) {
-        bitmap = freshImage;
-        draw(surfaceHolder);
 
     }
 
@@ -136,7 +128,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 });
 
             } else {
-                bitmap = MediaStore.Images.Media.getBitmap(cR, inputUri);
+                bitmap = imageHolder.getDefaultBitmap();
             }
             draw(surfaceHolder);
         }
@@ -187,6 +179,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
+    public void draw() {
+        draw(surfaceHolder);
+
+    }
     private void draw(SurfaceHolder surfaceHolder) {
 
         if (cR.getType(inputUri).equals("video/mp4")) {
@@ -199,7 +195,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             canvas.drawColor(Color.BLACK);
 
             Matrix matrix = new Matrix();
-            canvas.drawBitmap(bitmap, matrix, paint);
+            canvas.drawBitmap(imageHolder.getFreshBitmap(), matrix, paint);
 
             paint.setARGB(128, 255, 0, 0);
             paint.setStyle(Paint.Style.FILL);

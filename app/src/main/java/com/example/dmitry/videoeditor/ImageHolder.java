@@ -22,6 +22,7 @@ public class ImageHolder {
             defaultBitmap = MediaStore.Images.Media.getBitmap(
                     activity.getContentResolver(), defaultImagePath
             );
+            freshBitmap = defaultBitmap;
         }
         catch (IOException e) {
             Log.d("er", "101128");

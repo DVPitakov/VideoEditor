@@ -84,16 +84,19 @@ public class EditorActivity extends Activity {
             public void onClick(View view) {
                 Rect rect = mySurfaceView.getKropRect();
 
-                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getDefaultBitmap(), rect.left, rect.top, rect.right, rect.bottom);
-                mySurfaceView.updateImage(freshBitmap);
+                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getDefaultBitmap(),
+                        rect.left, rect.top, rect.right, rect.bottom);
+                imageHolder.setFreshBitmap(freshBitmap);
+                mySurfaceView.draw();
             }
         });
         filterButton = (Button)findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Bitmap freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
-                    mySurfaceView.updateImage(freshBitmap);
+                Bitmap freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                imageHolder.setFreshBitmap(freshBitmap);
+                mySurfaceView.draw();
             }
         });
 
@@ -106,8 +109,11 @@ public class EditorActivity extends Activity {
                     paint.setStrokeWidth(5.0f);
                     paint.setStyle(Paint.Style.STROKE);
                     paint.setTextSize(60);
-                    Bitmap freshBitmap = ImageEditor.addText(imageHolder.getDefaultBitmap(), "Hello world", 20.0f, 50.0f, paint);
-                    mySurfaceView.updateImage(freshBitmap);
+                    Bitmap freshBitmap = ImageEditor.addText(imageHolder.getDefaultBitmap(),
+                            "Hello world", 20.0f, 50.0f, paint);
+                    imageHolder.setFreshBitmap(freshBitmap);
+                    mySurfaceView.draw();
+
 
             }
         });
@@ -116,7 +122,7 @@ public class EditorActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bitmap bitmap = mySurfaceView.getImageBitmap();
+                Bitmap bitmap = imageHolder.getFreshBitmap();
                 String str = outputUri.getPath();
                 Log.d("ddd", str);
                 String filename = "myfile.jpg";
@@ -147,7 +153,7 @@ public class EditorActivity extends Activity {
         });
         lineraLayout = (LinearLayout)findViewById(R.id.editorLinearLayout);
 
-        mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri);
+        mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri, imageHolder);
         lineraLayout.addView(mySurfaceView);
 
 
