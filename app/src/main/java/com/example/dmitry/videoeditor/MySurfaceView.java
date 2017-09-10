@@ -41,6 +41,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     double x2;
     double y2;
 
+    double fingerX1;
+    double fingerY1;
+    double fingerX2;
+    double fingerY2;
+
     float alignLeft = 0.0f;
     float alignTop = 0.0f;
     float loupe = 1.0f;
@@ -164,30 +169,49 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                x1 = motionEvent.getX();
-                y1 = motionEvent.getY();
-                x2 = x1;
-                y2 = y1;
-                Log.d("db", "ACTION_DOWN");
-                break;
-            }
-            case MotionEvent.ACTION_MOVE: {
-                x2 = motionEvent.getX();
-                y2 = motionEvent.getY();
-                Log.d("db", "ACTION_MOVE");
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                x2 = motionEvent.getX();
-                y2 = motionEvent.getY();
-                Log.d("db", "ACTION_UP");
-                break;
+        int mark = motionEvent.getActionMasked();
+        int count = motionEvent.getPointerCount();
+        int index = motionEvent.getActionIndex();
+
+        if (count == 1) {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    x1 = motionEvent.getX();
+                    y1 = motionEvent.getY();
+                    x2 = x1;
+                    y2 = y1;
+                    Log.d("db", "ACTION_DOWN");
+                    break;
+                }
+                case MotionEvent.ACTION_MOVE: {
+                    x2 = motionEvent.getX();
+                    y2 = motionEvent.getY();
+                    Log.d("db", "ACTION_MOVE");
+                    break;
+                }
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL: {
+                    x2 = motionEvent.getX();
+                    y2 = motionEvent.getY();
+                    Log.d("db", "ACTION_UP");
+                    break;
+                }
             }
         }
+        else if (count == 2) {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_MOVE: {
+                    if(index == 0) {
 
+                    }
+                    else if(index == 1) {
+
+                    }
+                    Log.d("db", "ACTION_MOVE");
+                    break;
+                }
+            }
+        }
         draw(surfaceHolder);
         return true;
 
@@ -214,10 +238,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             int tw = this.getWidth();
             int th = this.getHeight();
 
-            alignLeft = (float)(tw - iw) / 2;
-            alignTop = (float)(th - ih) / 2;
-            canvas.drawBitmap(bitmap, alignLeft, alignTop, paint);
+            alignLeft = (float)(tw - iw * loupe) / 2;
+            alignTop = (float)(th - ih * loupe) / 2;
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int)(iw * loupe), (int)(ih * loupe), true);
 
+            canvas.drawBitmap(bitmap, alignLeft, alignTop, paint);
             paint.setARGB(128, 255, 0, 0);
             paint.setStyle(Paint.Style.FILL);
             paint.setAntiAlias(true);

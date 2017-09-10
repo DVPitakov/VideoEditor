@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         inputPathView = (TextView)findViewById(R.id.inputPathView);
         outputPathView = (TextView)findViewById(R.id.outputPathView);
 
-        outputPathButton.setEnabled(false);
-        editButton.setEnabled(false);
+        outputPathButton.setEnabled(true);
+        editButton.setEnabled(true);
 
         inputPathButton.setOnClickListener(new View.OnClickListener(){
             @Override
