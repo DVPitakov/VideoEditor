@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.dmitry.videoeditor.MainActivity">
+
+    <LinearLayout
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+        <TextView
+            android:id="@+id/inputPathView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="you must to select input path"/>
+        <Button
+            android:id="@+id/inputPathButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="select input path"/>
+        <TextView
+            android:id="@+id/outputPathView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="you must to select output path"/>
+        <Button
+            android:id="@+id/outputPathButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="select output path"/>
+        <Button
+            android:id="@+id/editButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="edit"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
