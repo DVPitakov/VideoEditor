@@ -41,6 +41,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     double x2;
     double y2;
 
+    float alignLeft = 0.0f;
+    float alignTop = 0.0f;
+    float loupe = 1.0f;
+
     public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
         super(context);
         getHolder().addCallback(this);
@@ -53,6 +57,13 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
+    public void kropClear() {
+        x1 = 0;
+        y1 = 0;
+        x2 = 0;
+        y2 = 0;
+
+    }
     public int getMediaPlayerCurrentPosition() {
         if(mediaPlayer != null) {
             return mediaPlayer.getCurrentPosition();
@@ -85,7 +96,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             y2 = y;
         }
         Log.d("trol", "tg1");
-        Rect resultRect = new Rect((int)x1, (int)y1, (int)x2, (int)y2);
+        Rect resultRect = new Rect((int)(x1 - alignLeft),
+                (int)(y1 - alignTop),
+                (int)(x2 - alignLeft),
+                (int)(y2 - alignTop));
         Log.d("trol", "tg2");
         return resultRect;
 
@@ -194,8 +208,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
             canvas.drawColor(Color.BLACK);
 
-            Matrix matrix = new Matrix();
-            canvas.drawBitmap(imageHolder.getFreshBitmap(), matrix, paint);
+            Bitmap bitmap = imageHolder.getFreshBitmap();
+            int iw = bitmap.getWidth();
+            int ih = bitmap.getHeight();
+            int tw = this.getWidth();
+            int th = this.getHeight();
+
+            alignLeft = (float)(tw - iw) / 2;
+            alignTop = (float)(th - ih) / 2;
+            canvas.drawBitmap(bitmap, alignLeft, alignTop, paint);
 
             paint.setARGB(128, 255, 0, 0);
             paint.setStyle(Paint.Style.FILL);

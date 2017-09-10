@@ -87,6 +87,7 @@ public class EditorActivity extends Activity {
                 Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
                         rect.left, rect.top, rect.right, rect.bottom);
                 imageHolder.setFreshBitmap(freshBitmap);
+                mySurfaceView.kropClear();
                 mySurfaceView.draw();
             }
         });

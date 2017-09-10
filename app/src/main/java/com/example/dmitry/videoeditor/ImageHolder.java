@@ -17,6 +17,9 @@ public class ImageHolder {
     private Bitmap defaultBitmap;
     private Bitmap freshBitmap;
 
+    private float loupe = 1;
+
+
     public ImageHolder(Uri defaultImagePath, Activity activity) {
         try {
             defaultBitmap = MediaStore.Images.Media.getBitmap(
