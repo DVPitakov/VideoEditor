@@ -84,7 +84,7 @@ public class EditorActivity extends Activity {
             public void onClick(View view) {
                 Rect rect = mySurfaceView.getKropRect();
 
-                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getDefaultBitmap(),
+                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
                         rect.left, rect.top, rect.right, rect.bottom);
                 imageHolder.setFreshBitmap(freshBitmap);
                 mySurfaceView.draw();
@@ -94,7 +94,7 @@ public class EditorActivity extends Activity {
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bitmap freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                Bitmap freshBitmap = ImageEditor.inversion(imageHolder.getFreshBitmap());
                 imageHolder.setFreshBitmap(freshBitmap);
                 mySurfaceView.draw();
             }
@@ -109,7 +109,7 @@ public class EditorActivity extends Activity {
                     paint.setStrokeWidth(5.0f);
                     paint.setStyle(Paint.Style.STROKE);
                     paint.setTextSize(60);
-                    Bitmap freshBitmap = ImageEditor.addText(imageHolder.getDefaultBitmap(),
+                    Bitmap freshBitmap = ImageEditor.addText(imageHolder.getFreshBitmap(),
                             "Hello world", 20.0f, 50.0f, paint);
                     imageHolder.setFreshBitmap(freshBitmap);
                     mySurfaceView.draw();
