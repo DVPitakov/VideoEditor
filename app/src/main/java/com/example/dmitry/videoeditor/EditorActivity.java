@@ -51,6 +51,7 @@ public class EditorActivity extends Activity {
     Button pauseButton;
     Button saveButton;
 
+
     LinearLayout lineraLayout;
 
     Uri inputUri;
@@ -100,6 +101,21 @@ public class EditorActivity extends Activity {
             }
         });
         filterButton = (Button)findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            EditorActivity.this.getContentResolver(), inputUri
+                    );
+                    Log.d("step", bitmap.toString());
+                    Bitmap freshBitmap = ImageEditor.inversion(bitmap);
+                    mySurfaceView.updateImage(freshBitmap);
+                } catch (IOException e) {
+                    Log.d("er", "101113");
+                }
+            }
+        });
 
         addTextButton = (Button)findViewById(R.id.addTextButton);
         addTextButton.setOnClickListener(new View.OnClickListener() {

@@ -3,6 +3,9 @@ package com.example.dmitry.videoeditor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.util.Log;
 
@@ -50,7 +53,29 @@ public class ImageEditor {
     }
 
     public static Bitmap inversion(Bitmap bitmap) {
-        return null;
+        ColorMatrix colorMatrix_Inverted =
+                new ColorMatrix(new float[] {
+                        -1,  0,  0,  0, 255,
+                        0, -1,  0,  0, 255,
+                        0,  0, -1,  0, 255,
+                        0,  0,  0,  1,   0});
+
+        ColorFilter ColorFilter_Sepia = new ColorMatrixColorFilter(
+                colorMatrix_Inverted);
+
+
+        android.graphics.Bitmap.Config config = bitmap.getConfig();
+        if(config == null) {
+            config  = android.graphics.Bitmap.Config.ARGB_8888;
+
+        }
+        Bitmap freshBitmap = bitmap.copy(config, true);
+
+        Canvas canvas = new Canvas(freshBitmap);
+        Paint paint = new Paint();
+        paint.setColorFilter(ColorFilter_Sepia);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return freshBitmap;
 
     }
 }
