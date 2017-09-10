@@ -51,7 +51,7 @@ public class EditorActivity extends Activity {
     Button pauseButton;
     Button saveButton;
 
-
+    ImageHolder imageHolder;
     LinearLayout lineraLayout;
 
     Uri inputUri;
@@ -76,44 +76,24 @@ public class EditorActivity extends Activity {
         outputUri = intent.getParcelableExtra(OUTPUT_URI);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
 
+        imageHolder = new ImageHolder(inputUri, this);
+
         kropButton = (Button)findViewById(R.id.kropButton);
         kropButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
-                            EditorActivity.this.getContentResolver(), inputUri
-                    );
-                    Log.d("step", bitmap.toString());
-                    Log.d("trol", "tg3");
-                    Rect rect = mySurfaceView.getKropRect();
-                    Log.d("trol", "tg4");
-                    Log.d("trol", String.valueOf(rect.left));
-                    Log.d("trol", String.valueOf(rect.top));
-                    Log.d("trol", String.valueOf(rect.right));
-                    Log.d("trol", String.valueOf(rect.bottom));
+                Rect rect = mySurfaceView.getKropRect();
 
-                    Bitmap freshBitmap = ImageEditor.krop(bitmap, rect.left, rect.top, rect.right, rect.bottom);
-                    mySurfaceView.updateImage(freshBitmap);
-                } catch (IOException e) {
-                    Log.d("er", "101038");
-                }
+                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getDefaultBitmap(), rect.left, rect.top, rect.right, rect.bottom);
+                mySurfaceView.updateImage(freshBitmap);
             }
         });
         filterButton = (Button)findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
-                            EditorActivity.this.getContentResolver(), inputUri
-                    );
-                    Log.d("step", bitmap.toString());
-                    Bitmap freshBitmap = ImageEditor.inversion(bitmap);
+                    Bitmap freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
                     mySurfaceView.updateImage(freshBitmap);
-                } catch (IOException e) {
-                    Log.d("er", "101113");
-                }
             }
         });
 
@@ -121,21 +101,13 @@ public class EditorActivity extends Activity {
         addTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
-                            EditorActivity.this.getContentResolver(), inputUri
-                    );
-                    Log.d("step", bitmap.toString());
                     Paint paint = new Paint();
                     paint.setColor(Color.BLUE);
                     paint.setStrokeWidth(5.0f);
                     paint.setStyle(Paint.Style.STROKE);
                     paint.setTextSize(60);
-                    Bitmap freshBitmap = ImageEditor.addText(bitmap, "Hello world", 20.0f, 50.0f, paint);
+                    Bitmap freshBitmap = ImageEditor.addText(imageHolder.getDefaultBitmap(), "Hello world", 20.0f, 50.0f, paint);
                     mySurfaceView.updateImage(freshBitmap);
-                } catch (IOException e) {
-                    Log.d("er", "092051");
-                }
 
             }
         });
