@@ -21,6 +21,8 @@ import android.view.View;
 
 import java.io.IOException;
 
+import static java.lang.Math.sqrt;
+
 /**
  * Created by dmitry on 08.09.17.
  */
@@ -41,15 +43,22 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     double x2;
     double y2;
 
-    double fingerX1;
-    double fingerY1;
-    double fingerX2;
-    double fingerY2;
+    float fingerX1;
+    float fingerY1;
+    float fingerX2;
+    float fingerY2;
+
+    float fingernX1;
+    float fingernY1;
+    float fingernX2;
+    float fingernY2;
+
+
 
     float alignLeft = 0.0f;
     float alignTop = 0.0f;
-    float loupe = 1.0f;
-
+    float loupeX = 1.0f;
+    float loupeY = 1.0f;
     public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
         super(context);
         getHolder().addCallback(this);
@@ -200,13 +209,32 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         }
         else if (count == 2) {
             switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    fingerX1 = motionEvent.getX();
+                    fingerY1 = motionEvent.getY();
+                    break;
+                }
+                case MotionEvent.ACTION_POINTER_DOWN: {
+                    if(index == 1) {
+                        fingerX2 = motionEvent.getX();
+                        fingerY2 = motionEvent.getY();
+                    }
+                    break;
+                }
                 case MotionEvent.ACTION_MOVE: {
                     if(index == 0) {
 
+                        fingernX1 = motionEvent.getX();
+                        fingernY1 = motionEvent.getY();
                     }
                     else if(index == 1) {
-
+                        fingernX2 = motionEvent.getX();
+                        fingernY2 = motionEvent.getY();
                     }
+
+                    loupeX = (fingernX1 - fingernX2) / (fingerX1 - fingerX2);
+                    loupeY = (fingernX1 - fingernX2) / (fingerY1 - fingerY2);
+
                     Log.d("db", "ACTION_MOVE");
                     break;
                 }
@@ -238,9 +266,9 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             int tw = this.getWidth();
             int th = this.getHeight();
 
-            alignLeft = (float)(tw - iw * loupe) / 2;
-            alignTop = (float)(th - ih * loupe) / 2;
-            bitmap = Bitmap.createScaledBitmap(bitmap, (int)(iw * loupe), (int)(ih * loupe), true);
+            alignLeft = (float)(tw - iw * loupeX) / 2;
+            alignTop = (float)(th - ih * loupeY) / 2;
+            bitmap = Bitmap.createScaledBitmap(bitmap, (int)(iw * loupeX), (int)(ih * loupeY), true);
 
             canvas.drawBitmap(bitmap, alignLeft, alignTop, paint);
             paint.setARGB(128, 255, 0, 0);
