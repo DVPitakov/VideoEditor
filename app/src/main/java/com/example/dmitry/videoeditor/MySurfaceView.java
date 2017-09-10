@@ -22,6 +22,7 @@ import android.view.View;
 import java.io.IOException;
 
 import static java.lang.Math.sqrt;
+import static java.util.Collections.swap;
 
 /**
  * Created by dmitry on 08.09.17.
@@ -182,20 +183,32 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         int count = motionEvent.getPointerCount();
         int index = motionEvent.getActionIndex();
 
-        if (count == 1) {
-            switch (motionEvent.getAction()) {
+
+            switch (motionEvent.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN: {
                     x1 = motionEvent.getX();
                     y1 = motionEvent.getY();
                     x2 = x1;
                     y2 = y1;
-                    Log.d("db", "ACTION_DOWN");
+                    fingerX1 = motionEvent.getX();
+                    fingerY1 = motionEvent.getY();
+                    if(count > 1) {
+                        fingerX2 = motionEvent.getX(1);
+                        fingerY2 = motionEvent.getY(1);
+                    }
+                    Log.d("101525: ", "ACTION_DOWN");
                     break;
                 }
                 case MotionEvent.ACTION_MOVE: {
                     x2 = motionEvent.getX();
                     y2 = motionEvent.getY();
-                    Log.d("db", "ACTION_MOVE");
+                    Log.d("101525", "ACTION_MOVE");
+                    break;
+                }
+                case MotionEvent.ACTION_POINTER_DOWN: {
+                    fingerX2 = motionEvent.getX(1);
+                    fingerY2 = motionEvent.getY(1);
+                    Log.d("101525", "ACTION_POINTER_DOWN");
                     break;
                 }
                 case MotionEvent.ACTION_UP:
@@ -206,36 +219,25 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     break;
                 }
             }
-        }
-        else if (count == 2) {
-            switch (motionEvent.getAction()) {
-                case MotionEvent.ACTION_DOWN: {
-                    fingerX1 = motionEvent.getX();
-                    fingerY1 = motionEvent.getY();
-                    break;
-                }
-                case MotionEvent.ACTION_POINTER_DOWN: {
-                    if(index == 1) {
-                        fingerX2 = motionEvent.getX();
-                        fingerY2 = motionEvent.getY();
-                    }
-                    break;
-                }
+        if (count == 2) {
+            switch (motionEvent.getActionMasked()) {
                 case MotionEvent.ACTION_MOVE: {
-                    if(index == 0) {
 
-                        fingernX1 = motionEvent.getX();
-                        fingernY1 = motionEvent.getY();
-                    }
-                    else if(index == 1) {
-                        fingernX2 = motionEvent.getX();
-                        fingernY2 = motionEvent.getY();
-                    }
+                    fingernX1 = motionEvent.getX(0);
+                    fingernY1 = motionEvent.getY(0);
+                    fingernX2 = motionEvent.getX(1);
+                    fingernY2 = motionEvent.getY(1);
 
-                    loupeX = (fingernX1 - fingernX2) / (fingerX1 - fingerX2);
-                    loupeY = (fingernX1 - fingernX2) / (fingerY1 - fingerY2);
 
-                    Log.d("db", "ACTION_MOVE");
+                    Log.d("101525", "fingerX1: " + String.valueOf( fingerX1));
+                    Log.d("101525", "fingerX2: " + String.valueOf( fingerX2));
+                    Log.d("101525", "fingernX1: " + String.valueOf( fingernX1));
+                    Log.d("101525", "fingernX2: " + String.valueOf( fingernX2));
+
+                    loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1));
+                    loupeY = loupeX;
+                    Log.d("101525", "lopueX: " + String.valueOf(loupeX));
+
                     break;
                 }
             }
