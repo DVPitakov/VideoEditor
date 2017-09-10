@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
@@ -75,6 +76,29 @@ public class EditorActivity extends Activity {
         seekBar = (SeekBar)findViewById(R.id.seekBar);
 
         kropButton = (Button)findViewById(R.id.kropButton);
+        kropButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                            EditorActivity.this.getContentResolver(), inputUri
+                    );
+                    Log.d("step", bitmap.toString());
+                    Log.d("trol", "tg3");
+                    Rect rect = mySurfaceView.getKropRect();
+                    Log.d("trol", "tg4");
+                    Log.d("trol", String.valueOf(rect.left));
+                    Log.d("trol", String.valueOf(rect.top));
+                    Log.d("trol", String.valueOf(rect.right));
+                    Log.d("trol", String.valueOf(rect.bottom));
+
+                    Bitmap freshBitmap = ImageEditor.krop(bitmap, rect.left, rect.top, rect.right, rect.bottom);
+                    mySurfaceView.updateImage(freshBitmap);
+                } catch (IOException e) {
+                    Log.d("er", "101038");
+                }
+            }
+        });
         filterButton = (Button)findViewById(R.id.filterButton);
 
         addTextButton = (Button)findViewById(R.id.addTextButton);

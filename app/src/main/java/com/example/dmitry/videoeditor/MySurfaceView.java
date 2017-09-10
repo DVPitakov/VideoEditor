@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import java.io.IOException;
  */
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
+
     DrawingThread drawingThread;
     MediaPlayer mediaPlayer;
     Context context;
@@ -66,6 +68,24 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         else {
             return -1;
         }
+
+    }
+
+    public Rect getKropRect() {
+        if(x1 > x2) {
+            double x = x1;
+            x1 = x2;
+            x2 = x;
+        }
+        if (y1 > y2) {
+            double y = y1;
+            y1 = y2;
+            y2 = y;
+        }
+        Log.d("trol", "tg1");
+        Rect resultRect = new Rect((int)x1, (int)y1, (int)x2, (int)y2);
+        Log.d("trol", "tg2");
+        return resultRect;
 
     }
 
