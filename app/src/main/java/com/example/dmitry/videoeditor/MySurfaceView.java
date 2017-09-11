@@ -38,6 +38,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     ContentResolver cR;
     Bitmap bitmap;
     ImageHolder imageHolder;
+    ImageEditorQueue imageEditorQueue;
+    ImageElement selectedImageElement;
 
     double x1;
     double y1;
@@ -61,6 +63,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     float oldLoupeX = 1.0f;
     float oldLoupeY = 1.0f;
 
+    float alignLeftOld = 0.0f;
+    float alignTopOld = 0.0f;
+
+    float elX;
+    float elY;
+
+
+    boolean isKrop = false;
+
     public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
         super(context);
         getHolder().addCallback(this);
@@ -69,6 +80,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         this.context = context;
         this.inputUri = inputUri;
         this.setOnTouchListener(this);
+        imageEditorQueue = new ImageEditorQueue();
 
 
     }
@@ -111,13 +123,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             y1 = y2;
             y2 = y;
         }
-        Log.d("trol", "tg1");
-        Rect resultRect = new Rect(
-                (int)((x1 - alignLeft) / loupeX),
-                (int)((y1 - alignTop) / loupeY),
-                (int)((x2 - alignLeft) / loupeX),
-                (int)((y2 - alignTop) / loupeY));
-        Log.d("trol", "tg2");
+        int left = (int)((x1) / loupeX - alignLeft);
+        int top = (int)((y1) / loupeY - alignTop);
+        int right = (int)((x2) / loupeX - alignLeft);
+        int bottom = (int)((y2) / loupeY - alignTop);
+        Rect resultRect = new Rect(left, top, right, bottom);
         return resultRect;
 
     }
@@ -140,6 +150,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
+    public void addImageElement(ImageElement imageElement) {
+        imageEditorQueue.addElement(imageElement);
+
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -160,6 +174,17 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
             } else {
                 bitmap = imageHolder.getDefaultBitmap();
+                int iw = bitmap.getWidth();
+                int ih = bitmap.getHeight();
+                int tw = this.getWidth();
+                int th = this.getHeight();
+
+                alignLeft = (float)(tw - iw * loupeX) / 2;
+                alignTop = (float)(th - ih * loupeY) / 2;
+
+                alignLeftOld = alignLeft;
+                alignTopOld = alignTop;
+
             }
             draw(surfaceHolder);
         }
@@ -198,13 +223,26 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         fingerX2 = motionEvent.getX(1);
                         fingerY2 = motionEvent.getY(1);
                     }
+                    if(count == 1) {
+                        selectedImageElement = imageEditorQueue.find((int)((x1- alignLeft)/loupeX),
+                                (int)((y1 - alignTop)/loupeY));
+                    }
                     Log.d("101525: ", "ACTION_DOWN");
                     break;
                 }
                 case MotionEvent.ACTION_MOVE: {
                     x2 = motionEvent.getX();
                     y2 = motionEvent.getY();
-                    Log.d("101525", "ACTION_MOVE");
+                    if(isKrop == false && count == 1) {
+                        if(selectedImageElement == null) {
+                            alignLeft = (float) (alignLeftOld + x2 - x1);
+                            alignTop = (float) (alignTopOld + y2 - y1);
+                        }
+                        else {
+                            selectedImageElement.setLeft((int)((x2 - x1)/loupeX));
+                            selectedImageElement.setTop((int)((y2 - y1)/loupeY));
+                        }
+                    }
                     break;
                 }
                 case MotionEvent.ACTION_POINTER_DOWN: {
@@ -217,6 +255,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 case MotionEvent.ACTION_CANCEL: {
                     x2 = motionEvent.getX();
                     y2 = motionEvent.getY();
+
+                    alignLeftOld = alignLeft;
+                    alignTopOld = alignTop;
+
+                    if (selectedImageElement != null) {
+                        selectedImageElement.saveLeft();
+                        selectedImageElement.saveTop();
+                    }
+
                     Log.d("db", "ACTION_UP");
                     break;
                 }
@@ -231,14 +278,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     fingernY2 = motionEvent.getY(1);
 
 
-                    Log.d("101525", "fingerX1: " + String.valueOf( fingerX1));
-                    Log.d("101525", "fingerX2: " + String.valueOf( fingerX2));
-                    Log.d("101525", "fingernX1: " + String.valueOf( fingernX1));
-                    Log.d("101525", "fingernX2: " + String.valueOf( fingernX2));
-
                     loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
                     loupeY = loupeX;
-                    Log.d("101525", "lopueX: " + String.valueOf(loupeX));
 
                     break;
                 }
@@ -270,20 +311,25 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             canvas.drawColor(Color.BLACK);
 
             Bitmap bitmap = imageHolder.getFreshBitmap();
+            bitmap = imageEditorQueue.draw(bitmap);
+
+
+
             int iw = bitmap.getWidth();
             int ih = bitmap.getHeight();
             int tw = this.getWidth();
             int th = this.getHeight();
 
-            alignLeft = (float)(tw - iw * loupeX) / 2;
-            alignTop = (float)(th - ih * loupeY) / 2;
+
             bitmap = Bitmap.createScaledBitmap(bitmap, (int)(iw * loupeX), (int)(ih * loupeY), true);
 
             canvas.drawBitmap(bitmap, alignLeft, alignTop, paint);
             paint.setARGB(128, 255, 0, 0);
             paint.setStyle(Paint.Style.FILL);
             paint.setAntiAlias(true);
-            canvas.drawRect((float) x1, (float) y1, (float) x2, (float) y2, paint);
+            if (isKrop) {
+                canvas.drawRect((float) x1, (float) y1, (float) x2, (float) y2, paint);
+            }
             surface.unlockCanvasAndPost(canvas);
         }
 

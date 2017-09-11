@@ -16,6 +16,9 @@ public class ImageAdapter extends Fragment {
     private Context mContext;
     protected GridView gridView;
 
+    // references to our images
+    public	Integer[] mThumbIds;
+
     public ImageAdapter(Context c) {
         mContext = c;
     }
@@ -49,8 +52,7 @@ public class ImageAdapter extends Fragment {
         return imageView;
     }
 
-    // references to our images
-    public	Integer[] mThumbIds;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -14,15 +14,22 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,6 +57,8 @@ public class EditorActivity extends Activity {
     Button addTextButton;
     Button pauseButton;
     Button saveButton;
+
+    EditText editText;
 
     ImageHolder imageHolder;
     LinearLayout lineraLayout;
@@ -105,14 +114,10 @@ public class EditorActivity extends Activity {
         addTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Paint paint = new Paint();
-                    paint.setColor(Color.BLUE);
-                    paint.setStrokeWidth(5.0f);
-                    paint.setStyle(Paint.Style.STROKE);
-                    paint.setTextSize(60);
-                    Bitmap freshBitmap = ImageEditor.addText(imageHolder.getFreshBitmap(),
-                            "Hello world", 20.0f, 50.0f, paint);
-                    imageHolder.setFreshBitmap(freshBitmap);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+                    mySurfaceView.addImageElement(new TextImage("hello", 60, 60));
+                    Log.d("step", "step1");
                     mySurfaceView.draw();
 
 
@@ -152,6 +157,25 @@ public class EditorActivity extends Activity {
 
             }
         });
+
+        editText = (EditText)findViewById(R.id.edutText);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.d("1829", editable.toString());
+            }
+        });
+
         lineraLayout = (LinearLayout)findViewById(R.id.editorLinearLayout);
 
         mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri, imageHolder);
