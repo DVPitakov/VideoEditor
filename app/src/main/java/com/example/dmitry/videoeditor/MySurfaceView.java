@@ -278,14 +278,27 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     fingernY2 = motionEvent.getY(1);
 
 
-                    loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
-                    loupeY = loupeX;
+                    if (selectedImageElement != null) {
+                        Log.d("step", "selectedImageElement != null");
+                        //if(selectedImageElement.getClass() == TextImage.class) {
+                            ((TextImage)selectedImageElement).setTextSize(((fingernX2 - fingernX1) / (fingerX2 - fingerX1)));
+                        //}
+                    }
+                    else {
+                        loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
+                        loupeY = loupeX;
+                    }
 
                     break;
                 }
                 case MotionEvent.ACTION_POINTER_UP: {
                     oldLoupeX = loupeX;
                     oldLoupeY = loupeY;
+                    if (selectedImageElement != null) {
+                        //SUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
+                        ((TextImage)selectedImageElement).saveTextSize();
+                    }
+
                     break;
                 }
             }
