@@ -75,7 +75,6 @@ public class EditorActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_editor);
 
@@ -116,7 +115,7 @@ public class EditorActivity extends Activity {
             public void onClick(View view) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
-                    mySurfaceView.addImageElement(new TextImage("hello", 60, 60));
+                    mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
                     Log.d("step", "step1");
                     mySurfaceView.draw();
 
@@ -172,7 +171,8 @@ public class EditorActivity extends Activity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Log.d("1829", editable.toString());
+                mySurfaceView.setImageText(editable.toString());
+
             }
         });
 

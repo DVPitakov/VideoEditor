@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 pickerIntent .putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
                 startActivityForResult(pickerIntent, 2);
 
+
+
             }
         });
 
@@ -70,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Intent pickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        pickerIntent.setType("*/*");
+        String[] mimetypes = {"image/*", "video/*"};
+        pickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+        startActivityForResult(pickerIntent, 1);
 
     }
 
@@ -88,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
                     inputUri = data.getData();
                     inputPathView.setText(inputUri.toString());
                     outputPathButton.setEnabled(true);
+
+                    editButton.callOnClick();
                 }
                 break;
             }

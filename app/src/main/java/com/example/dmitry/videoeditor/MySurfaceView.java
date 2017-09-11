@@ -66,9 +66,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     float alignLeftOld = 0.0f;
     float alignTopOld = 0.0f;
 
-    float elX;
-    float elY;
-
 
     boolean isKrop = false;
 
@@ -152,7 +149,16 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     public void addImageElement(ImageElement imageElement) {
         imageEditorQueue.addElement(imageElement);
+        selectedImageElement = imageElement;
 
+    }
+
+    public void setImageText(String text) {
+        if (selectedImageElement != null) {
+            ///LOLOLO BE CAREFUL LOLOLO
+            ((TextImage)selectedImageElement).setText(text);
+            draw();
+        }
     }
 
     @Override

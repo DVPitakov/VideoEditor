@@ -12,7 +12,7 @@ import android.util.Log;
  */
 
 public class TextImage extends ImageElement {
-    private String text = "Russia";
+    private String text = "Новый текст";
     private int textSize = 60;
     private int textSizeD = 60;
 
