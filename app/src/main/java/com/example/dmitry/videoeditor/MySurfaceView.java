@@ -170,6 +170,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
+        this.imageHolder.setMaxImageSize(this.getWidth(), this.getHeight());
         try {
             if (cR.getType(inputUri).equals("video/mp4")) {
                 mediaPlayer = new MediaPlayer();
@@ -296,13 +297,17 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     if (selectedImageElement != null) {
                         Log.d("step", "selectedImageElement != null");
                         //if(selectedImageElement.getClass() == TextImage.class) {
-                            ((TextImage)selectedImageElement).setTextSize(((fingernX2 - fingernX1) / (fingerX2 - fingerX1)));
+                            ((TextImage)selectedImageElement).setTextSize(
+                                    Tools.normalizator(((fingernX2 - fingernX1)
+                                            / (fingerX2 - fingerX1)), 10, (float)0.2));
                             imageHolder.setBitmapWithElements(null);
                         //}
                     }
                     else {
                         loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
                         loupeY = loupeX;
+                        loupeX = Tools.normalizator(loupeX, 10, (float)0.2);
+                        loupeY = Tools.normalizator(loupeY, 10, (float)0.2);
                         imageHolder.setScaledBitmap(null);
                     }
 

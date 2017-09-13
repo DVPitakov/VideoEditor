@@ -7,4 +7,16 @@ package com.example.dmitry.videoeditor;
 public class Tools {
     private Tools() {};
 
+    public static float normalizator(float val, float maxVal, float minVal) {
+        if (val > maxVal) {
+            return maxVal;
+
+        }
+        if (val < minVal) {
+            return minVal;
+
+        }
+        return val;
+
+    }
 }
