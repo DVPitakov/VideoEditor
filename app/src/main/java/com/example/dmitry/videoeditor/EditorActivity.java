@@ -275,8 +275,6 @@ public class EditorActivity extends Activity {
             videoScrollLayoyt.setVisibility(View.GONE);
         }
 
-
-
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

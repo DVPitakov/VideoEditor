@@ -184,7 +184,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     public void setImageText(String text) {
         if (selectedImageElement != null) {
-            ///LOLOLO BE CAREFUL LOLOLO
             if(selectedImageElement.getClass() == TextImage.class) {
                 ((TextImage)selectedImageElement).setText(text);
             }
@@ -196,9 +195,9 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
-        this.imageHolder.setMaxImageSize(this.getWidth(), this.getHeight());
         try {
             if (cR.getType(inputUri).equals("video/mp4")) {
+
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(context, inputUri);
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
@@ -212,6 +211,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 });
 
             } else {
+                this.imageHolder.setMaxImageSize(this.getWidth(), this.getHeight());
                 int iw = imageHolder.getDefaultBitmap().getWidth();
                 int ih = imageHolder.getDefaultBitmap().getHeight();
                 int tw = this.getWidth();
@@ -222,9 +222,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
                 alignLeftOld = alignLeft;
                 alignTopOld = alignTop;
-
+                draw(surfaceHolder);
             }
-            draw(surfaceHolder);
         }
         catch (IOException e) {
             Log.d("exc", "IOExcepiton in MySurfaceView.surfaceCreated");
