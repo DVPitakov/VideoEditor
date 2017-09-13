@@ -207,6 +207,15 @@ public class EditorActivity extends Activity {
         lineraLayout = (LinearLayout)findViewById(R.id.editorLinearLayout);
 
         mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri, imageHolder);
+        mySurfaceView.setFocusListener(new MySurfaceView.FocusListener() {
+            @Override
+            public void focusLosed() {
+                editText.setText("");
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
+            }
+        });
         lineraLayout.addView(mySurfaceView);
 
 
@@ -236,9 +245,7 @@ public class EditorActivity extends Activity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
-        Log.d("step", "step y");
         fragmentTransaction.add(R.id.frameLayout, fragment);
-        Log.d("step", "step y + 1");
         fragmentTransaction.commit();
     }
 

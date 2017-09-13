@@ -30,6 +30,20 @@ import static java.util.Collections.swap;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
 
+    public interface FocusListener {
+        void focusLosed();
+    }
+
+    public void setFocusListener(FocusListener listener) {
+        focusListener = listener;
+
+    }
+    private void focusLosed() {
+        if(focusListener != null) {
+            focusListener.focusLosed();
+        }
+    }
+
     MediaPlayer mediaPlayer;
     Context context;
     Uri inputUri;
@@ -63,6 +77,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     float alignLeftOld = 0.0f;
     float alignTopOld = 0.0f;
+
+    FocusListener focusListener;
 
 
     boolean isKrop = false;
@@ -239,6 +255,9 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         if(count == 1) {
                             selectedImageElement = imageEditorQueue.find((int)((x1- alignLeft)/loupeX),
                                     (int)((y1 - alignTop)/loupeY));
+                            if(selectedImageElement == null) {
+                                focusLosed();
+                            }
                         }
                     }
                     Log.d("101525: ", "ACTION_DOWN");
@@ -299,15 +318,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         //if(selectedImageElement.getClass() == TextImage.class) {
                             ((TextImage)selectedImageElement).setTextSize(
                                     Tools.normalizator(((fingernX2 - fingernX1)
-                                            / (fingerX2 - fingerX1)), 10, (float)0.2));
+                                            / (fingerX2 - fingerX1)), 6, (float)0.2));
                             imageHolder.setBitmapWithElements(null);
                         //}
                     }
                     else {
                         loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
                         loupeY = loupeX;
-                        loupeX = Tools.normalizator(loupeX, 10, (float)0.2);
-                        loupeY = Tools.normalizator(loupeY, 10, (float)0.2);
+                        loupeX = Tools.normalizator(loupeX, 4, (float)0.2);
+                        loupeY = Tools.normalizator(loupeY, 4, (float)0.2);
                         imageHolder.setScaledBitmap(null);
                     }
 
