@@ -3,6 +3,7 @@ package com.example.dmitry.videoeditor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * Created by dmitry on 11.09.17.
@@ -22,6 +23,7 @@ public class ImageElement {
     }
 
     public boolean contains(int x, int y) {
+        Log.d("logo", "here " + String.valueOf(rect.contains(x, y)));
         return rect != null && rect.contains(x, y);
 
     }

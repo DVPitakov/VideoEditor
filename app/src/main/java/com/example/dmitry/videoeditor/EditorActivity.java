@@ -64,6 +64,7 @@ public class EditorActivity extends Activity {
     Button pauseButton;
     Button saveButton;
     Button backButton;
+    Button addImage;
 
     EditText editText;
 
@@ -116,10 +117,38 @@ public class EditorActivity extends Activity {
         });
         filterButton = (Button)findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
+            int i = 0;
             @Override
             public void onClick(View view) {
-                Bitmap freshBitmap = ImageEditor.inversion(imageHolder.getFreshBitmap());
+                Bitmap freshBitmap;
+                switch (i) {
+                    case 0: {
+                        freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                        break;
+                    }
+                    case 1: {
+                        freshBitmap = ImageEditor.bombit(imageHolder.getDefaultBitmap());
+                        break;
+                    }
+                    case 2: {
+                        freshBitmap = ImageEditor.bombit2(imageHolder.getDefaultBitmap());
+                        break;
+                    }
+                    default: freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                }
                 imageHolder.setFreshBitmap(freshBitmap);
+                mySurfaceView.draw();
+                i = (i + 1) % 3;
+            }
+        });
+
+        addImage = (Button)findViewById(R.id.addImage);
+        addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mySurfaceView.addImageElement(new IconImage(R.drawable.item_menu, addImage, 60, 60));
+                Log.d("step", "step1");
+                mySurfaceView.imageHolder.setBitmapWithElements(null);
                 mySurfaceView.draw();
             }
         });
@@ -218,8 +247,8 @@ public class EditorActivity extends Activity {
 
             @Override
             public void focusTaken() {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                //imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
 
             }
         });

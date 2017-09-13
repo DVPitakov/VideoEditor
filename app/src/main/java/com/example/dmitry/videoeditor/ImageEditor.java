@@ -88,4 +88,58 @@ public class ImageEditor {
         return freshBitmap;
 
     }
+
+    public static Bitmap bombit(Bitmap bitmap) {
+        ColorMatrix colorMatrix_Inverted =
+                new ColorMatrix(new float[] {
+                        (float)1.2,  (float)0.2,  0,  0, 0,
+                        0,   (float)1.2,  (float)0.2,  0, 0,
+                        0,  0,  1,  0, 0,
+                        0,  0,  0,  1, 0});
+
+        ColorFilter ColorFilter_Sepia = new ColorMatrixColorFilter(
+                colorMatrix_Inverted);
+
+
+        android.graphics.Bitmap.Config config = bitmap.getConfig();
+        if(config == null) {
+            config  = android.graphics.Bitmap.Config.ARGB_8888;
+
+        }
+        Bitmap freshBitmap = bitmap.copy(config, true);
+
+        Canvas canvas = new Canvas(freshBitmap);
+        Paint paint = new Paint();
+        paint.setColorFilter(ColorFilter_Sepia);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return freshBitmap;
+
+    }
+
+    public static Bitmap bombit2(Bitmap bitmap) {
+        ColorMatrix colorMatrix_Inverted =
+                new ColorMatrix(new float[] {
+                        (float)1.2,  0,  0,  0, 0,
+                        0,   (float)1.2,  0,  0, 0,
+                        0,  0,  (float)1.2,  0, 0,
+                        0,  0,  0,  1, 0});
+
+        ColorFilter ColorFilter_Sepia = new ColorMatrixColorFilter(
+                colorMatrix_Inverted);
+
+
+        android.graphics.Bitmap.Config config = bitmap.getConfig();
+        if(config == null) {
+            config  = android.graphics.Bitmap.Config.ARGB_8888;
+
+        }
+        Bitmap freshBitmap = bitmap.copy(config, true);
+
+        Canvas canvas = new Canvas(freshBitmap);
+        Paint paint = new Paint();
+        paint.setColorFilter(ColorFilter_Sepia);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return freshBitmap;
+
+    }
 }

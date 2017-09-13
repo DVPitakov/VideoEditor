@@ -185,8 +185,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public void setImageText(String text) {
         if (selectedImageElement != null) {
             ///LOLOLO BE CAREFUL LOLOLO
-            ((TextImage)selectedImageElement).setText(text);
+            if(selectedImageElement.getClass() == TextImage.class) {
+                ((TextImage)selectedImageElement).setText(text);
+            }
             draw();
+
         }
     }
 
@@ -324,12 +327,17 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
 
                     if (selectedImageElement != null) {
-                        Log.d("step", "selectedImageElement != null");
-                        //if(selectedImageElement.getClass() == TextImage.class) {
+                        if(selectedImageElement.getClass() == TextImage.class) {
                             ((TextImage)selectedImageElement).setTextSize(
                                     Tools.normalizator(((fingernX2 - fingernX1)
                                             / (fingerX2 - fingerX1)), 6, (float)0.2));
-                            imageHolder.setBitmapWithElements(null);
+                        }
+                        else {
+                            ((IconImage)selectedImageElement).setImageSize(
+                                    Tools.normalizator(((fingernX2 - fingernX1)
+                                            / (fingerX2 - fingerX1)), 6, (float)0.2));
+                        }
+                        imageHolder.setBitmapWithElements(null);
                         //}
                     }
                     else {
@@ -346,8 +354,13 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     oldLoupeX = loupeX;
                     oldLoupeY = loupeY;
                     if (selectedImageElement != null) {
-                        //SUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-                        ((TextImage)selectedImageElement).saveTextSize();
+                        if(selectedImageElement.getClass() == TextImage.class) {
+                            ((TextImage)selectedImageElement).saveTextSize();
+                        }
+                        else {
+                            ((IconImage)selectedImageElement).saveImageSize();
+                        }
+
                     }
 
                     break;

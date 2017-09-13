@@ -45,7 +45,6 @@ public class TextImage extends ImageElement {
         this.text = text;
         int left = rect.left;
         int bottom = rect.bottom;
-
         rect.set(left, bottom - textSizeD, left + textSizeD / 2  * text.length(), bottom);
 
     }
