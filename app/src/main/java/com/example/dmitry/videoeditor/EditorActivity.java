@@ -215,6 +215,13 @@ public class EditorActivity extends Activity {
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
             }
+
+            @Override
+            public void focusTaken() {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+
+            }
         });
         lineraLayout.addView(mySurfaceView);
 

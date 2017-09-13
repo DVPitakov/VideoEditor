@@ -32,6 +32,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     public interface FocusListener {
         void focusLosed();
+        void focusTaken();
     }
 
     public void setFocusListener(FocusListener listener) {
@@ -41,6 +42,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     private void focusLosed() {
         if(focusListener != null) {
             focusListener.focusLosed();
+        }
+    }
+
+    private void focusTaken() {
+        if(focusListener != null) {
+            focusListener.focusTaken();
         }
     }
 
@@ -257,6 +264,9 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                                     (int)((y1 - alignTop)/loupeY));
                             if(selectedImageElement == null) {
                                 focusLosed();
+                            }
+                            else {
+                                focusTaken();
                             }
                         }
                     }
