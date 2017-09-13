@@ -41,7 +41,10 @@ public class ImageHolder {
     }
 
     public Bitmap getFreshBitmap() {
-        return  freshBitmap;
+        if(freshBitmap == null) {
+            freshBitmap = defaultBitmap;
+        }
+        return freshBitmap;
 
     }
 

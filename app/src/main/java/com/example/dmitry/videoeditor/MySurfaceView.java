@@ -346,6 +346,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 bitmapWithElements = imageHolder.getBitmapWithElements();
                 if(bitmapWithElements == null) {
                     Bitmap freshBitmap = imageHolder.getFreshBitmap();
+                    if(freshBitmap == null) {
+                        freshBitmap = imageHolder.getDefaultBitmap();
+                        imageHolder.setFreshBitmap(freshBitmap);
+                    }
                     bitmapWithElements = imageEditorQueue.draw(freshBitmap);
                     imageHolder.setBitmapWithElements(bitmapWithElements);
                 }

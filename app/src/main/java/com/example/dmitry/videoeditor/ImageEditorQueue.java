@@ -45,4 +45,9 @@ public class ImageEditorQueue {
         return null;
 
     }
+
+    public void clear() {
+        images = new ArrayList<>();
+
+    }
 }

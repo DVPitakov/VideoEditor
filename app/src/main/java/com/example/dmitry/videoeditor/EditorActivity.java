@@ -63,6 +63,7 @@ public class EditorActivity extends Activity {
     Button addTextButton;
     Button pauseButton;
     Button saveButton;
+    Button backButton;
 
     EditText editText;
 
@@ -137,6 +138,18 @@ public class EditorActivity extends Activity {
 
             }
         });
+
+        backButton = (Button)findViewById(R.id.backHistoryButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mySurfaceView.imageHolder.setFreshBitmap(null);
+                mySurfaceView.imageEditorQueue.clear();
+                mySurfaceView.draw();
+
+            }
+        });
+
 
         saveButton = (Button)findViewById(R.id.saveBtton);
         saveButton.setOnClickListener(new View.OnClickListener() {
