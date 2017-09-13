@@ -2,17 +2,21 @@ package layout;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-
 import com.example.dmitry.videoeditor.R;
 
 
-public class ImageAdapter extends Fragment {
+public class ImageAdapter extends Fragment  {
     private Context mContext;
     protected GridView gridView;
 
@@ -20,6 +24,7 @@ public class ImageAdapter extends Fragment {
     public	Integer[] mThumbIds;
 
     public ImageAdapter(Context c) {
+        Log.d("step", "i'm here 6");
         mContext = c;
     }
 
@@ -58,8 +63,10 @@ public class ImageAdapter extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_instrumen_panel_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_instrumen_panel_list, null);
         gridView = (GridView) view.findViewById(R.id.gridPanelImage);
+        //gridView.setAdapter();
         return view;
+
     }
 }

@@ -30,13 +30,11 @@ import static java.util.Collections.swap;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
 
-    DrawingThread drawingThread;
     MediaPlayer mediaPlayer;
     Context context;
     Uri inputUri;
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
-    Bitmap bitmap;
     ImageHolder imageHolder;
     ImageEditorQueue imageEditorQueue;
     ImageElement selectedImageElement;
@@ -147,6 +145,14 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
+    public void kropSet() {
+        isKrop = true;
+
+    }
+    public void kropUnset() {
+        isKrop = false;
+
+    }
     public void addImageElement(ImageElement imageElement) {
         imageEditorQueue.addElement(imageElement);
         selectedImageElement = imageElement;
@@ -179,9 +185,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 });
 
             } else {
-                bitmap = imageHolder.getDefaultBitmap();
-                int iw = bitmap.getWidth();
-                int ih = bitmap.getHeight();
+                int iw = imageHolder.getDefaultBitmap().getWidth();
+                int ih = imageHolder.getDefaultBitmap().getHeight();
                 int tw = this.getWidth();
                 int th = this.getHeight();
 
@@ -225,13 +230,15 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     y2 = y1;
                     fingerX1 = motionEvent.getX();
                     fingerY1 = motionEvent.getY();
-                    if(count > 1) {
-                        fingerX2 = motionEvent.getX(1);
-                        fingerY2 = motionEvent.getY(1);
-                    }
-                    if(count == 1) {
-                        selectedImageElement = imageEditorQueue.find((int)((x1- alignLeft)/loupeX),
-                                (int)((y1 - alignTop)/loupeY));
+                    if (isKrop == false) {
+                        if(count > 1) {
+                            fingerX2 = motionEvent.getX(1);
+                            fingerY2 = motionEvent.getY(1);
+                        }
+                        if(count == 1) {
+                            selectedImageElement = imageEditorQueue.find((int)((x1- alignLeft)/loupeX),
+                                    (int)((y1 - alignTop)/loupeY));
+                        }
                     }
                     Log.d("101525: ", "ACTION_DOWN");
                     break;
@@ -247,6 +254,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         else {
                             selectedImageElement.setLeft((int)((x2 - x1)/loupeX));
                             selectedImageElement.setTop((int)((y2 - y1)/loupeY));
+                            imageHolder.setBitmapWithElements(null);
                         }
                     }
                     break;
@@ -268,6 +276,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     if (selectedImageElement != null) {
                         selectedImageElement.saveLeft();
                         selectedImageElement.saveTop();
+                        imageHolder.setBitmapWithElements(null);
                     }
 
                     Log.d("db", "ACTION_UP");
@@ -288,11 +297,13 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         Log.d("step", "selectedImageElement != null");
                         //if(selectedImageElement.getClass() == TextImage.class) {
                             ((TextImage)selectedImageElement).setTextSize(((fingernX2 - fingernX1) / (fingerX2 - fingerX1)));
+                            imageHolder.setBitmapWithElements(null);
                         //}
                     }
                     else {
                         loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
                         loupeY = loupeX;
+                        imageHolder.setScaledBitmap(null);
                     }
 
                     break;
@@ -329,20 +340,22 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
             canvas.drawColor(Color.BLACK);
 
-            Bitmap bitmap = imageHolder.getFreshBitmap();
-            bitmap = imageEditorQueue.draw(bitmap);
+            Bitmap scaledBitmap = imageHolder.getScaledBitmap();
+            Bitmap bitmapWithElements;
+            if (scaledBitmap == null) {
+                bitmapWithElements = imageHolder.getBitmapWithElements();
+                if(bitmapWithElements == null) {
+                    Bitmap freshBitmap = imageHolder.getFreshBitmap();
+                    bitmapWithElements = imageEditorQueue.draw(freshBitmap);
+                    imageHolder.setBitmapWithElements(bitmapWithElements);
+                }
+                int iw = bitmapWithElements.getWidth();
+                int ih = bitmapWithElements.getHeight();
+                scaledBitmap = Bitmap.createScaledBitmap(bitmapWithElements, (int) (iw * loupeX), (int) (ih * loupeY), true);
+                imageHolder.setScaledBitmap(scaledBitmap);
+            }
+            canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
 
-
-
-            int iw = bitmap.getWidth();
-            int ih = bitmap.getHeight();
-            int tw = this.getWidth();
-            int th = this.getHeight();
-
-
-            bitmap = Bitmap.createScaledBitmap(bitmap, (int)(iw * loupeX), (int)(ih * loupeY), true);
-
-            canvas.drawBitmap(bitmap, alignLeft, alignTop, paint);
             paint.setARGB(128, 255, 0, 0);
             paint.setStyle(Paint.Style.FILL);
             paint.setAntiAlias(true);

@@ -1,6 +1,9 @@
 package com.example.dmitry.videoeditor;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,6 +39,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 
+import layout.ImageAdapter;
+import layout.PanelInstrumentImage;
+
 public class EditorActivity extends Activity {
 
 
@@ -62,6 +68,7 @@ public class EditorActivity extends Activity {
 
     ImageHolder imageHolder;
     LinearLayout lineraLayout;
+    LinearLayout videoScrollLayoyt;
 
     Uri inputUri;
     Uri outputUri;
@@ -88,15 +95,22 @@ public class EditorActivity extends Activity {
 
         kropButton = (Button)findViewById(R.id.kropButton);
         kropButton.setOnClickListener(new View.OnClickListener() {
+            boolean b =false;
             @Override
             public void onClick(View view) {
-                Rect rect = mySurfaceView.getKropRect();
-
-                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
-                        rect.left, rect.top, rect.right, rect.bottom);
-                imageHolder.setFreshBitmap(freshBitmap);
-                mySurfaceView.kropClear();
-                mySurfaceView.draw();
+                if (b) {
+                    mySurfaceView.kropUnset();
+                    Rect rect = mySurfaceView.getKropRect();
+                    Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
+                            rect.left, rect.top, rect.right, rect.bottom);
+                    imageHolder.setFreshBitmap(freshBitmap);
+                    mySurfaceView.kropClear();
+                    mySurfaceView.draw();
+                }
+                else {
+                    mySurfaceView.kropSet();
+                }
+                b = !b;
             }
         });
         filterButton = (Button)findViewById(R.id.filterButton);
@@ -117,6 +131,7 @@ public class EditorActivity extends Activity {
                     imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
                     mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
                     Log.d("step", "step1");
+                    mySurfaceView.imageHolder.setBitmapWithElements(null);
                     mySurfaceView.draw();
 
 
@@ -127,7 +142,6 @@ public class EditorActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bitmap bitmap = imageHolder.getFreshBitmap();
                 String str = outputUri.getPath();
                 Log.d("ddd", str);
                 String filename = "myfile.jpg";
@@ -172,6 +186,7 @@ public class EditorActivity extends Activity {
             @Override
             public void afterTextChanged(Editable editable) {
                 mySurfaceView.setImageText(editable.toString());
+                mySurfaceView.imageHolder.setBitmapWithElements(null);
 
             }
         });
@@ -193,6 +208,25 @@ public class EditorActivity extends Activity {
             }
         });
 
+
+        videoScrollLayoyt = (LinearLayout)findViewById(R.id.videoScrollLayout);
+        if(this.getBaseContext().getContentResolver().getType(inputUri).equals("video/mp4")) {
+            videoScrollLayoyt.setVisibility(View.VISIBLE);
+        }
+        else {
+            videoScrollLayoyt.setVisibility(View.GONE);
+        }
+
+
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
+        Log.d("step", "step y");
+        fragmentTransaction.add(R.id.frameLayout, fragment);
+        Log.d("step", "step y + 1");
+        fragmentTransaction.commit();
     }
 
     @Override

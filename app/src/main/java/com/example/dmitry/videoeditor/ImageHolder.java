@@ -16,6 +16,8 @@ import java.io.IOException;
 public class ImageHolder {
     private Bitmap defaultBitmap;
     private Bitmap freshBitmap;
+    private Bitmap bitmapWithElements;
+    private Bitmap scaledBitmap;
 
     private float loupe = 1;
 
@@ -40,10 +42,34 @@ public class ImageHolder {
 
     public Bitmap getFreshBitmap() {
         return  freshBitmap;
+
     }
 
     public void setFreshBitmap(Bitmap freshBitmap) {
         this.freshBitmap = freshBitmap;
+        bitmapWithElements = null;
+        scaledBitmap = null;
+
+    }
+
+    public void setScaledBitmap(Bitmap bitmap) {
+        scaledBitmap = bitmap;
+
+    }
+
+    public void setBitmapWithElements(Bitmap bitmap) {
+        bitmapWithElements = bitmap;
+        scaledBitmap = null;
+
+    }
+
+    public Bitmap getBitmapWithElements() {
+        return bitmapWithElements;
+
+    }
+
+    public  Bitmap getScaledBitmap() {
+        return scaledBitmap;
 
     }
 }
