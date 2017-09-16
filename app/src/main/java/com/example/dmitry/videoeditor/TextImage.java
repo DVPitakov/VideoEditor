@@ -15,6 +15,7 @@ public class TextImage extends ImageElement {
     private String text = "Новый текст";
     private int textSize = 60;
     private int textSizeD = 60;
+    private int color = Color.WHITE;
 
     public TextImage(String text, int left, int bottom) {
         super();
@@ -49,11 +50,15 @@ public class TextImage extends ImageElement {
 
     }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public void draw(Canvas canvas) {
         Paint fontPaint = new Paint();
-        fontPaint.setColor(Color.BLUE);
+        fontPaint.setColor(color);
         fontPaint.setStrokeWidth(5.0f);
-        fontPaint.setStyle(Paint.Style.STROKE);
+        fontPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         fontPaint.setTextSize(textSizeD);
         canvas.drawText(text, rect.left + x, rect.bottom + y, fontPaint);
 

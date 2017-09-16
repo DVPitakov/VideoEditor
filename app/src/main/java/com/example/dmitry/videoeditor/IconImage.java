@@ -1,5 +1,6 @@
 package com.example.dmitry.videoeditor;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -14,7 +15,7 @@ import android.view.View;
  */
 
 public class IconImage extends ImageElement {
-    private int image = R.drawable.item_crop;
+    private int image = R.drawable.shapka;
     private int imageSize = 60;
     private int imageSizeD = 60;
     private Bitmap bitmapSource;
@@ -27,6 +28,21 @@ public class IconImage extends ImageElement {
         rect = new Rect();
         rect.set(left, top, left + imageSizeD, top +  imageSizeD);
         bitmapSource = BitmapFactory.decodeResource(view.getResources(), image);
+        int width = bitmapSource.getWidth();
+        int height = bitmapSource.getHeight();
+        Resources res = view.getResources();
+        int maxSize = (int)res.getDimension(R.dimen.maxIconSize);
+        float w = width /maxSize;
+        float h = height / maxSize;
+        if(w > 1 || h > 1) {
+            if (w > h) {
+                h = w;
+            }
+            else {
+                w = h;
+            }
+            bitmapSource = Bitmap.createScaledBitmap(bitmapSource, (int)(width / w), (int)(height / h), false);
+        }
         imageSize = bitmapSource.getWidth();
         imageSizeD = imageSize;
 

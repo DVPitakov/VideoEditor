@@ -1,5 +1,7 @@
 package com.example.dmitry.videoeditor;
 
+import layout.PanelInstrumentImage;
+
 /**
  * Created by dmitry on 10.09.17.
  */
@@ -19,6 +21,7 @@ public class Tools {
         return val;
 
     }
+
 
     public static boolean isVideo(String string) {
         return string.equals("video/mp4")

@@ -1,11 +1,13 @@
 package layout;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,9 @@ import com.example.dmitry.videoeditor.R;
 
 
 public class ImageAdapter extends Fragment {
-    public final static  Integer[] mContacts = {1, 2, 3, 4};
+    public final static  Integer[] mContacts = {1, 2, 3, 4, 5, 6};
 
-    private class DataAdapter extends ArrayAdapter<Integer> {
+    protected class DataAdapter extends ArrayAdapter<Integer> {
         Context mContext;
 
         public DataAdapter(Context context, int textViewResourceId) {
@@ -37,10 +39,13 @@ public class ImageAdapter extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView;
+            Log.d("here", "werdddesss");
             if (convertView == null) {
                 // if it's not recycled, initialize some attributes
                 imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+                Resources res = getResources();
+                float imageSize = res.getDimension(R.dimen.imageAdapterImageSize);
+                imageView.setLayoutParams(new GridView.LayoutParams((int)imageSize, (int)imageSize));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(8, 8, 8, 8);
             } else {
@@ -48,6 +53,7 @@ public class ImageAdapter extends Fragment {
             }
 
             imageView.setImageResource(mThumbIds[position]);
+
             return imageView;
         }
 
@@ -57,17 +63,15 @@ public class ImageAdapter extends Fragment {
         }
 
     }
-    private Context mContext;
+    protected Context mContext;
     protected GridView gridView;
-    private DataAdapter dataAdapter;
+    protected DataAdapter dataAdapter;
     AdapterView.OnItemClickListener onItemClickListener;
 
     // references to our images
     public	Integer[] mThumbIds;
 
     public ImageAdapter(Context c) {
-        Log.d("step", "i'm here 6");
-
         mContext = c;
 
     }
@@ -89,11 +93,12 @@ public class ImageAdapter extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        dataAdapter = new DataAdapter(container.getContext(), R.id.gridPanelImage);
         // Inflate the layout for this fragment
+        dataAdapter = new DataAdapter(mContext, R.id.gridPanelImage);
         View view = inflater.inflate(R.layout.fragment_instrumen_panel_list, null);
         gridView = (GridView) view.findViewById(R.id.gridPanelImage);
         gridView.setAdapter(dataAdapter);
+        //gridView.setAlpha(0.5f);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -105,7 +110,7 @@ public class ImageAdapter extends Fragment {
         return view;
 
     }
-    
+
 
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {

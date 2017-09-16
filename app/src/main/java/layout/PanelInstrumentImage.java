@@ -17,9 +17,10 @@ public class PanelInstrumentImage extends ImageAdapter{
                 R.drawable.item_crop,
                 R.drawable.item_text_fild,
                 R.drawable.item_negative,
-                R.drawable.item_scale
+                R.drawable.item_scale,
+                R.drawable.item_save,
+                R.drawable.item_back
         };
-       // gridView.setAlpha(0.5f);
     }
 
 }

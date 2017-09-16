@@ -6,83 +6,57 @@
     android:layout_height="match_parent"
     tools:context="com.example.dmitry.videoeditor.EditorActivity">
 
-    <EditText
-        android:id="@+id/edutText"
-        android:layout_width="0dp"
-        android:layout_height="0dp" />
-    <LinearLayout
-        android:id="@+id/editorLinearLayout"
-        android:layout_width="368dp"
-        android:layout_height="495dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+    <FrameLayout
+        android:id="@+id/editorFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
+            android:id="@+id/editorLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/kropButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="krop"/>
-            <Button
-                android:id="@+id/filterButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="filter"/>
-            <Button
-                android:id="@+id/addTextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="nadpis"/>
-            <Button
-                android:id="@+id/addImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="addImage"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id = "@+id/videoScrollLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/pauseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=">"/>
-
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_gravity="center"
+            android:gravity="top"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="8dp"
+            tools:layout_editor_absoluteX="8dp">
+            <EditText
+                android:id="@+id/edutText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp" />
+            <LinearLayout
+                android:id = "@+id/videoScrollLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/backHistoryButton"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"/>
-            <Button
-                android:id="@+id/saveBtton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Save"/>
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/pauseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=">"/>
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </FrameLayout>
 
 
         </LinearLayout>
         <FrameLayout
-            android:id="@+id/frameLayout"
+            android:id="@+id/frameLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
         </FrameLayout>
+    </FrameLayout>
 
-    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

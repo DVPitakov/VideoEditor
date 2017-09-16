@@ -371,6 +371,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
+    public void  setImageColor(int color) {
+        if (selectedImageElement != null && selectedImageElement.getClass() == TextImage.class) {
+            ((TextImage)selectedImageElement).setColor(color);
+        }
+    }
+
     public void draw() {
         draw(surfaceHolder);
 
@@ -384,7 +390,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             Canvas canvas = surface.lockCanvas(null);
             Paint paint = new Paint();
 
-            canvas.drawColor(Color.BLACK);
+            canvas.drawColor(Color.WHITE);
 
             Bitmap scaledBitmap = imageHolder.getScaledBitmap();
             Bitmap bitmapWithElements;
