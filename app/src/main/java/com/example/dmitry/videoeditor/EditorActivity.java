@@ -133,11 +133,13 @@ public class EditorActivity extends Activity {
             public void focusTaken() {
                 //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 //imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.frameLayout2, fragment2);
-                fragmentTransaction.commit();
 
+                //FragmentManager fragmentManager = getFragmentManager();
+               // if(fragmentManager.findFragmentById(R.id.frameLayout2) == null) {
+              //      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+               //     fragmentTransaction.add(R.id.frameLayout2, fragment2);
+               //     fragmentTransaction.commit();
+               // }
             }
         });
         lineraLayout.addView(mySurfaceView);
@@ -226,9 +228,11 @@ public class EditorActivity extends Activity {
                         mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
                         Log.d("step", "step1");
                         FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.add(R.id.frameLayout2, fragment2);
-                        fragmentTransaction.commit();
+                        if(fragmentManager.findFragmentById(R.id.frameLayout2) == null) {
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.add(R.id.frameLayout2, fragment2);
+                            fragmentTransaction.commit();
+                        }
                         mySurfaceView.imageHolder.setBitmapWithElements(null);
                         mySurfaceView.draw();
                         break;
