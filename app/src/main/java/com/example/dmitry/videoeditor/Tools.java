@@ -19,4 +19,13 @@ public class Tools {
         return val;
 
     }
+
+    public static boolean isVideo(String string) {
+        return string.equals("video/mp4")
+                ||  string.equals("video/mp4")
+                ||  string.equals("video/3gp")
+                ||  string.equals("video/avi");
+
+
+    }
 }

@@ -196,7 +196,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         try {
-            if (cR.getType(inputUri).equals("video/mp4")) {
+            if (Tools.isVideo(cR.getType(inputUri))) {
 
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(context, inputUri);
@@ -377,7 +377,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
     private void draw(SurfaceHolder surfaceHolder) {
 
-        if (cR.getType(inputUri).equals("video/mp4")) {
+        if (Tools.isVideo(cR.getType(inputUri))) {
 
         } else {
             Surface surface = surfaceHolder.getSurface();

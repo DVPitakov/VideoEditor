@@ -10,7 +10,7 @@
         android:id="@+id/gridPanelImage"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:columnWidth="90dp"
+        android:columnWidth="60dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
         android:numColumns="auto_fit"

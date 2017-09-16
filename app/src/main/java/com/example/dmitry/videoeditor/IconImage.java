@@ -39,6 +39,9 @@ public class IconImage extends ImageElement {
 
     public void setImageSize(float loupe) {
         imageSizeD = (int)(imageSize * loupe);
+        bitmapSource = Bitmap.createScaledBitmap(bitmapSource, imageSizeD, imageSizeD, false);
+        rect.right = rect.left + imageSize;
+        rect.bottom = rect.top + imageSize;
 
     }
 
@@ -56,7 +59,7 @@ public class IconImage extends ImageElement {
 
     public void draw(Canvas canvas) {
         Paint fontPaint = new Paint();
-        canvas.drawBitmap(bitmapSource, rect.left, rect.top, fontPaint);
+        canvas.drawBitmap(bitmapSource, rect.left + x, rect.top + y, fontPaint);
 
     }
 }

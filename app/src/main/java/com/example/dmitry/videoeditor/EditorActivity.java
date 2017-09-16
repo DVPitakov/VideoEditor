@@ -28,8 +28,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -247,8 +249,8 @@ public class EditorActivity extends Activity {
 
             @Override
             public void focusTaken() {
-                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                //imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
 
             }
         });
@@ -268,7 +270,7 @@ public class EditorActivity extends Activity {
 
 
         videoScrollLayoyt = (LinearLayout)findViewById(R.id.videoScrollLayout);
-        if(this.getBaseContext().getContentResolver().getType(inputUri).equals("video/mp4")) {
+        if(Tools.isVideo(this.getBaseContext().getContentResolver().getType(inputUri))) {
             videoScrollLayoyt.setVisibility(View.VISIBLE);
         }
         else {
@@ -281,6 +283,12 @@ public class EditorActivity extends Activity {
         PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
         fragmentTransaction.add(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
+        fragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("item", "item was clicked");
+            }
+        });
     }
 
     @Override
