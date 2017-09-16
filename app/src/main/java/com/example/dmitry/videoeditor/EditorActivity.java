@@ -165,131 +165,131 @@ public class EditorActivity extends Activity {
         }
         else {
             videoScrollLayoyt.setVisibility(View.GONE);
-        }
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
+            fragment2 = new PanelColors (EditorActivity.this.getBaseContext());
 
-        PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
-        fragment2 = new PanelColors (EditorActivity.this.getBaseContext());
+            fragmentTransaction.add(R.id.frameLayout, fragment);
+            fragmentTransaction.commit();
+            final int KROP_ELEMENT = 0;
+            final int FILTER_ELEMENT = 2;
+            final int TEXT_ELEMENT = 1;
+            final int IMAGE_ELEMENT = 3;
 
-        fragmentTransaction.add(R.id.frameLayout, fragment);
-        fragmentTransaction.commit();
-        final int KROP_ELEMENT = 0;
-        final int FILTER_ELEMENT = 2;
-        final int TEXT_ELEMENT = 1;
-        final int IMAGE_ELEMENT = 3;
-
-        fragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            boolean b =false;
-            int i = 0;
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
-                    case KROP_ELEMENT: {
-                        if (b) {
-                            mySurfaceView.kropUnset();
-                            Rect rect = mySurfaceView.getKropRect();
-                            Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
-                                    rect.left, rect.top, rect.right, rect.bottom);
+            fragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                boolean b =false;
+                int i = 0;
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    switch (i) {
+                        case KROP_ELEMENT: {
+                            if (b) {
+                                mySurfaceView.kropUnset();
+                                Rect rect = mySurfaceView.getKropRect();
+                                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
+                                        rect.left, rect.top, rect.right, rect.bottom);
+                                imageHolder.setFreshBitmap(freshBitmap);
+                                mySurfaceView.kropClear();
+                                mySurfaceView.draw();
+                            }
+                            else {
+                                mySurfaceView.kropSet();
+                            }
+                            b = !b;
+                            break;
+                        }
+                        case FILTER_ELEMENT: {
+                            Bitmap freshBitmap;
+                            switch (this.i) {
+                                case 0: {
+                                    freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                                    break;
+                                }
+                                case 1: {
+                                    freshBitmap = ImageEditor.bombit(imageHolder.getDefaultBitmap());
+                                    break;
+                                }
+                                case 2: {
+                                    freshBitmap = ImageEditor.bombit2(imageHolder.getDefaultBitmap());
+                                    break;
+                                }
+                                default: freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                            }
                             imageHolder.setFreshBitmap(freshBitmap);
-                            mySurfaceView.kropClear();
                             mySurfaceView.draw();
+                            this.i = (this.i + 1) % 3;
+                            break;
                         }
-                        else {
-                            mySurfaceView.kropSet();
-                        }
-                        b = !b;
-                        break;
-                    }
-                    case FILTER_ELEMENT: {
-                        Bitmap freshBitmap;
-                        switch (this.i) {
-                            case 0: {
-                                freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
-                                break;
+                        case TEXT_ELEMENT: {
+                            mySurfaceView.selectedImageElement = null;
+                            editText.setText("");
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+                            mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
+                            Log.d("step", "step1");
+                            FragmentManager fragmentManager = getFragmentManager();
+                            if(fragmentManager.findFragmentById(R.id.frameLayout2) == null) {
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.add(R.id.frameLayout2, fragment2);
+                                fragmentTransaction.commit();
                             }
-                            case 1: {
-                                freshBitmap = ImageEditor.bombit(imageHolder.getDefaultBitmap());
-                                break;
+                            mySurfaceView.imageHolder.setBitmapWithElements(null);
+                            mySurfaceView.draw();
+                            break;
+                        }
+                        case IMAGE_ELEMENT: {
+                            mySurfaceView.addImageElement(new IconImage(R.drawable.item_menu, mySurfaceView, 60, 60));
+                            Log.d("step", "step1");
+                            mySurfaceView.imageHolder.setBitmapWithElements(null);
+                            mySurfaceView.draw();
+                            break;
+                        }
+                        case 4: {
+                            String str = outputUri.getPath();
+                            Log.d("ddd", str);
+                            String filename = "myfile.jpg";
+                            String string = "Hello world!";
+                            FileOutputStream outputStream;
+                            try {
+                                outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                                outputStream.write(string.getBytes());
+                                outputStream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            case 2: {
-                                freshBitmap = ImageEditor.bombit2(imageHolder.getDefaultBitmap());
-                                break;
-                            }
-                            default: freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
+                            break;
                         }
-                        imageHolder.setFreshBitmap(freshBitmap);
-                        mySurfaceView.draw();
-                        this.i = (this.i + 1) % 3;
-                        break;
-                    }
-                    case TEXT_ELEMENT: {
-                        mySurfaceView.selectedImageElement = null;
-                        editText.setText("");
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
-                        mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
-                        Log.d("step", "step1");
-                        FragmentManager fragmentManager = getFragmentManager();
-                        if(fragmentManager.findFragmentById(R.id.frameLayout2) == null) {
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.add(R.id.frameLayout2, fragment2);
-                            fragmentTransaction.commit();
+                        case 5: {
+                            mySurfaceView.imageHolder.setFreshBitmap(null);
+                            mySurfaceView.imageEditorQueue.clear();
+                            mySurfaceView.draw();
+                            break;
                         }
-                        mySurfaceView.imageHolder.setBitmapWithElements(null);
-                        mySurfaceView.draw();
-                        break;
-                    }
-                    case IMAGE_ELEMENT: {
-                        mySurfaceView.addImageElement(new IconImage(R.drawable.item_menu, mySurfaceView, 60, 60));
-                        Log.d("step", "step1");
-                        mySurfaceView.imageHolder.setBitmapWithElements(null);
-                        mySurfaceView.draw();
-                        break;
-                    }
-                    case 4: {
-                        String str = outputUri.getPath();
-                        Log.d("ddd", str);
-                        String filename = "myfile.jpg";
-                        String string = "Hello world!";
-                        FileOutputStream outputStream;
-                        try {
-                            outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                            outputStream.write(string.getBytes());
-                            outputStream.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    }
-                    case 5: {
-                        mySurfaceView.imageHolder.setFreshBitmap(null);
-                        mySurfaceView.imageEditorQueue.clear();
-                        mySurfaceView.draw();
-                        break;
                     }
                 }
-            }
-        });
+            });
+
+            fragment2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                int []Colors = {
+                        Color.WHITE,
+                        Color.BLUE,
+                        Color.RED,
+                        Color.GREEN,
+                        Color.GRAY,
+                        Color.YELLOW};
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    mySurfaceView.setImageColor(Colors[i]);
+                    mySurfaceView.imageHolder.setBitmapWithElements(null);
+                    mySurfaceView.draw();
+
+                }
+            });
+        }
 
 
-        fragment2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            int []Colors = {
-                    Color.WHITE,
-                    Color.BLUE,
-                    Color.RED,
-                    Color.GREEN,
-                    Color.GRAY,
-                    Color.YELLOW};
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mySurfaceView.setImageColor(Colors[i]);
-                mySurfaceView.imageHolder.setBitmapWithElements(null);
-                mySurfaceView.draw();
-
-            }
-        });
 
     }
 
