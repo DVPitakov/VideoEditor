@@ -93,12 +93,14 @@ public class EditorActivity extends Activity {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                mySurfaceView.setImageText(charSequence.toString());
+                mySurfaceView.imageHolder.setBitmapWithElements(null);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                mySurfaceView.setImageText(charSequence.toString());
+                mySurfaceView.imageHolder.setBitmapWithElements(null);
             }
 
             @Override
@@ -223,6 +225,8 @@ public class EditorActivity extends Activity {
                         break;
                     }
                     case TEXT_ELEMENT: {
+                        mySurfaceView.selectedImageElement = null;
+                        editText.setText("");
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
                         mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
