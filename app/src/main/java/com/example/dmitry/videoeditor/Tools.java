@@ -43,7 +43,7 @@ public class Tools {
 
         float dx1 = x11 - x10;
         float dy1 = y11 - y10;
-        float val =(float)(asin(dy1 / dx1) - asin(dy0 / dx0));
+        float val =(float)(Math.atan(dy1 / dx1) - Math.atan(dy0 / dx0));
         if(val == 0) {
             return 0;
         }
