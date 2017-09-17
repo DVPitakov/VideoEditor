@@ -325,13 +325,17 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     if (selectedImageElement != null) {
                         if(selectedImageElement.getClass() == TextImage.class) {
                             ((TextImage)selectedImageElement).setTextSize(
-                                    Tools.normalizator(((fingernX2 - fingernX1)
-                                            / (fingerX2 - fingerX1)), 6, (float)0.2));
+                                    Tools.normalizator(Tools.getLoupe(fingerX1, fingerY1,
+                                            fingerX2, fingerY2,
+                                            fingernX1, fingernY1,
+                                            fingernX2, fingernY2), 6, (float)0.2));
                         }
                         else {
                             ((IconImage)selectedImageElement).setImageSize(
-                                    Tools.normalizator(((fingernX2 - fingernX1)
-                                            / (fingerX2 - fingerX1)), 6, (float)0.2));
+                                    Tools.normalizator(Tools.getLoupe(fingerX1, fingerY1,
+                                            fingerX2, fingerY2,
+                                            fingernX1, fingernY1,
+                                            fingernX2, fingernY2), 6, (float)0.2));
                         }
                         selectedImageElement.setAlpha(
                                 Tools.getAlpha(fingerX1, fingerY1,
@@ -342,7 +346,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         //}
                     }
                     else {
-                        loupeX = ((fingernX2 - fingernX1) / (fingerX2 - fingerX1)) * oldLoupeX;
+                        loupeX = Tools.getLoupe(fingerX1, fingerY1,
+                                fingerX2, fingerY2,
+                                fingernX1, fingernY1,
+                                fingernX2, fingernY2) * oldLoupeX;
                         loupeY = loupeX;
                         loupeX = Tools.normalizator(loupeX, 4, (float)0.2);
                         loupeY = Tools.normalizator(loupeY, 4, (float)0.2);

@@ -37,7 +37,28 @@ public class Tools {
 
     }
 
-    public static float getAlpha(float x00, float y00, float x01, float y01, float x10, float y10, float x11, float y11) {
+
+    public static float getLoupe(float x00, float y00, float x01, float y01,
+                                 float x10, float y10, float x11, float y11) {
+        float dx0 = x01 - x00;
+        float dy0 = y01 - y00;
+
+        float dx1 = x11 - x10;
+        float dy1 = y11 - y10;
+
+        float l0 = (float)Math.sqrt(dx0 * dx0 + dy0 * dy0);
+        float l1 = (float)Math.sqrt(dx1 * dx1 + dy1 * dy1);
+
+        if (l0 < 0.01) {
+            l0 = 0.01f;
+        }
+
+        return l1 / l0;
+
+    }
+
+    public static float getAlpha(float x00, float y00, float x01, float y01,
+                                 float x10, float y10, float x11, float y11) {
         float dx0 = x01 - x00;
         float dy0 = y01 - y00;
 
