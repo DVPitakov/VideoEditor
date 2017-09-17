@@ -24,6 +24,7 @@ public class IconImage extends ImageElement {
 
     public IconImage(int imageType, View view, int left, int top) {
         super();
+        image = imageType;
         this.view = view;
         rect = new Rect();
         rect.set(left, top, left + imageSizeD, top +  imageSizeD);

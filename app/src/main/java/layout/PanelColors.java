@@ -35,6 +35,7 @@ public class PanelColors extends ImageAdapter{
                 Color.GRAY,
                 Color.YELLOW
         };
+        mContacts = mThumbIds.clone();
     }
 
     @Override

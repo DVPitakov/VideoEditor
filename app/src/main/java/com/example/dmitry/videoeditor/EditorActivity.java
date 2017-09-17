@@ -1,7 +1,6 @@
 package com.example.dmitry.videoeditor;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -9,14 +8,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +27,7 @@ import java.io.FileOutputStream;
 
 import layout.PanelColors;
 import layout.PanelInstrumentImage;
+import layout.PanelStckers;
 
 public class EditorActivity extends Activity {
 
@@ -57,6 +52,7 @@ public class EditorActivity extends Activity {
     SeekBar seekBar;
     Handler handler = new Handler();
     PanelColors fragment2;
+    PanelStckers panelStckers;
 
 
     @Override
@@ -170,6 +166,7 @@ public class EditorActivity extends Activity {
 
             PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
             fragment2 = new PanelColors (EditorActivity.this.getBaseContext());
+            panelStckers = new PanelStckers(EditorActivity.this.getBaseContext());
 
             fragmentTransaction.add(R.id.frameLayout, fragment);
             fragmentTransaction.commit();
@@ -240,10 +237,12 @@ public class EditorActivity extends Activity {
                             break;
                         }
                         case IMAGE_ELEMENT: {
-                            mySurfaceView.addImageElement(new IconImage(R.drawable.item_menu, mySurfaceView, 60, 60));
-                            Log.d("step", "step1");
-                            mySurfaceView.imageHolder.setBitmapWithElements(null);
-                            mySurfaceView.draw();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            if(fragmentManager.findFragmentById(R.id.stickersLayout) == null) {
+                                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                fragmentTransaction.add(R.id.stickersLayout, panelStckers);
+                                fragmentTransaction.commit();
+                            }
                             break;
                         }
                         case 4: {
@@ -285,6 +284,19 @@ public class EditorActivity extends Activity {
                     mySurfaceView.imageHolder.setBitmapWithElements(null);
                     mySurfaceView.draw();
 
+                }
+            });
+
+            panelStckers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    mySurfaceView.addImageElement(new IconImage(PanelStckers.ITEMS[i], mySurfaceView, 60, 60));
+                    mySurfaceView.imageHolder.setBitmapWithElements(null);
+                    mySurfaceView.draw();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.remove(panelStckers);
+                    fragmentTransaction.commit();
                 }
             });
         }

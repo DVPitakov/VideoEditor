@@ -4,27 +4,23 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.dmitry.videoeditor.R;
 
 
 public class ImageAdapter extends Fragment {
-    public final static  Integer[] mContacts = {1, 2, 3, 4, 5, 6};
-
+    public Integer[] mContacts = {};
+    protected int layout = R.layout.fragment_instrumen_panel_list;
+    protected int id = R.id.gridPanelImage;
+    protected int itemSize = R.dimen.imageAdapterImageSize;
     protected class DataAdapter extends ArrayAdapter<Integer> {
         Context mContext;
 
@@ -44,7 +40,7 @@ public class ImageAdapter extends Fragment {
                 // if it's not recycled, initialize some attributes
                 imageView = new ImageView(mContext);
                 Resources res = getResources();
-                float imageSize = res.getDimension(R.dimen.imageAdapterImageSize);
+                float imageSize = res.getDimension(itemSize);
                 imageView.setLayoutParams(new GridView.LayoutParams((int)imageSize, (int)imageSize));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(8, 8, 8, 8);
@@ -94,9 +90,9 @@ public class ImageAdapter extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        dataAdapter = new DataAdapter(mContext, R.id.gridPanelImage);
-        View view = inflater.inflate(R.layout.fragment_instrumen_panel_list, null);
-        gridView = (GridView) view.findViewById(R.id.gridPanelImage);
+        dataAdapter = new DataAdapter(mContext, id);
+        View view = inflater.inflate(layout, null);
+        gridView = (GridView) view.findViewById(id);
         gridView.setAdapter(dataAdapter);
         //gridView.setAlpha(0.5f);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

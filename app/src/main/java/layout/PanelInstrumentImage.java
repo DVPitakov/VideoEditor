@@ -10,7 +10,6 @@ import com.example.dmitry.videoeditor.R;
  */
 
 public class PanelInstrumentImage extends ImageAdapter{
-
     public PanelInstrumentImage(Context c) {
         super(c);
         mThumbIds = new Integer[]{
@@ -21,6 +20,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                 R.drawable.item_save,
                 R.drawable.item_back
         };
+        mContacts = mThumbIds.clone();
     }
 
 }
