@@ -74,8 +74,19 @@ public class IconImage extends ImageElement {
     }
 
     public void draw(Canvas canvas) {
-        Paint fontPaint = new Paint();
-        canvas.drawBitmap(bitmapSource, rect.left + x, rect.top + y, fontPaint);
+        matrix.reset();
+        matrix.setTranslate(rect.left + x, rect.top + y);
+        matrix.postRotate(alpha + oldAlpha, rect.left + x, rect.top + y);
 
+        inverseMatrix.reset();
+        inverseMatrix.setTranslate(-rect.left - x, - rect.top  - y);
+        inverseMatrix.postRotate(-alpha - oldAlpha, 0, 0);
+        canvas.setMatrix(matrix);
+
+        Paint fontPaint = new Paint();
+        canvas.drawBitmap(bitmapSource, 0, 0, fontPaint);
+
+        fontPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawRect(0,0, rect.right - rect.left, rect.bottom - rect.top, fontPaint);
     }
 }

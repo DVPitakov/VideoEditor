@@ -3,7 +3,9 @@ package com.example.dmitry.videoeditor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -55,12 +57,24 @@ public class TextImage extends ImageElement {
     }
 
     public void draw(Canvas canvas) {
+        matrix.reset();
+        matrix.setTranslate(rect.left + x, rect.top + y);
+        matrix.postRotate(alpha + oldAlpha, rect.left + x, rect.top + y);
+
+        inverseMatrix.reset();
+        inverseMatrix.setTranslate(-rect.left - x, - rect.top  - y);
+        inverseMatrix.postRotate(-alpha -oldAlpha, 0, 0);
+
         Paint fontPaint = new Paint();
         fontPaint.setColor(color);
         fontPaint.setStrokeWidth(5.0f);
-        fontPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        fontPaint.setStyle(Paint.Style.FILL);
         fontPaint.setTextSize(textSizeD);
-        canvas.drawText(text, rect.left + x, rect.bottom + y, fontPaint);
+        canvas.setMatrix(matrix);
+        canvas.drawText(text, 0, - rect.top + rect.bottom, fontPaint);
+        fontPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawRect( 0, - rect.top + rect.bottom, rect.right - rect.left, 0, fontPaint);
+
 
     }
 }

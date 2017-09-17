@@ -3,5 +3,5 @@
     <dimen name="imageAdapterImageBorder">4dp</dimen>
     <dimen name="imageAdapterImageSize">40dp</dimen>
     <dimen name="maxIconSize">90dp</dimen>
-    <dimen name="mySurfaceViewSize">350dp</dimen>
+    <dimen name="mySurfaceViewSize">450dp</dimen>
 </resources>

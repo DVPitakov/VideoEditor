@@ -1,6 +1,11 @@
 package com.example.dmitry.videoeditor;
 
+import android.graphics.Matrix;
+import android.graphics.Point;
+
 import layout.PanelInstrumentImage;
+
+import static java.lang.Math.asin;
 
 /**
  * Created by dmitry on 10.09.17.
@@ -31,4 +36,19 @@ public class Tools {
 
 
     }
+
+    public static float getAlpha(float x00, float y00, float x01, float y01, float x10, float y10, float x11, float y11) {
+        float dx0 = x01 - x00;
+        float dy0 = y01 - y00;
+
+        float dx1 = x11 - x10;
+        float dy1 = y11 - y10;
+        float val =(float)(asin(dy1 / dx1) - asin(dy0 / dx0));
+        if(val == 0) {
+            return 0;
+        }
+        return (float)(180 * val / Math.PI);
+
+    }
+
 }

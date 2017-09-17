@@ -272,7 +272,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                             }
                         }
                     }
-                    Log.d("101525: ", "ACTION_DOWN");
                     break;
                 }
                 case MotionEvent.ACTION_MOVE: {
@@ -294,7 +293,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 case MotionEvent.ACTION_POINTER_DOWN: {
                     fingerX2 = motionEvent.getX(1);
                     fingerY2 = motionEvent.getY(1);
-                    Log.d("101525", "ACTION_POINTER_DOWN");
                     break;
                 }
                 case MotionEvent.ACTION_UP:
@@ -311,7 +309,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         imageHolder.setBitmapWithElements(null);
                     }
 
-                    Log.d("db", "ACTION_UP");
                     break;
                 }
             }
@@ -336,6 +333,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                                     Tools.normalizator(((fingernX2 - fingernX1)
                                             / (fingerX2 - fingerX1)), 6, (float)0.2));
                         }
+                        selectedImageElement.setAlpha(
+                                Tools.getAlpha(fingerX1, fingerY1,
+                                        fingerX2, fingerY2,
+                                        fingernX1, fingernY1,
+                                        fingernX2, fingernY2));
                         imageHolder.setBitmapWithElements(null);
                         //}
                     }
@@ -359,6 +361,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         else {
                             ((IconImage)selectedImageElement).saveImageSize();
                         }
+                        selectedImageElement.saveAlpha();
 
                     }
 
