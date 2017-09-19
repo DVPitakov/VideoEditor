@@ -34,9 +34,12 @@ public class Tools {
                 ||  string.equals("video/3gp")
                 ||  string.equals("video/avi");
 
-
     }
 
+    public static float getCenter(float x00, float x01) {
+        return (x01 + x00)/2;
+
+    }
 
     public static float getLoupe(float x00, float y00, float x01, float y01,
                                  float x10, float y10, float x11, float y11) {
