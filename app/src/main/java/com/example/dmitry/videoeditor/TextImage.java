@@ -35,6 +35,10 @@ public class TextImage extends ImageElement {
     public void setTextSize(float loupe) {
         Log.d("step", "setTextSize");
         textSizeD = (int)(textSize * loupe);
+        rect.set(rect.left,
+                rect.bottom - textSizeD,
+                rect.left + textSizeD / 2 * text.length(),
+                rect.bottom);
 
     }
 
@@ -72,8 +76,8 @@ public class TextImage extends ImageElement {
         fontPaint.setTextSize(textSizeD);
         canvas.setMatrix(matrix);
         canvas.drawText(text, 0, - rect.top + rect.bottom, fontPaint);
-        fontPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect( 0, - rect.top + rect.bottom, rect.right - rect.left, 0, fontPaint);
+        //fontPaint.setStyle(Paint.Style.STROKE);
+        //canvas.drawRect( 0, - rect.top + rect.bottom, rect.right - rect.left, 0, fontPaint);
 
 
     }

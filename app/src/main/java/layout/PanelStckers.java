@@ -26,13 +26,13 @@ public class PanelStckers extends ImageAdapter {
             R.drawable.s14,
             R.drawable.s15,
             R.drawable.s16,
-            R.drawable.s17,
-            R.drawable.s18,
-            R.drawable.s19,
-            R.drawable.s20,
-            R.drawable.s21,
-            R.drawable.s22,
-            R.drawable.s23,
+//            R.drawable.s17,
+//            R.drawable.s18,
+//            R.drawable.s19,
+//            R.drawable.s20,
+//            R.drawable.s21,
+//            R.drawable.s22,
+//            R.drawable.s23,
     };
     public PanelStckers(Context c) {
         super(c);
