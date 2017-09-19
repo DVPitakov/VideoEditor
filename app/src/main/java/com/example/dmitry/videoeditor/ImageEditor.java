@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 
@@ -142,4 +143,34 @@ public class ImageEditor {
         return freshBitmap;
 
     }
+
+    public static Bitmap sobol(Bitmap bitmap) {
+        ColorMatrix colorMatrix;
+        ColorMatrix colorMatrix_Inverted =
+                new ColorMatrix(new float[] {
+                        (float)1.2,  0,  0,  0, 0,
+                        0,   (float)1.2,  0,  0, 0,
+                        0,  0,  (float)1.2,  0, 0,
+                        0,  0,  0,  1, 0});
+
+        ColorFilter ColorFilter_Sepia = new ColorMatrixColorFilter(
+                colorMatrix_Inverted);
+
+
+        android.graphics.Bitmap.Config config = bitmap.getConfig();
+        if(config == null) {
+            config  = android.graphics.Bitmap.Config.ARGB_8888;
+
+        }
+        Bitmap freshBitmap = bitmap.copy(config, true);
+
+        Canvas canvas = new Canvas(freshBitmap);
+        Paint paint = new Paint();
+        paint.setColorFilter(ColorFilter_Sepia);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return freshBitmap;
+
+    }
+
+
 }

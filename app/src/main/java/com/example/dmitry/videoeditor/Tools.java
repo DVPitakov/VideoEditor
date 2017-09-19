@@ -1,7 +1,12 @@
 package com.example.dmitry.videoeditor;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 import layout.PanelInstrumentImage;
 
@@ -74,5 +79,18 @@ public class Tools {
         return (float)(180 * val / Math.PI);
 
     }
+
+    public static void saveAndSendImage(Bitmap bitmap, Context context) {
+        String str = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "image.jpg" , null);
+        Uri imageUri = Uri.parse(str);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/jpeg");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(Intent.createChooser(shareIntent, "send"));
+
+    }
+
 
 }

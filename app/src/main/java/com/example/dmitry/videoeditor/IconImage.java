@@ -81,13 +81,15 @@ public class IconImage extends ImageElement {
     }
 
     public void draw(Canvas canvas) {
+        float senterX = Tools.getCenter(rect.right + x, rect.left + x);
+        float senterY = Tools.getCenter(rect.top + y , rect.bottom + y);
         matrix.reset();
         matrix.setTranslate(rect.left + x, rect.top + y);
-        matrix.postRotate(alpha + oldAlpha, rect.left + x, rect.top + y);
+        matrix.postRotate(alpha + oldAlpha, senterX, senterY);
 
         inverseMatrix.reset();
-        inverseMatrix.setTranslate(-rect.left - x, - rect.top  - y);
-        inverseMatrix.postRotate(-alpha - oldAlpha, 0, 0);
+        inverseMatrix.setRotate(-alpha - oldAlpha, senterX, senterY);
+        inverseMatrix.postTranslate(-rect.left - x, - rect.top  - y);
         canvas.setMatrix(matrix);
 
         Paint fontPaint = new Paint();

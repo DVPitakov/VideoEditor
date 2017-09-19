@@ -1,17 +1,25 @@
 package com.example.dmitry.videoeditor;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +31,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import layout.PanelColors;
@@ -48,6 +61,7 @@ public class EditorActivity extends Activity {
     Uri inputUri;
     Uri outputUri;
 
+
     MySurfaceView mySurfaceView;
     SeekBar seekBar;
     Handler handler = new Handler();
@@ -63,6 +77,7 @@ public class EditorActivity extends Activity {
         setContentView(R.layout.activity_editor);
 
         Intent intent = getIntent();
+
 
         inputUri = intent.getParcelableExtra(INPUT_URI);
         outputUri = intent.getParcelableExtra(OUTPUT_URI);
@@ -112,7 +127,7 @@ public class EditorActivity extends Activity {
 
         mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri, imageHolder);
         Resources res = getResources();
-        float imageSize = res.getDimension(R.dimen.mySurfaceViewSize);
+        final float imageSize = res.getDimension(R.dimen.mySurfaceViewSize);
         mySurfaceView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)imageSize));
         mySurfaceView.setFocusListener(new MySurfaceView.FocusListener() {
             @Override
@@ -246,17 +261,21 @@ public class EditorActivity extends Activity {
                             break;
                         }
                         case 4: {
-                            String str = outputUri.getPath();
-                            Log.d("ddd", str);
-                            String filename = "myfile.jpg";
-                            String string = "Hello world!";
-                            FileOutputStream outputStream;
-                            try {
-                                outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-                                outputStream.write(string.getBytes());
-                                outputStream.close();
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            //requestPermissions(thisActivity,
+                            //        new String[]{Manifest.permission.READ_CONTACTS},
+                            //        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            Log.d("123", "123");
+                            if (Build.VERSION.SDK_INT >= 23) {
+                                Log.d("123", "456");
+                                ActivityCompat.requestPermissions(EditorActivity.this,
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISION);
+
+                            }
+                            else {
+                                Bitmap bitmap =  imageHolder.getBitmapWithElements();
+                                MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "image" , null);
+                                Tools.saveAndSendImage(bitmap, EditorActivity.this);
                             }
                             break;
                         }
@@ -310,6 +329,21 @@ public class EditorActivity extends Activity {
         super.onDestroy();
 
     }
+
+    final int MY_PERMISION = 1;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Bitmap bitmap =  imageHolder.getBitmapWithElements();
+                Tools.saveAndSendImage(bitmap, this);
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+
 
 
 }
