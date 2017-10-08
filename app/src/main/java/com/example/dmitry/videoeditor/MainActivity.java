@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
             {
                 if (resultCode == RESULT_OK)
                 {
-
                     inputUri = data.getData();
                     inputPathView.setText(inputUri.toString());
                     outputPathButton.setEnabled(true);

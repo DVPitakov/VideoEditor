@@ -43,12 +43,8 @@ import layout.PanelInstrumentImage;
 import layout.PanelStckers;
 
 public class EditorActivity extends Activity {
-
-
     public final static String INPUT_URI = "inputUri";
     public final static String OUTPUT_URI = "outputUri";
-
-
 
     Button pauseButton;
 
@@ -61,19 +57,19 @@ public class EditorActivity extends Activity {
     Uri inputUri;
     Uri outputUri;
 
+    Handler handler = new Handler();
 
     MySurfaceView mySurfaceView;
     SeekBar seekBar;
-    Handler handler = new Handler();
     PanelColors fragment2;
     PanelStckers panelStckers;
+    PanelInstrumentImage fragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_editor);
 
         Intent intent = getIntent();
@@ -83,7 +79,8 @@ public class EditorActivity extends Activity {
         outputUri = intent.getParcelableExtra(OUTPUT_URI);
         seekBar = (SeekBar)findViewById(R.id.seekBar);
 
-        imageHolder = new ImageHolder(inputUri, this);
+        imageHolder = ImageHolder.getInstance();
+        imageHolder.tryInit(inputUri, this);
 
 
         pauseButton = (Button)findViewById(R.id.pauseButton);
@@ -122,9 +119,8 @@ public class EditorActivity extends Activity {
             }
         });
 
+
         lineraLayout = (LinearLayout)findViewById(R.id.editorLinearLayout);
-
-
         mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri, imageHolder);
         Resources res = getResources();
         final float imageSize = res.getDimension(R.dimen.mySurfaceViewSize);
@@ -157,7 +153,6 @@ public class EditorActivity extends Activity {
         });
         lineraLayout.addView(mySurfaceView);
 
-
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -170,26 +165,33 @@ public class EditorActivity extends Activity {
         });
 
 
+
         videoScrollLayoyt = (LinearLayout)findViewById(R.id.videoScrollLayout);
+
         if(Tools.isVideo(this.getBaseContext().getContentResolver().getType(inputUri))) {
             videoScrollLayoyt.setVisibility(View.VISIBLE);
+
         }
         else {
+
             videoScrollLayoyt.setVisibility(View.GONE);
+
+
+            //TODO
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            PanelInstrumentImage fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
+            fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
             fragment2 = new PanelColors (EditorActivity.this.getBaseContext());
             panelStckers = new PanelStckers(EditorActivity.this.getBaseContext());
 
             fragmentTransaction.add(R.id.frameLayout, fragment);
             fragmentTransaction.commit();
+
             final int KROP_ELEMENT = 0;
             final int FILTER_ELEMENT = 2;
             final int TEXT_ELEMENT = 1;
             final int IMAGE_ELEMENT = 3;
-
             fragment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 boolean b =false;
                 int i = 0;
@@ -200,9 +202,13 @@ public class EditorActivity extends Activity {
                             if (b) {
                                 mySurfaceView.kropUnset();
                                 Rect rect = mySurfaceView.getKropRect();
-                                Bitmap freshBitmap = ImageEditor.krop(imageHolder.getFreshBitmap(),
+                                Bitmap kropedBitmap = imageHolder.getKropedBitmap();
+                                if (kropedBitmap == null) {
+                                    kropedBitmap = imageHolder.getDefaultBitmap();
+                                }
+                                kropedBitmap = ImageEditor.krop(kropedBitmap,
                                         rect.left, rect.top, rect.right, rect.bottom);
-                                imageHolder.setFreshBitmap(freshBitmap);
+                                imageHolder.setKropedBitmap(kropedBitmap);
                                 mySurfaceView.kropClear();
                                 mySurfaceView.draw();
                             }
@@ -213,25 +219,10 @@ public class EditorActivity extends Activity {
                             break;
                         }
                         case FILTER_ELEMENT: {
-                            Bitmap freshBitmap;
-                            switch (this.i) {
-                                case 0: {
-                                    freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
-                                    break;
-                                }
-                                case 1: {
-                                    freshBitmap = ImageEditor.bombit(imageHolder.getDefaultBitmap());
-                                    break;
-                                }
-                                case 2: {
-                                    freshBitmap = ImageEditor.bombit2(imageHolder.getDefaultBitmap());
-                                    break;
-                                }
-                                default: freshBitmap = ImageEditor.inversion(imageHolder.getDefaultBitmap());
-                            }
-                            imageHolder.setFreshBitmap(freshBitmap);
+                            this.i = (this.i + 1) % 4;
+                            imageHolder.setFreshBitmap(null);
+                            mySurfaceView.setEffect(this.i);
                             mySurfaceView.draw();
-                            this.i = (this.i + 1) % 3;
                             break;
                         }
                         case TEXT_ELEMENT: {
@@ -261,12 +252,7 @@ public class EditorActivity extends Activity {
                             break;
                         }
                         case 4: {
-                            //requestPermissions(thisActivity,
-                            //        new String[]{Manifest.permission.READ_CONTACTS},
-                            //        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                            Log.d("123", "123");
                             if (Build.VERSION.SDK_INT >= 23) {
-                                Log.d("123", "456");
                                 ActivityCompat.requestPermissions(EditorActivity.this,
                                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                         MY_PERMISION);
@@ -280,7 +266,7 @@ public class EditorActivity extends Activity {
                             break;
                         }
                         case 5: {
-                            mySurfaceView.imageHolder.setFreshBitmap(null);
+                            mySurfaceView.imageHolder.setKropedBitmap(null);
                             mySurfaceView.imageEditorQueue.clear();
                             mySurfaceView.draw();
                             break;
@@ -288,7 +274,6 @@ public class EditorActivity extends Activity {
                     }
                 }
             });
-
             fragment2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 int []Colors = {
                         Color.WHITE,
@@ -320,14 +305,24 @@ public class EditorActivity extends Activity {
             });
         }
 
-
-
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        FragmentManager fragmentManager2 = getFragmentManager();
+        FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+        fragmentTransaction2.remove(fragment);
+        fragmentTransaction2.remove(fragment2);
+        fragmentTransaction2.remove(panelStckers);
+        fragmentTransaction2.commit();
+        savedInstanceState.putParcelable(INPUT_URI, inputUri);
+        savedInstanceState.putParcelable(OUTPUT_URI, outputUri);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     final int MY_PERMISION = 1;

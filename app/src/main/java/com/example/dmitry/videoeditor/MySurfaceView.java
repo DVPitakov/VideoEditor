@@ -59,6 +59,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     ImageHolder imageHolder;
     ImageEditorQueue imageEditorQueue;
     ImageElement selectedImageElement;
+    int effect = 0;
 
     double x1;
     double y1;
@@ -89,6 +90,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
 
     boolean isKrop = false;
+
+    public void setEffect(int i) {
+        effect = i;
+
+    }
 
     public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
         super(context);
@@ -179,6 +185,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public void addImageElement(ImageElement imageElement) {
         imageEditorQueue.addElement(imageElement);
         selectedImageElement = imageElement;
+        focusListener.focusTaken();
 
     }
 
@@ -409,7 +416,32 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 if(bitmapWithElements == null) {
                     Bitmap freshBitmap = imageHolder.getFreshBitmap();
                     if(freshBitmap == null) {
-                        freshBitmap = imageHolder.getDefaultBitmap();
+                        Bitmap kropedBitmap = imageHolder.getKropedBitmap();
+                        if(kropedBitmap == null) {
+                            kropedBitmap = imageHolder.getDefaultBitmap();
+                            imageHolder.setKropedBitmap(kropedBitmap);
+                        }
+                        switch (effect) {
+                            case 0: {
+                                freshBitmap = kropedBitmap;
+                                break;
+                            }
+                            case 1: {
+                                freshBitmap = ImageEditor.bombit(kropedBitmap);
+                                break;
+                            }
+                            case 2: {
+                                freshBitmap = ImageEditor.bombit2(kropedBitmap);
+                                break;
+                            }
+                            case 3: {
+                                freshBitmap = ImageEditor.inversion(kropedBitmap);
+                                break;
+                            }
+                            default: {
+                                freshBitmap = kropedBitmap;
+                            }
+                        }
                         imageHolder.setFreshBitmap(freshBitmap);
                     }
                     bitmapWithElements = imageEditorQueue.draw(freshBitmap);

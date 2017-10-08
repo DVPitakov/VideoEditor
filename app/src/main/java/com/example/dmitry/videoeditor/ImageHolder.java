@@ -14,23 +14,32 @@ import java.io.IOException;
  */
 
 public class ImageHolder {
-    private Bitmap defaultBitmap;
-    private Bitmap freshBitmap;
-    private Bitmap bitmapWithElements;
-    private Bitmap scaledBitmap;
+    private  Bitmap defaultBitmap;
+    private  Bitmap kropedBitmap;
+    private  Bitmap freshBitmap;
+    private  Bitmap bitmapWithElements;
+    private  Bitmap scaledBitmap;
+    private static ImageHolder instance;
 
-
-    public ImageHolder(Uri defaultImagePath, Activity activity) {
-        try {
-            defaultBitmap = MediaStore.Images.Media.getBitmap(
-                    activity.getContentResolver(), defaultImagePath
-            );
-            freshBitmap = defaultBitmap;
+    public static ImageHolder getInstance() {
+        if (instance == null) {
+         instance = new ImageHolder();
         }
-        catch (IOException e) {
-            Log.d("er", "101128");
-        }
+        return instance;
+    }
+    private ImageHolder() {}
 
+    public void tryInit(Uri defaultImagePath, Activity activity) {
+        if (defaultBitmap == null) {
+            try {
+                defaultBitmap = MediaStore.Images.Media.getBitmap(
+                        activity.getContentResolver(), defaultImagePath
+                );
+                freshBitmap = defaultBitmap;
+            } catch (IOException e) {
+                Log.d("er", "101128");
+            }
+        }
     }
 
     public void setMaxImageSize(int maxWidth, int maxHeight) {
@@ -61,10 +70,17 @@ public class ImageHolder {
     }
 
     public Bitmap getFreshBitmap() {
-        if(freshBitmap == null) {
-            freshBitmap = defaultBitmap;
-        }
         return freshBitmap;
+
+    }
+
+    public void setKropedBitmap(Bitmap bitmap) {
+        this.kropedBitmap = bitmap;
+        setFreshBitmap(null);
+    }
+
+    public Bitmap getKropedBitmap() {
+        return kropedBitmap;
 
     }
 
