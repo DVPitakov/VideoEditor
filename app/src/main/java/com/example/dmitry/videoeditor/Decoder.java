@@ -81,7 +81,7 @@ public class Decoder {
         }
     }
 
-    public void inputFile(String path_name){
+    public void outputFile(String path_name){
         output_name_file = path_name;
     }
 
