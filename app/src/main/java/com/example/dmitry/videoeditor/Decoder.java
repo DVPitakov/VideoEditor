@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class Decoder {
     private String complexCommand;
-
     public enum name_command  {
         OVERWRITE_FILE,
         INPUT_FILE_FULL_PATH,
@@ -24,6 +23,12 @@ public class Decoder {
         VFRAMES,
         START_CROP_VIDEO,
         DURATION_CROP_VIDEO
+    }
+
+    public enum name_video_codec  {
+        COPY,
+        H264,
+        MPEG4
     }
 
     private static final Map<name_command,String> command_list =  new HashMap<name_command , String>() {
@@ -43,13 +48,18 @@ public class Decoder {
         }
     };
 
+    private static final Map<name_video_codec,String> video_codec_list =  new HashMap<name_video_codec , String>() {
+        {
+            put(name_video_codec.COPY, "copy");
+            put(name_video_codec.H264, "libx264");
+            put(name_video_codec.MPEG4, "mp4");
+        }
+    };
     private Map<String,String> command_map;
     private String output_name_file;
 
-    public Decoder(String input_file, String output_file) {
+    public Decoder() {
         command_map = new HashMap<>();
-        output_name_file = output_file;
-        addCommand(name_command.INPUT_FILE_FULL_PATH,input_file);
     }
 
     public String getComplexCommand(){
@@ -71,13 +81,17 @@ public class Decoder {
         }
     }
 
-    public void delCommand(name_command command){
-        if (command==name_command.INPUT_FILE_FULL_PATH)
-            return;
-        command_map.remove(command_list.get(command));
-    }
-
     public void inputFile(String path_name){
         output_name_file = path_name;
+    }
+
+    public void setVideoCodec(name_video_codec name){
+        command_map.put("-vcodec", "-vcodec "+ video_codec_list.get(name));
+    }
+
+    public void clearSetup(){
+        String input_file_name = command_map.get(command_list.get(name_command.INPUT_FILE_FULL_PATH));
+        command_map.clear();
+        addCommand(name_command.INPUT_FILE_FULL_PATH,input_file_name);
     }
 }
