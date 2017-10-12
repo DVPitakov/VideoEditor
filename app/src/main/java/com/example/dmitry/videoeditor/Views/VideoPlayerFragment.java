@@ -44,6 +44,7 @@ public class VideoPlayerFragment extends Fragment {
     ImageButton playButton;
     ImageButton convertButton;
     ImageButton crosButton;
+    ImageButton showKroper;
     RangeBar rangebar;
     private OnVideoPlayerFragmentInteractionListener mListener;
 
@@ -125,6 +126,13 @@ public class VideoPlayerFragment extends Fragment {
                     int rr = rangebar.getRight();
                     mListener.doVideoKrop(left, right, ll, rr);
                 }
+            }
+        });
+        showKroper = (ImageButton)(rootView.findViewById(R.id.show_kroper));
+        showKroper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rangebar.setVisibility(View.VISIBLE);
             }
         });
         redyForUpdating = true;
