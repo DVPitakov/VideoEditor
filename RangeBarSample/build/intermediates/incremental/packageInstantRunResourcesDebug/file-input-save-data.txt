@@ -1,0 +1,30 @@
+#Internal package file, do not edit.
+#Thu Oct 12 17:11:40 MSK 2017
+2.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+5.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/menu-v11/main.xml
+5.set=ANDROID_RESOURCE
+3.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+6.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/AndroidManifest.xml
+2.set=ANDROID_RESOURCE
+4.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+7.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/layout/activity_main.xml
+7.set=ANDROID_RESOURCE
+count=9
+0.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/assets/debug/Roboto-Thin.ttf
+5.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+8.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/ic_launcher.png
+4.set=ANDROID_RESOURCE
+6.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+1.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/seek_thumb_normal.png
+1.set=ANDROID_RESOURCE
+7.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+2.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/resources.arsc
+6.set=ANDROID_RESOURCE
+0.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/assets/debug
+8.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+3.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/seek_thumb_pressed.png
+3.set=ANDROID_RESOURCE
+1.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+4.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/menu/main.xml
+8.set=ANDROID_RESOURCE
+0.set=ASSET

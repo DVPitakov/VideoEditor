@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/incremental/mergeDebugResources/merged.dir/values-large-v4/values-large-v4.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 39,
+                    "endOffset": 90
+                },
+                "from": {
+                    "file": "/home/dmitry/VideoEditor/RangeBarSample/res/values-large/dimens.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 186,
+                        "endColumn": 39,
+                        "endOffset": 221
+                    }
+                }
+            }
+        ]
+    }
+]

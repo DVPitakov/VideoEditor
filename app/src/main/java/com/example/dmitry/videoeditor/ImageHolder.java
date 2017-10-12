@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
@@ -88,6 +89,7 @@ public class ImageHolder {
         this.freshBitmap = freshBitmap;
         bitmapWithElements = null;
         scaledBitmap = null;
+        System.gc();
 
     }
 
@@ -99,6 +101,7 @@ public class ImageHolder {
     public void setBitmapWithElements(Bitmap bitmap) {
         bitmapWithElements = bitmap;
         scaledBitmap = null;
+        System.gc();
 
     }
 

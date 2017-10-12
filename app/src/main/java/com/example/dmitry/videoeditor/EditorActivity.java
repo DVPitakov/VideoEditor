@@ -32,6 +32,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
+import com.example.dmitry.videoeditor.Views.CompressionModeFragment;
+import com.example.dmitry.videoeditor.Views.ConvertingProgressFragment;
+import com.example.dmitry.videoeditor.Views.VideoPlayerFragment;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -42,17 +46,21 @@ import layout.PanelColors;
 import layout.PanelInstrumentImage;
 import layout.PanelStckers;
 
-public class EditorActivity extends Activity {
+public class EditorActivity
+        extends Activity
+        implements VideoPlayerFragment.OnVideoPlayerFragmentInteractionListener
+        , CompressionModeFragment.OnFragmentInteractionListener
+        , ConvertingProgressFragment.OnConvertingFragmentInteractionListener{
     public final static String INPUT_URI = "inputUri";
     public final static String OUTPUT_URI = "outputUri";
-
-    Button pauseButton;
 
     EditText editText;
 
     ImageHolder imageHolder;
     LinearLayout lineraLayout;
     LinearLayout videoScrollLayoyt;
+    VideoPlayerFragment videoPlayerFragment;
+    CompressionModeFragment compressionModeFragment;
 
     Uri inputUri;
     Uri outputUri;
@@ -60,11 +68,10 @@ public class EditorActivity extends Activity {
     Handler handler = new Handler();
 
     MySurfaceView mySurfaceView;
-    SeekBar seekBar;
     PanelColors fragment2;
     PanelStckers panelStckers;
     PanelInstrumentImage fragment;
-
+    int dur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,25 +84,9 @@ public class EditorActivity extends Activity {
 
         inputUri = intent.getParcelableExtra(INPUT_URI);
         outputUri = intent.getParcelableExtra(OUTPUT_URI);
-        seekBar = (SeekBar)findViewById(R.id.seekBar);
 
         imageHolder = ImageHolder.getInstance();
         imageHolder.tryInit(inputUri, this);
-
-
-        pauseButton = (Button)findViewById(R.id.pauseButton);
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mySurfaceView.mediaPlayerIsPlaying()) {
-                    mySurfaceView.mediaPlayerPause();
-                }
-                else {
-                    mySurfaceView.mediaPlayerStart();
-                }
-
-            }
-        });
 
         editText = (EditText)findViewById(R.id.edutText);
         editText.addTextChangedListener(new TextWatcher() {
@@ -153,23 +144,16 @@ public class EditorActivity extends Activity {
         });
         lineraLayout.addView(mySurfaceView);
 
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                int currentPosition = mySurfaceView.getMediaPlayerCurrentPosition();
-                seekBar.setMax(mySurfaceView.getMediaPlayerDuration());
-                seekBar.setProgress(currentPosition);
-                handler.postDelayed(this, 100);
-
-            }
-        });
-
-
 
         videoScrollLayoyt = (LinearLayout)findViewById(R.id.videoScrollLayout);
 
         if(Tools.isVideo(this.getBaseContext().getContentResolver().getType(inputUri))) {
-            videoScrollLayoyt.setVisibility(View.VISIBLE);
+            videoPlayerFragment = new VideoPlayerFragment();
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.footer_pos, videoPlayerFragment)
+                    .commit();
+
 
         }
         else {
@@ -305,7 +289,10 @@ public class EditorActivity extends Activity {
             });
         }
 
+
     }
+
+
 
     @Override
     protected void onStop() {
@@ -339,7 +326,70 @@ public class EditorActivity extends Activity {
     }
 
 
+    @Override
+    public void onVideoPlayerFragmentInteraction(boolean bul) {
+        if(mySurfaceView.mediaPlayerIsPlaying()) {
+            mySurfaceView.mediaPlayerPause();
+        }
+        else {
+            mySurfaceView.mediaPlayerStart();
+        }
+    }
 
 
+    @Override
+    public void ready(Object object) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(videoPlayerFragment != null)
+                    videoPlayerFragment.updateProgess(mySurfaceView.getMediaPlayerCurrentPosition(),
+                            mySurfaceView.getMediaPlayerDuration());
+                    handler.postDelayed(this, 100);
+            }
+        });
+    }
+
+
+    @Override
+    public void show_compression_menu_request() {
+        compressionModeFragment = new CompressionModeFragment();
+        compressionModeFragment.show(getFragmentManager(), "123");
+    }
+
+    //TODO для обрезки видео leftCur, leftMax - текущее положение (leftCur / (rightMax - leftMax))
+    @Override
+    public void doVideoKrop(int leftCur, int rightCur, int leftMax, int rightMax) {
+
+    }
+
+    @Override
+    public void onConvertingFragmentInteraction(Uri uri) {
+
+    }
+
+    //TODO
+    //            convertingProgressFragment.setProgess(); - отображает прогресс
+
+    //TODO устанавливает режим конвертации видео
+    @Override
+    public void onFragmentInteraction(String buttonType) {
+        ConvertingProgressFragment convertingProgressFragment = new ConvertingProgressFragment();
+        compressionModeFragment.dismiss();
+        switch (buttonType) {
+            case CompressionModeFragment.FAST_COMPRESS: {
+                convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
+                break;
+            }
+            case CompressionModeFragment.QUALITY_COMPRESS: {
+                convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
+                break;
+            }
+            case CompressionModeFragment.WITHOUT_COMPRESS: {
+                //convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
+                break;
+            }
+        }
+    }
 }
 

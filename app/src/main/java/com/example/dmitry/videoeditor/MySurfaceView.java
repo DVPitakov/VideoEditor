@@ -452,6 +452,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 scaledBitmap = Bitmap.createScaledBitmap(bitmapWithElements, (int) (iw * loupeX), (int) (ih * loupeY), true);
                 imageHolder.setScaledBitmap(scaledBitmap);
             }
+            canvas.scale(loupeX, loupeY);
             canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
 
             paint.setARGB(128, 255, 0, 0);

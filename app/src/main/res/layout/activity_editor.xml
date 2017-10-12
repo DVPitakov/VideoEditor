@@ -15,31 +15,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:orientation="vertical"
-            tools:layout_editor_absoluteY="8dp"
-            tools:layout_editor_absoluteX="8dp">
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/edutText"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 tools:layout_editor_absoluteY="0dp"
                 tools:layout_editor_absoluteX="0dp" />
+            <FrameLayout
+                android:id="@+id/header_pos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </FrameLayout>
             <LinearLayout
                 android:id = "@+id/videoScrollLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <Button
-                    android:id="@+id/pauseButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=">"/>
-
-                <SeekBar
-                    android:id="@+id/seekBar"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
             <FrameLayout
                 android:id="@+id/frameLayout"
@@ -61,6 +54,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">
         </FrameLayout>
+        <FrameLayout
+            android:id="@+id/footer_pos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </FrameLayout>
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/message_pos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     </FrameLayout>
 
 

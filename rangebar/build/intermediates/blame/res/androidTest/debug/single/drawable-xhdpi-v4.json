@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/dmitry/VideoEditor/rangebar/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/seek_thumb_pressed.png",
+        "source": "/home/dmitry/VideoEditor/rangebar/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/seek_thumb_pressed.png"
+    },
+    {
+        "merged": "/home/dmitry/VideoEditor/rangebar/build/intermediates/res/merged/androidTest/debug/drawable-xhdpi-v4/seek_thumb_normal.png",
+        "source": "/home/dmitry/VideoEditor/rangebar/build/intermediates/bundles/debug/res/drawable-xhdpi-v4/seek_thumb_normal.png"
+    }
+]

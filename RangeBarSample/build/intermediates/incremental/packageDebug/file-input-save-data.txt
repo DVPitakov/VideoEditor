@@ -1,0 +1,36 @@
+#Internal package file, do not edit.
+#Thu Oct 12 17:11:42 MSK 2017
+2.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+5.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/menu/main.xml
+5.set=ANDROID_RESOURCE
+3.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+6.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e4bcb5296bf5f6c1dd97560fa13a924fd71a53ca/classes.dex
+2.set=ANDROID_RESOURCE
+10.set=ANDROID_RESOURCE
+10.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/ic_launcher.png
+4.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+7.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/menu-v11/main.xml
+7.set=ANDROID_RESOURCE
+count=11
+0.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_4d2ba3e195b5329d110aa39b73f7dd9d7f1afb31/classes.dex
+5.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+8.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/AndroidManifest.xml
+4.set=ANDROID_RESOURCE
+6.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e4bcb5296bf5f6c1dd97560fa13a924fd71a53ca
+1.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/assets/debug/Roboto-Thin.ttf
+9.set=ANDROID_RESOURCE
+9.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/layout/activity_main.xml
+10.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+1.set=ASSET
+7.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+2.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/seek_thumb_normal.png
+6.set=DEX
+0.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_4d2ba3e195b5329d110aa39b73f7dd9d7f1afb31
+8.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+3.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/resources.arsc
+3.set=ANDROID_RESOURCE
+1.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/assets/debug
+9.base=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_
+4.file=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/seek_thumb_pressed.png
+8.set=ANDROID_RESOURCE
+0.set=DEX

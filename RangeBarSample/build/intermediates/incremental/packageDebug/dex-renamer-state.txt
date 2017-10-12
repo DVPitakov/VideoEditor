@@ -1,0 +1,7 @@
+#Thu Oct 12 17:11:42 MSK 2017
+base.0=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_4d2ba3e195b5329d110aa39b73f7dd9d7f1afb31
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e4bcb5296bf5f6c1dd97560fa13a924fd71a53ca/classes.dex
+base.1=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_e4bcb5296bf5f6c1dd97560fa13a924fd71a53ca
+file.0=/home/dmitry/VideoEditor/RangeBarSample/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_4d2ba3e195b5329d110aa39b73f7dd9d7f1afb31/classes.dex
