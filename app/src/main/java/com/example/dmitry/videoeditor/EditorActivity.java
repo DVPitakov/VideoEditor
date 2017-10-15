@@ -46,6 +46,8 @@ import layout.PanelColors;
 import layout.PanelInstrumentImage;
 import layout.PanelStckers;
 
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+
 public class EditorActivity
         extends Activity
         implements VideoPlayerFragment.OnVideoPlayerFragmentInteractionListener
@@ -72,6 +74,8 @@ public class EditorActivity
     PanelStckers panelStckers;
     PanelInstrumentImage fragment;
     int dur;
+
+    FFmpeg ffmpeg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
