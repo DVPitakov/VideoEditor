@@ -129,6 +129,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
     public int getMediaPlayerCurrentPosition() {
         if(mediaPlayer != null) {
+            mediaPlayer.getDuration();
             return mediaPlayer.getCurrentPosition();
         }
         else {

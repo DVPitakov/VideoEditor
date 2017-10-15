@@ -120,10 +120,10 @@ public class VideoPlayerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mListener != null) {
-                    int left = rangebar.getLeftIndex();
-                    int right = rangebar.getRightIndex();
-                    int ll = rangebar.getLeft();
-                    int rr = rangebar.getRight();
+                    int ll = rangebar.getLeftIndex();
+                    int rr = rangebar.getRightIndex();
+                    int left = rangebar.getLeft();
+                    int right = rangebar.getRight();
                     mListener.doVideoKrop(left, right, ll, rr);
                 }
             }

@@ -15,14 +15,15 @@ public class DecodeVideo {
         LOW_QUALITY,
     }
 
-    public static void decode(float start, float end, Type type){
-        loadFFMpegBinary();
-        float duration = start - end;
+    public DecodeVideo(float start, float end, Type type){
+      //  loadFFMpegBinary();
+        float duration =end - start;
         Decoder decoder = new Decoder();
         decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH,UrlHolder.getInpurUrl());
         decoder.outputFile(UrlHolder.getOutputUrl());
         decoder.addCommand(Decoder.name_command.START_CROP_VIDEO, String.valueOf(start));
         decoder.addCommand(Decoder.name_command.DURATION_CROP_VIDEO, String.valueOf(duration));
+        decoder.addCommand(Decoder.name_command.OVERWRITE_FILE,"");
         decoder.setUltraFast();
         switch (type){
             case COPY:

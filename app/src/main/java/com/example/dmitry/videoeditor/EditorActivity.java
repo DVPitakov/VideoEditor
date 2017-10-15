@@ -380,15 +380,20 @@ public class EditorActivity
     @Override
     public void doVideoKrop(int leftCur, int rightCur, int leftMax, int rightMax) {
         int len =  rightMax - leftMax;
+        int len_video = mySurfaceView.getMediaPlayerDuration();
+        float time_end = (rightCur - leftMax) *len_video/ len / 1000;
+        float time_start = (leftCur - leftMax) * len_video / len / 1000;
 
-        float time_end = ( rightCur - leftMax) / len;
-        float time_start = (leftCur - leftMax) / len;
         if (time_end<time_start){
             float time = time_end;
             time_end=time_start;
             time_start=time;
         }
-        DecodeVideo.decode(time_start,time_end,DecodeVideo.Type.COPY);
+        Log.d("1996", "video duration: " + String.valueOf(len_video));
+        Log.d("1996", "video len: " + String.valueOf(len_video / len / 1000));
+        Log.d("1996", "begin time: " + String.valueOf(time_start));
+        Log.d("1996", "end time: " + String.valueOf(time_end));
+        new DecodeVideo(time_start,time_end,DecodeVideo.Type.COPY);
     }
 
     @Override

@@ -67,7 +67,7 @@ public class Decoder {
         complexCommand = new String[com.size()*2+1];
         for (int i=0; i<com.size(); i++){
             complexCommand[i*2] = com.toArray()[i].toString();
-            complexCommand[i*2+1] = command_map.get(com.toArray()[i]).toString();
+            complexCommand[i*2+1] = command_map.get(com.toArray()[i]);
         }
         complexCommand[com.size()*2] = output_name_file;
         return complexCommand;
