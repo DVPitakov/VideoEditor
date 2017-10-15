@@ -16,7 +16,7 @@ public class DecodeVideo {
     }
 
     public DecodeVideo(float start, float end, Type type){
-      //  loadFFMpegBinary();
+        loadFFMpegBinary();
         float duration =end - start;
         Decoder decoder = new Decoder();
         decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH,UrlHolder.getInpurUrl());

@@ -80,10 +80,10 @@ public class TextImage extends ImageElement {
 
         Paint fontPaint = new Paint();
 
-        Typeface typeface = FontHolder.getInstance().getType();
+        //Typeface typeface = FontHolder.getInstance().getType();
 
-        FontHolder.getInstance().getType();
-        fontPaint.setTypeface(typeface);
+        //FontHolder.getInstance().getType();
+        //fontPaint.setTypeface(typeface);
         fontPaint.setColor(color);
         fontPaint.setStrokeWidth(5.0f);
         fontPaint.setStyle(Paint.Style.FILL);
