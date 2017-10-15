@@ -132,7 +132,12 @@ public class VideoPlayerFragment extends Fragment {
         showKroper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rangebar.setVisibility(View.VISIBLE);
+                if (rangebar.getVisibility() == View.GONE) {
+                    rangebar.setVisibility(View.VISIBLE);
+                }
+                else {
+                    rangebar.setVisibility(View.GONE);
+                }
             }
         });
         redyForUpdating = true;

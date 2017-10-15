@@ -61,6 +61,7 @@ public class EditorActivity
     LinearLayout videoScrollLayoyt;
     VideoPlayerFragment videoPlayerFragment;
     CompressionModeFragment compressionModeFragment;
+    Decoder decoder;
 
     Uri inputUri;
     Uri outputUri;
@@ -81,7 +82,7 @@ public class EditorActivity
 
         Intent intent = getIntent();
 
-
+        decoder = new Decoder();
         inputUri = intent.getParcelableExtra(INPUT_URI);
         outputUri = intent.getParcelableExtra(OUTPUT_URI);
 
@@ -379,6 +380,11 @@ public class EditorActivity
         switch (buttonType) {
             case CompressionModeFragment.FAST_COMPRESS: {
                 convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, inputUri.toString());
+                decoder.outputFile(inputUri.toString() + ".mp4");
+                decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
+
+                //mySurfaceView.updateVideo(Uri.parse(inputUri.toString() + ".mp4"));
                 break;
             }
             case CompressionModeFragment.QUALITY_COMPRESS: {

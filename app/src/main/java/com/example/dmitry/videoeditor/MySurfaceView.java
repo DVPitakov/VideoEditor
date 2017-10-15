@@ -199,6 +199,27 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
+    public void updateVideo(Uri uri) {
+        inputUri = uri;
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        try {
+            mediaPlayer.setDataSource(context, inputUri);
+            mediaPlayer.setSurface(surfaceHolder.getSurface());
+            mediaPlayer.setLooping(true);
+            mediaPlayer.prepare();
+            mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
+                @Override
+                public void onSeekComplete(MediaPlayer mediaPlayer) {
+                    Log.d("db", "next");
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
