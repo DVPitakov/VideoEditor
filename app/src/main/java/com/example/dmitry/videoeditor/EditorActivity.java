@@ -85,8 +85,11 @@ public class EditorActivity
         setContentView(R.layout.activity_editor);
         decoder = new Decoder();
 
-        imageHolder = ImageHolder.getInstance();
-        imageHolder.tryInit(this);
+        if(!Tools.isVideo(UrlHolder.getInpurUrl())) {
+            imageHolder = ImageHolder.getInstance();
+            imageHolder.tryInit(this);
+        }
+
 
         editText = (EditText)findViewById(R.id.edutText);
         editText.addTextChangedListener(new TextWatcher() {
@@ -151,23 +154,27 @@ public class EditorActivity
                  }
             }
         });
+        Log.d("1996", "0004");
         lineraLayout.addView(mySurfaceView);
+        Log.d("1996", "0005");
 
 
-        videoScrollLayoyt = (LinearLayout)findViewById(R.id.videoScrollLayout);
-
+        Log.d("1996", "0006");
         if(Tools.isVideo(UrlHolder.getInpurUrl())) {
             videoPlayerFragment = new VideoPlayerFragment();
+            Log.d("1996", "0001");
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.footer_pos, videoPlayerFragment)
                     .commit();
+            Log.d("1996", "0002");
+
 
 
         }
         else {
 
-            videoScrollLayoyt.setVisibility(View.GONE);
+            //videoScrollLayoyt.setVisibility(View.GONE);
 
 
             //TODO

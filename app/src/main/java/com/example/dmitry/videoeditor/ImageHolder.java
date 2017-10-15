@@ -45,7 +45,7 @@ public class ImageHolder {
     }
 
     public void setMaxImageSize(int maxWidth, int maxHeight) {
-        if (maxWidth != 0 && maxHeight != 0) {
+        if (maxWidth != 0 && maxHeight != 0 && defaultBitmap != null) {
             float x =  defaultBitmap.getWidth() / maxWidth;
             float y = defaultBitmap.getHeight() / maxHeight;
             if (x > 1 || y > 1) {

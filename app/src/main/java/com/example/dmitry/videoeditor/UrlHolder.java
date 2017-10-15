@@ -1,13 +1,16 @@
 package com.example.dmitry.videoeditor;
 
+import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 
 /**
  * Created by dmitry on 15.10.17.
@@ -64,6 +67,7 @@ public class UrlHolder {
     }
 
     public static String getFilePath(Context context, Uri uri)  {
+        final int MY_PERMISION = 1;
         String selection = null;
         String[] selectionArgs = null;
         // Uri is different in versions after KITKAT (Android 4.4), we need to

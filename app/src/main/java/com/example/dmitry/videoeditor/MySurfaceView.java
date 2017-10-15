@@ -108,6 +108,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     public MySurfaceView(Context context, ImageHolder imageHolder) {
         super(context);
+        Log.d("1996", "0003");
         getHolder().addCallback(this);
         this.imageHolder = imageHolder;
         this.cR = context.getContentResolver();
@@ -246,11 +247,11 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         Log.d("db", "next");
                     }
                 });
-
-            } else {
-                this.imageHolder.setMaxImageSize(this.getWidth(), this.getHeight());
-                int iw = imageHolder.getDefaultBitmap().getWidth();
-                int ih = imageHolder.getDefaultBitmap().getHeight();
+            }
+            else {
+                ImageHolder.getInstance().setMaxImageSize(getWidth(), getHeight());
+                int iw = ImageHolder.getInstance().getDefaultBitmap().getWidth();
+                int ih = ImageHolder.getInstance().getDefaultBitmap().getHeight();
                 int tw = this.getWidth();
                 int th = this.getHeight();
 

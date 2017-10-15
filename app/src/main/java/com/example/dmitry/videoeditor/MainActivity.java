@@ -1,5 +1,6 @@
 package com.example.dmitry.videoeditor;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
         editButton = (Button)findViewById(R.id.editButton);
         inputPathView = (TextView)findViewById(R.id.inputPathView);
         outputPathView = (TextView)findViewById(R.id.outputPathView);
+
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+
+        }
 
         outputPathButton.setEnabled(true);
         editButton.setEnabled(true);

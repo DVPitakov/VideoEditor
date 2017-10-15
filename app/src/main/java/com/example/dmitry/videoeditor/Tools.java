@@ -36,12 +36,9 @@ public class Tools {
 
     }
 
-
+    private static Pattern p = Pattern.compile("(mp4)|(3gp)|(avi)$");
     public static boolean isVideo(String string) {
-        Pattern p = Pattern.compile("(mp4)|(3gp)|(avi)$");
         Matcher m = p.matcher(string);
-        Log.d("1996", string);
-        Log.d("1996", String.valueOf(m.find()));
         return m.find();
 
     }
