@@ -7,7 +7,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.Log;
+import android.view.View;
 
 /**
  * Created by dmitry on 11.09.17.
@@ -42,6 +44,11 @@ public class TextImage extends ImageElement {
 
     }
 
+    public void setFont() {
+
+    }
+
+
     public void saveTextSize() {
         Log.d("step", "saveTextSize");
         textSize = textSizeD;
@@ -72,6 +79,11 @@ public class TextImage extends ImageElement {
         inverseMatrix.postTranslate(-rect.left - x, - rect.top  - y);
 
         Paint fontPaint = new Paint();
+
+        Typeface typeface = FontHolder.getInstance().getType();
+
+        FontHolder.getInstance().getType();
+        fontPaint.setTypeface(typeface);
         fontPaint.setColor(color);
         fontPaint.setStrokeWidth(5.0f);
         fontPaint.setStyle(Paint.Style.FILL);

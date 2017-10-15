@@ -34,6 +34,7 @@ import android.widget.SeekBar;
 
 import com.example.dmitry.videoeditor.Views.CompressionModeFragment;
 import com.example.dmitry.videoeditor.Views.ConvertingProgressFragment;
+import com.example.dmitry.videoeditor.Views.ElementRedactorFragment;
 import com.example.dmitry.videoeditor.Views.VideoPlayerFragment;
 
 import java.io.ByteArrayOutputStream;
@@ -61,6 +62,7 @@ public class EditorActivity
     LinearLayout videoScrollLayoyt;
     VideoPlayerFragment videoPlayerFragment;
     CompressionModeFragment compressionModeFragment;
+    ElementRedactorFragment elementRedactorHeader;
     Decoder decoder;
 
     Uri inputUri;
@@ -132,15 +134,24 @@ public class EditorActivity
 
             @Override
             public void focusTaken() {
-                //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                //imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
 
-                //FragmentManager fragmentManager = getFragmentManager();
-               // if(fragmentManager.findFragmentById(R.id.frameLayout2) == null) {
-              //      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-               //     fragmentTransaction.add(R.id.frameLayout2, fragment2);
-               //     fragmentTransaction.commit();
-               // }
+            }
+
+            @Override
+            public void doubleClick() {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                 if(fragmentManager.findFragmentById(R.id.frameLayout2) == null) {
+                     elementRedactorHeader = new ElementRedactorFragment();
+                     getFragmentManager()
+                             .beginTransaction()
+                             .setCustomAnimations(R.animator.slide_anim, 0)
+                             .replace(R.id.frameLayout, elementRedactorHeader)
+                             .add(R.id.frameLayout2, fragment2)
+                             .commit();
+                 }
             }
         });
         lineraLayout.addView(mySurfaceView);
@@ -163,15 +174,18 @@ public class EditorActivity
 
 
             //TODO
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+           // FragmentManager fragmentManager = getFragmentManager();
+           // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             fragment = new  PanelInstrumentImage (EditorActivity.this.getBaseContext());
             fragment2 = new PanelColors (EditorActivity.this.getBaseContext());
             panelStckers = new PanelStckers(EditorActivity.this.getBaseContext());
 
-            fragmentTransaction.add(R.id.frameLayout, fragment);
-            fragmentTransaction.commit();
+            getFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.animator.slide_anim, R.animator.slide_anim)
+                    .add(R.id.frameLayout, fragment)
+                    .commit();
 
             final int KROP_ELEMENT = 0;
             final int FILTER_ELEMENT = 2;

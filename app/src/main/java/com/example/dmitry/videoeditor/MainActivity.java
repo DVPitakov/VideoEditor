@@ -1,6 +1,7 @@
 package com.example.dmitry.videoeditor;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        Typeface typeface = FontHolder.getInstance(getApplicationContext()).getType();
+
 
         inputPathButton = (Button)findViewById(R.id.inputPathButton);
         outputPathButton = (Button)findViewById(R.id.outputPathButton);
