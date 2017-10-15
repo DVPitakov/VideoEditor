@@ -379,7 +379,16 @@ public class EditorActivity
     //TODO для обрезки видео leftCur, leftMax - текущее положение (leftCur / (rightMax - leftMax))
     @Override
     public void doVideoKrop(int leftCur, int rightCur, int leftMax, int rightMax) {
+        int len =  rightMax - leftMax;
 
+        float time_end = ( rightCur - leftMax) / len;
+        float time_start = (leftCur - leftMax) / len;
+        if (time_end<time_start){
+            float time = time_end;
+            time_end=time_start;
+            time_start=time;
+        }
+        DecodeVideo.decode(time_start,time_end,DecodeVideo.Type.COPY);
     }
 
     @Override
@@ -395,7 +404,7 @@ public class EditorActivity
     public void onFragmentInteraction(String buttonType) {
         ConvertingProgressFragment convertingProgressFragment = new ConvertingProgressFragment();
         compressionModeFragment.dismiss();
-        switch (buttonType) {
+      /*  switch (buttonType) {
             case CompressionModeFragment.FAST_COMPRESS: {
                 convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
                 decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, inputUri.toString());
@@ -413,7 +422,7 @@ public class EditorActivity
                 //convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
                 break;
             }
-        }
+        }*/
     }
 }
 

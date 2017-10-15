@@ -5,13 +5,9 @@ package com.example.dmitry.videoeditor;
  */
 
 public class UrlHolder {
-    private String inputUrl;
-    private String outputUrl;
+    private static String inputUrl;
+    private static String outputUrl;
     private static UrlHolder instance;
-    private UrlHolder() {
-        this.instance = new UrlHolder();
-
-    }
 
     public static UrlHolder getInstance() {
         if(instance == null) {
@@ -20,22 +16,22 @@ public class UrlHolder {
         return instance;
     }
 
-    public void setInputUrl(String inputUrl) {
-        this.inputUrl = inputUrl;
+    public static void setInputUrl(String _inputUrl) {
+        inputUrl = _inputUrl;
 
     }
 
-    public void setOutputUrl(String outputUrl) {
-        this.outputUrl = outputUrl;
+    public static void setOutputUrl(String _outputUrl) {
+        outputUrl = _outputUrl;
 
     }
 
-    public String getInpurUrl() {
+    public static String getInpurUrl() {
         return inputUrl;
 
     }
 
-    public String outputUrl() {
+    public static String getOutputUrl() {
         return outputUrl;
 
     }
