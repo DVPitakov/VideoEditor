@@ -64,7 +64,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     MediaPlayer mediaPlayer;
     Context context;
-    Uri inputUri;
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
     ImageHolder imageHolder;
@@ -107,13 +106,12 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    public MySurfaceView(Context context, Uri inputUri, ImageHolder imageHolder) {
+    public MySurfaceView(Context context, ImageHolder imageHolder) {
         super(context);
         getHolder().addCallback(this);
         this.imageHolder = imageHolder;
         this.cR = context.getContentResolver();
         this.context = context;
-        this.inputUri = inputUri;
         this.setOnTouchListener(this);
         imageEditorQueue = new ImageEditorQueue();
 
@@ -212,11 +210,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void updateVideo(Uri uri) {
-        inputUri = uri;
         mediaPlayer.stop();
         mediaPlayer.reset();
         try {
-            mediaPlayer.setDataSource(context, inputUri);
+            mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getInpurUrl()));
             mediaPlayer.setSurface(surfaceHolder.getSurface());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
@@ -236,10 +233,10 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
         try {
-            if (Tools.isVideo(cR.getType(inputUri))) {
+            if (Tools.isVideo(UrlHolder.getInpurUrl())) {
 
                 mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(context, inputUri);
+                mediaPlayer.setDataSource(context, UrlHolder._getInputUri());
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
@@ -433,7 +430,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
     private void draw(SurfaceHolder surfaceHolder) {
 
-        if (Tools.isVideo(cR.getType(inputUri))) {
+        if (Tools.isVideo(UrlHolder.getInpurUrl())) {
 
         } else {
             Surface surface = surfaceHolder.getSurface();

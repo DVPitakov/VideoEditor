@@ -7,6 +7,10 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import layout.PanelInstrumentImage;
 
@@ -34,10 +38,11 @@ public class Tools {
 
 
     public static boolean isVideo(String string) {
-        return string.equals("video/mp4")
-                ||  string.equals("video/mp4")
-                ||  string.equals("video/3gp")
-                ||  string.equals("video/avi");
+        Pattern p = Pattern.compile("(mp4)|(3gp)|(avi)$");
+        Matcher m = p.matcher(string);
+        Log.d("1996", string);
+        Log.d("1996", String.valueOf(m.find()));
+        return m.find();
 
     }
 

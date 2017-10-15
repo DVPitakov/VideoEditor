@@ -30,12 +30,13 @@ public class ImageHolder {
     }
     private ImageHolder() {}
 
-    public void tryInit(Uri defaultImagePath, Activity activity) {
+    public void tryInit(Activity activity) {
         if (defaultBitmap == null) {
             try {
                 defaultBitmap = MediaStore.Images.Media.getBitmap(
-                        activity.getContentResolver(), defaultImagePath
+                        activity.getContentResolver(), UrlHolder._getInputUri()
                 );
+                Log.d("1996", "defaultBitmap: " + String.valueOf(defaultBitmap));
                 freshBitmap = defaultBitmap;
             } catch (IOException e) {
                 Log.d("er", "101128");

@@ -67,8 +67,6 @@ public class EditorActivity
     ElementRedactorFragment elementRedactorHeader;
     Decoder decoder;
 
-    Uri inputUri;
-    Uri outputUri;
 
     Handler handler = new Handler();
 
@@ -85,15 +83,10 @@ public class EditorActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_editor);
-
-        Intent intent = getIntent();
-
         decoder = new Decoder();
-        inputUri = intent.getParcelableExtra(INPUT_URI);
-        outputUri = intent.getParcelableExtra(OUTPUT_URI);
 
         imageHolder = ImageHolder.getInstance();
-        imageHolder.tryInit(inputUri, this);
+        imageHolder.tryInit(this);
 
         editText = (EditText)findViewById(R.id.edutText);
         editText.addTextChangedListener(new TextWatcher() {
@@ -119,7 +112,7 @@ public class EditorActivity
 
 
         lineraLayout = (LinearLayout)findViewById(R.id.editorLinearLayout);
-        mySurfaceView = new MySurfaceView(lineraLayout.getContext(), inputUri, imageHolder);
+        mySurfaceView = new MySurfaceView(lineraLayout.getContext(), imageHolder);
         Resources res = getResources();
         final float imageSize = res.getDimension(R.dimen.mySurfaceViewSize);
         mySurfaceView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)imageSize));
@@ -163,7 +156,7 @@ public class EditorActivity
 
         videoScrollLayoyt = (LinearLayout)findViewById(R.id.videoScrollLayout);
 
-        if(Tools.isVideo(this.getBaseContext().getContentResolver().getType(inputUri))) {
+        if(Tools.isVideo(UrlHolder.getInpurUrl())) {
             videoPlayerFragment = new VideoPlayerFragment();
             getFragmentManager()
                     .beginTransaction()
@@ -326,8 +319,8 @@ public class EditorActivity
         fragmentTransaction2.remove(fragment2);
         fragmentTransaction2.remove(panelStckers);
         fragmentTransaction2.commit();
-        savedInstanceState.putParcelable(INPUT_URI, inputUri);
-        savedInstanceState.putParcelable(OUTPUT_URI, outputUri);
+        //savedInstanceState.putParcelable(INPUT_URI, inputUri);
+        //savedInstanceState.putParcelable(OUTPUT_URI, outputUri);
         super.onSaveInstanceState(savedInstanceState);
     }
 
