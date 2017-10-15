@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         String[] mimetypes = {"image/*", "video/*"};
         pickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         startActivityForResult(pickerIntent, 1);
-
     }
 
     @Override

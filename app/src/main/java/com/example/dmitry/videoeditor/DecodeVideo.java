@@ -46,7 +46,7 @@ public class DecodeVideo {
         }
     }
 
-    @Inject
+//    @Inject
     private FFmpeg ffmpeg;
 
     private void execFFmpegBinary(final String[] command) {
@@ -101,5 +101,4 @@ public class DecodeVideo {
         //    showUnsupportedExceptionDialog();
         }
     }
-
 }

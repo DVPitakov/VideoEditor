@@ -95,13 +95,13 @@ public class UrlHolder {
         }
         if ("content".equalsIgnoreCase(uri.getScheme())) {
             String[] projection = {
-                    MediaStore.Images.Media.DATA
+                    MediaStore.Video.Media.DATA
             };
             Cursor cursor = null;
             try {
                 cursor = context.getContentResolver()
                         .query(uri, projection, selection, selectionArgs, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
                 if (cursor.moveToFirst()) {
                     return cursor.getString(column_index);
                 }
@@ -124,9 +124,4 @@ public class UrlHolder {
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
-
-
-
-
-
 }
