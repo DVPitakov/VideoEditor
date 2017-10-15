@@ -6,7 +6,9 @@ import javax.inject.Inject;
 
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
 public class DecodeVideo {
     public enum Type{
@@ -16,6 +18,7 @@ public class DecodeVideo {
     }
 
     public static void decode(float start, float end, Type type){
+        loadFFMpegBinary();
         float duration = start - end;
         Decoder decoder = new Decoder();
         decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH,"/");
@@ -81,6 +84,19 @@ public class DecodeVideo {
             });
         } catch (FFmpegCommandAlreadyRunningException e) {
             // do nothing for now
+        }
+    }
+
+    private static void loadFFMpegBinary() {
+        try {
+            ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
+                @Override
+                public void onFailure() {
+               //     showUnsupportedExceptionDialog();
+                }
+            });
+        } catch (FFmpegNotSupportedException e) {
+        //    showUnsupportedExceptionDialog();
         }
     }
 
