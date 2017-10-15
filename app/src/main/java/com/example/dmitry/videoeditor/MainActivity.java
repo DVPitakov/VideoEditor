@@ -1,6 +1,7 @@
 package com.example.dmitry.videoeditor;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
         inputPathButton = (Button)findViewById(R.id.inputPathButton);
         outputPathButton = (Button)findViewById(R.id.outputPathButton);
         editButton = (Button)findViewById(R.id.editButton);
@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                UrlHolder.getInstance().setInputUrl(intent.toString());
+                UrlHolder.getInstance().setOutputUrl(intent.toString());
                 intent.putExtra(EditorActivity.INPUT_URI, inputUri);
                 intent.putExtra(EditorActivity.OUTPUT_URI, outputUri);
                 startActivityForResult(intent, 3);

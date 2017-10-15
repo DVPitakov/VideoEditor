@@ -30,9 +30,12 @@ import static java.util.Collections.swap;
 
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
 
+    private long oldClickTime;
+    private long newClickTime;
     public interface FocusListener {
         void focusLosed();
         void focusTaken();
+        void doubleClick();
     }
 
     public void setFocusListener(FocusListener listener) {
@@ -42,12 +45,20 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     private void focusLosed() {
         if(focusListener != null) {
             focusListener.focusLosed();
+            oldClickTime = 0;
         }
     }
 
     private void focusTaken() {
         if(focusListener != null) {
-            focusListener.focusTaken();
+            oldClickTime = newClickTime;
+            newClickTime = System.currentTimeMillis();
+            if((newClickTime - oldClickTime) < 250) {
+                focusListener.doubleClick();
+            }
+            else {
+                focusListener.focusTaken();
+            }
         }
     }
 
