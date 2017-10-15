@@ -1,5 +1,7 @@
 package com.example.dmitry.videoeditor;
 
+import android.content.Context;
+
 import javax.inject.Inject;
 
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
@@ -15,7 +17,8 @@ public class DecodeVideo {
         LOW_QUALITY,
     }
 
-    public DecodeVideo(float start, float end, Type type){
+    public DecodeVideo( Context context, float start, float end, Type type){
+        ffmpeg = FFmpeg.getInstance(context);
         loadFFMpegBinary();
         float duration =end - start;
         Decoder decoder = new Decoder();
@@ -44,9 +47,9 @@ public class DecodeVideo {
     }
 
     @Inject
-    private static FFmpeg ffmpeg;
+    private FFmpeg ffmpeg;
 
-    private static void execFFmpegBinary(final String[] command) {
+    private void execFFmpegBinary(final String[] command) {
         try {
             ffmpeg.execute(command, new ExecuteBinaryResponseHandler() {
               /*  @Override
@@ -86,7 +89,7 @@ public class DecodeVideo {
         }
     }
 
-    private static void loadFFMpegBinary() {
+    private void loadFFMpegBinary() {
         try {
             ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
                 @Override

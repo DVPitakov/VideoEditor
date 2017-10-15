@@ -393,7 +393,7 @@ public class EditorActivity
         Log.d("1996", "video len: " + String.valueOf(len_video / len / 1000));
         Log.d("1996", "begin time: " + String.valueOf(time_start));
         Log.d("1996", "end time: " + String.valueOf(time_end));
-        new DecodeVideo(time_start,time_end,DecodeVideo.Type.COPY);
+        new DecodeVideo(this,time_start,time_end,DecodeVideo.Type.COPY);
     }
 
     @Override
