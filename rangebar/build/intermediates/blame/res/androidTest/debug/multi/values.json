@@ -1,0 +1,134 @@
+[
+    {
+        "outputFile": "/home/alexandr/AndroidStudioProjects/VideoEditor/rangebar/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 663,
+                    "endColumn": 45,
+                    "endOffset": 704
+                },
+                "from": {
+                    "file": "/home/alexandr/AndroidStudioProjects/VideoEditor/rangebar/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 663,
+                        "endColumn": 45,
+                        "endOffset": 704
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 709,
+                    "endLine": 10,
+                    "endColumn": 12,
+                    "endOffset": 995
+                },
+                "from": {
+                    "file": "/home/alexandr/AndroidStudioProjects/VideoEditor/rangebar/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 709,
+                        "endLine": 10,
+                        "endColumn": 12,
+                        "endOffset": 995
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 1000,
+                    "endLine": 13,
+                    "endColumn": 12,
+                    "endOffset": 1155
+                },
+                "from": {
+                    "file": "/home/alexandr/AndroidStudioProjects/VideoEditor/rangebar/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1000,
+                        "endLine": 13,
+                        "endColumn": 12,
+                        "endOffset": 1155
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "outputFile": "/home/dmitry/VideoEditor/rangebar/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values/values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 663,
+                    "endColumn": 45,
+                    "endOffset": 704
+                },
+                "from": {
+                    "file": "/home/dmitry/VideoEditor/rangebar/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 663,
+                        "endColumn": 45,
+                        "endOffset": 704
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 709,
+                    "endLine": 10,
+                    "endColumn": 12,
+                    "endOffset": 995
+                },
+                "from": {
+                    "file": "/home/dmitry/VideoEditor/rangebar/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 709,
+                        "endLine": 10,
+                        "endColumn": 12,
+                        "endOffset": 995
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 1000,
+                    "endLine": 13,
+                    "endColumn": 12,
+                    "endOffset": 1155
+                },
+                "from": {
+                    "file": "/home/dmitry/VideoEditor/rangebar/build/intermediates/bundles/debug/res/values/values.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1000,
+                        "endLine": 13,
+                        "endColumn": 12,
+                        "endOffset": 1155
+                    }
+                }
+            }
+        ]
+    }
+]

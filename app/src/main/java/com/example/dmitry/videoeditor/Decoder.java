@@ -9,7 +9,7 @@ import java.util.Set;
  */
 
 public class Decoder {
-    private String complexCommand;
+    private String[] complexCommand;
     public enum name_command  {
         OVERWRITE_FILE,
         INPUT_FILE_FULL_PATH,
@@ -62,23 +62,23 @@ public class Decoder {
         command_map = new HashMap<>();
     }
 
-    public String getComplexCommand(){
+    public String[] getComplexCommand(){
         Set<String> com = command_map.keySet();
-        complexCommand ="";
+        complexCommand = new String[com.size()*2+1];
         for (int i=0; i<com.size(); i++){
-            complexCommand += command_map.get(com.toArray()[i]);
-            complexCommand +=" ";
+            complexCommand[i*2] = com.toArray()[i].toString();
+            complexCommand[i*2+1] = command_map.get(com.toArray()[i]).toString();
         }
-        complexCommand += output_name_file;
+        complexCommand[com.size()*2] = output_name_file;
         return complexCommand;
     }
 
     public void addCommand(name_command command,String value){
         if (command==name_command.OVERWRITE_FILE){
-            command_map.put(command_list.get(command), command_list.get(command));
-        }else {
-            command_map.put(command_list.get(command), command_list.get(command)+" "+value);
+            value = "-y";
         }
+        command_map.put(command_list.get(command), value);
+
     }
 
     public void outputFile(String path_name){
@@ -86,12 +86,16 @@ public class Decoder {
     }
 
     public void setVideoCodec(name_video_codec name){
-        command_map.put("-vcodec", "-vcodec "+ video_codec_list.get(name));
+        command_map.put("-vcodec", video_codec_list.get(name));
     }
 
     public void clearSetup(){
         String input_file_name = command_map.get(command_list.get(name_command.INPUT_FILE_FULL_PATH));
         command_map.clear();
         addCommand(name_command.INPUT_FILE_FULL_PATH,input_file_name);
+    }
+
+    public void setUltraFast(){
+        command_map.put("-preset", "ultrafast");
     }
 }

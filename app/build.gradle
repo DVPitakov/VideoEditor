@@ -33,4 +33,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     testCompile 'junit:junit:4.12'
     compile project(':FFmpegAndroid')
+    compile project(path: ':FFmpegAndroid')
+    compile 'javax.inject:javax.inject:1'
 }
