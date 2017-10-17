@@ -35,7 +35,7 @@ import com.example.dmitry.videoeditor.UrlHolder;
  */
 public class VideoFragment extends Fragment
         implements VideoPlayerFragment.OnVideoPlayerFragmentInteractionListener
-        , CompressionModeFragment.OnFragmentInteractionListener
+        , CompressionModeFragment.OnCompressionModeFragmentInteractionListener
         , ConvertingProgressFragment.OnConvertingFragmentInteractionListener {
 
 
@@ -182,7 +182,7 @@ public class VideoFragment extends Fragment
 
     //TODO устанавливает режим конвертации видео
     @Override
-    public void onFragmentInteraction(String buttonType) {
+    public void onCompressionModeFragmentInteraction(String buttonType) {
         ConvertingProgressFragment convertingProgressFragment = new ConvertingProgressFragment();
         compressionModeFragment.dismiss();
         switch (buttonType) {

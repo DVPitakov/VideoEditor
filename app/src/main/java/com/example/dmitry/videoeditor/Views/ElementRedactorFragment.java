@@ -12,14 +12,6 @@ import android.widget.ImageView;
 
 import com.example.dmitry.videoeditor.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ElementRedactorFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ElementRedactorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ElementRedactorFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,7 +28,7 @@ public class ElementRedactorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private OnRedactorFragmentInteractionListener mListener;
 
     public ElementRedactorFragment() {
         // Required empty public constructor
@@ -113,15 +105,15 @@ public class ElementRedactorFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onRedactorFragmentInteraction(uri);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnRedactorFragmentInteractionListener) {
+            mListener = (OnRedactorFragmentInteractionListener) context;
         } else {
  //           throw new RuntimeException(context.toString()
  //                   + " must implement OnFragmentInteractionListener");
@@ -134,18 +126,14 @@ public class ElementRedactorFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
+
+
+    public void setOnFragmentInteractionListener(OnRedactorFragmentInteractionListener listener) {
+        mListener = listener;
+    }
+
+    public interface OnRedactorFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onRedactorFragmentInteraction(Uri uri);
     }
 }

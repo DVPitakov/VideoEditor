@@ -15,14 +15,6 @@ import android.widget.Button;
 
 import com.example.dmitry.videoeditor.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CompressionModeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CompressionModeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CompressionModeFragment extends DialogFragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +33,7 @@ public class CompressionModeFragment extends DialogFragment implements View.OnCl
     private Button fastButton;
     private Button qualityButton;
 
-    private OnFragmentInteractionListener mListener;
+    private OnCompressionModeFragmentInteractionListener mListener;
 
     public CompressionModeFragment() {
         // Required empty public constructor
@@ -107,8 +99,8 @@ public class CompressionModeFragment extends DialogFragment implements View.OnCl
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnCompressionModeFragmentInteractionListener) {
+            mListener = (OnCompressionModeFragmentInteractionListener) context;
         } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
@@ -126,21 +118,25 @@ public class CompressionModeFragment extends DialogFragment implements View.OnCl
         if (mListener != null) {
             switch (view.getId()) {
                 case R.id.fast_compress_button: {
-                    mListener.onFragmentInteraction(FAST_COMPRESS);
+                    mListener.onCompressionModeFragmentInteraction(FAST_COMPRESS);
                     break;
                 }
                 case R.id.quality_compress_button: {
-                    mListener.onFragmentInteraction(QUALITY_COMPRESS);
+                    mListener.onCompressionModeFragmentInteraction(QUALITY_COMPRESS);
                     break;
                 }
                 case R.id.without_compress_button: {
-                    mListener.onFragmentInteraction(WITHOUT_COMPRESS);
+                    mListener.onCompressionModeFragmentInteraction(WITHOUT_COMPRESS);
                     break;
                 }
             }
         }
     }
 
+
+    public void setOnCompressionModeFragmentInteractionListener(OnCompressionModeFragmentInteractionListener listener) {
+        mListener = listener;
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -151,8 +147,8 @@ public class CompressionModeFragment extends DialogFragment implements View.OnCl
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnCompressionModeFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(String buttonType);
+        void onCompressionModeFragmentInteraction(String buttonType);
     }
 }
