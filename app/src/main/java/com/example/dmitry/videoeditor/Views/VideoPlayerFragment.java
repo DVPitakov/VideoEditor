@@ -97,12 +97,13 @@ public class VideoPlayerFragment extends Fragment {
                 Log.d("1996", "I am here 0849");
                 isPlaying = !isPlaying;
                 if(isPlaying) {
-                    playButton.setImageDrawable(rootView.getResources().getDrawable(R.drawable.pause1));
+                    playButton.setImageDrawable(rootView.getResources().getDrawable(R.drawable.ic_pause_circle_filled_black_24dp));
                 }
                 else {
-                    playButton.setImageDrawable(rootView.getResources().getDrawable(R.drawable.play1));
+                    playButton.setImageDrawable(rootView.getResources().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
                 }
                 if (mListener != null) {
+                    Log.d("1996", "I am here 1524");
                     mListener.onVideoPlayerFragmentInteraction(isPlaying);
                 }
             }
@@ -147,7 +148,7 @@ public class VideoPlayerFragment extends Fragment {
 
     public void videoEnd() {
         isPlaying = false;
-        playButton.setImageDrawable(rootView.getResources().getDrawable(R.drawable.play1));
+        playButton.setImageDrawable(rootView.getResources().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
     }
 
 
@@ -161,6 +162,7 @@ public class VideoPlayerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnVideoPlayerFragmentInteractionListener) {
+            Log.d("1999", "I am 1521");
             mListener = (OnVideoPlayerFragmentInteractionListener) context;
         } else {
 //            throw new RuntimeException(context.toString()
@@ -178,6 +180,11 @@ public class VideoPlayerFragment extends Fragment {
         if (redyForUpdating && (mListener != null)) {
             mListener.ready(object);
         }
+    }
+
+    public void setOnVideoPlayerFragmentInteractionListener(OnVideoPlayerFragmentInteractionListener listener) {
+        mListener = listener;
+
     }
 
     /**

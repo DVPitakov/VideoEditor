@@ -66,9 +66,9 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     Context context;
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
-    ImageHolder imageHolder;
-    ImageEditorQueue imageEditorQueue;
-    ImageElement selectedImageElement;
+    public ImageHolder imageHolder;
+    public ImageEditorQueue imageEditorQueue;
+    public ImageElement selectedImageElement;
     int effect = 0;
 
     double x1;
@@ -437,8 +437,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
             Surface surface = surfaceHolder.getSurface();
             Canvas canvas = surface.lockCanvas(null);
             Paint paint = new Paint();
-
-            canvas.drawColor(Color.WHITE);
+            canvas.drawColor(Color.BLACK);
 
             Bitmap scaledBitmap = imageHolder.getScaledBitmap();
             Bitmap bitmapWithElements;

@@ -13,11 +13,11 @@ public class PanelInstrumentImage extends ImageAdapter{
     public PanelInstrumentImage(Context c) {
         super(c);
         mThumbIds = new Integer[]{
-                R.drawable.item_crop,
+                R.drawable.ic_crop_white_24dp,
                 R.drawable.item_text_fild,
                 R.drawable.item_negative,
                 R.drawable.item_scale,
-                R.drawable.item_save,
+                R.drawable.ic_save_white_24dp,
                 R.drawable.item_back
         };
         mContacts = mThumbIds.clone();
