@@ -55,7 +55,6 @@ public class ImageFragment extends Fragment {
     private FrameLayout surfaceViewPos;
     private OnFragmentInteractionListener mListener;
 
-    ImageHolder imageHolder;
     ElementRedactorFragment elementRedactorHeader;
 
     MySurfaceView mySurfaceView;
@@ -88,12 +87,10 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_image, container, false);
-
-        imageHolder = ImageHolder.getInstance();
-        imageHolder.tryInit(getActivity());
+        ImageHolder.getInstance().tryInit(getActivity());
 
         surfaceViewPos = (FrameLayout)(rootView.findViewById(R.id.surface_view_pos));
-        mySurfaceView = new MySurfaceView(surfaceViewPos.getContext(), imageHolder);
+        mySurfaceView = new MySurfaceView(surfaceViewPos.getContext());
         surfaceViewPos.addView(mySurfaceView);
 
         editText = (EditText) (rootView.findViewById(R.id.edutText));
@@ -101,19 +98,19 @@ public class ImageFragment extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mySurfaceView.setImageText(charSequence.toString());
-                mySurfaceView.imageHolder.setBitmapWithElements(null);
+                ImageHolder.getInstance().setBitmapWithElements(null);
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mySurfaceView.setImageText(charSequence.toString());
-                mySurfaceView.imageHolder.setBitmapWithElements(null);
+                ImageHolder.getInstance().setBitmapWithElements(null);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 mySurfaceView.setImageText(editable.toString());
-                mySurfaceView.imageHolder.setBitmapWithElements(null);
+                ImageHolder.getInstance().setBitmapWithElements(null);
 
             }
         });
@@ -146,19 +143,17 @@ public class ImageFragment extends Fragment {
                 imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
 
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
-                if(fragmentManager.findFragmentById(R.id.image_header_pos) == null) {
-                    elementRedactorHeader = new ElementRedactorFragment();
-                    getFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.animator.slide_anim, 0)
-                            .replace(R.id.image_header_pos, elementRedactorHeader)
-                            .add(R.id.image_footer_pos, fragment2)
-                            .commit();
-                }
+                elementRedactorHeader = new ElementRedactorFragment();
+                getFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.animator.slide_anim, 0)
+                        .replace(R.id.image_header_pos, elementRedactorHeader)
+                        .replace(R.id.image_footer_pos, fragment2)
+                        .commit();
             }
         });
         fragment = new  PanelInstrumentImage(getActivity().getBaseContext());
-        fragment2 = new PanelColors(getActivity().getBaseContext());
+        fragment2 = new PanelColors();
         panelStckers = new PanelStckers(getActivity().getBaseContext());
 
         getFragmentManager()
@@ -181,13 +176,13 @@ public class ImageFragment extends Fragment {
                         if (b) {
                             mySurfaceView.kropUnset();
                             Rect rect = mySurfaceView.getKropRect();
-                            Bitmap kropedBitmap = imageHolder.getKropedBitmap();
+                            Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
                             if (kropedBitmap == null) {
-                                kropedBitmap = imageHolder.getDefaultBitmap();
+                                kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
                             }
                             kropedBitmap = ImageEditor.krop(kropedBitmap,
                                     rect.left, rect.top, rect.right, rect.bottom);
-                            imageHolder.setKropedBitmap(kropedBitmap);
+                            ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
                             mySurfaceView.kropClear();
                             mySurfaceView.draw();
                         }
@@ -199,7 +194,7 @@ public class ImageFragment extends Fragment {
                     }
                     case FILTER_ELEMENT: {
                         this.i = (this.i + 1) % 4;
-                        imageHolder.setFreshBitmap(null);
+                        ImageHolder.getInstance().setFreshBitmap(null);
                         mySurfaceView.setEffect(this.i);
                         mySurfaceView.draw();
                         break;
@@ -217,7 +212,7 @@ public class ImageFragment extends Fragment {
                             fragmentTransaction.add(R.id.image_footer_pos, fragment2);
                             fragmentTransaction.commit();
                         }
-                        mySurfaceView.imageHolder.setBitmapWithElements(null);
+                        ImageHolder.getInstance().setBitmapWithElements(null);
                         mySurfaceView.draw();
                         break;
                     }
@@ -238,14 +233,14 @@ public class ImageFragment extends Fragment {
 
                         }
                         else {
-                            Bitmap bitmap =  imageHolder.getBitmapWithElements();
+                            Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
                             MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "image" , null);
                             Tools.saveAndSendImage(bitmap, getActivity());
                         }
                         break;
                     }
                     case 5: {
-                        mySurfaceView.imageHolder.setKropedBitmap(null);
+                        ImageHolder.getInstance().setKropedBitmap(null);
                         mySurfaceView.imageEditorQueue.clear();
                         mySurfaceView.draw();
                         break;
@@ -264,17 +259,17 @@ public class ImageFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 mySurfaceView.setImageColor(Colors[i]);
-                mySurfaceView.imageHolder.setBitmapWithElements(null);
+                ImageHolder.getInstance().setBitmapWithElements(null);
                 mySurfaceView.draw();
 
             }
         });
 
-        panelStckers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        panelStckers.setOnStickerClickListener(new PanelStckers.OnStickerClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mySurfaceView.addImageElement(new IconImage(PanelStckers.ITEMS[i], mySurfaceView, 60, 60));
-                mySurfaceView.imageHolder.setBitmapWithElements(null);
+            public void onStickerClick(int sticker) {
+                mySurfaceView.addImageElement(new IconImage(sticker, mySurfaceView, 60, 60));
+                ImageHolder.getInstance().setBitmapWithElements(null);
                 mySurfaceView.draw();
                 FragmentManager fragmentManager = getActivity().getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

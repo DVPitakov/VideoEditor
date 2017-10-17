@@ -80,7 +80,7 @@ public class VideoFragment extends Fragment
 
         final float imageSize = getResources().getDimension(R.dimen.mySurfaceViewSize);
         surfaceViewPos = (FrameLayout)(rootView.findViewById(R.id.video_surface_view_pos));
-        mySurfaceView = new MySurfaceView(getActivity().getBaseContext(), null);
+        mySurfaceView = new MySurfaceView(getActivity().getBaseContext());
         surfaceViewPos.addView(mySurfaceView);
         mySurfaceView.setLayoutParams(
                 new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int)imageSize));

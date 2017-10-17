@@ -39,7 +39,7 @@ public class ImageHolder {
                 Log.d("1996", "defaultBitmap: " + String.valueOf(defaultBitmap));
                 freshBitmap = defaultBitmap;
             } catch (IOException e) {
-                Log.d("er", "101128");
+                Log.d("2245", "101128");
             }
         }
     }

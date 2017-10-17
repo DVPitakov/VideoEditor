@@ -1,5 +1,6 @@
 package layout;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -14,68 +15,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
+import com.example.dmitry.videoeditor.Adapters.ColorAdapter;
+import com.example.dmitry.videoeditor.Models.IconWithText;
 import com.example.dmitry.videoeditor.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by dmitry on 16.09.17.
  */
 
-public class PanelColors extends ImageAdapter{
+public class PanelColors extends Fragment {
+    private ArrayList<Integer> arrayList = new ArrayList<>();
+    AdapterView.OnItemClickListener onItemClickListener;
+    public  PanelColors() {
+        arrayList.add(Color.WHITE);
+        arrayList.add(Color.BLUE);
+        arrayList.add(Color.RED);
+        arrayList.add(Color.GREEN);
+        arrayList.add(Color.GRAY);
+        arrayList.add(Color.YELLOW);
 
-    public  PanelColors(Context c) {
-        super(c);
-        mThumbIds = new Integer[]{
-                Color.WHITE,
-                Color.BLUE,
-                Color.RED,
-                Color.GREEN,
-                Color.GRAY,
-                Color.YELLOW
-        };
-        mContacts = mThumbIds.clone();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        dataAdapter = new DataAdapter(mContext, R.id.gridPanelImage){
-            @Override
-            public View getView(final int position, View convertView, ViewGroup parent) {
-                View view;
-                if (convertView == null) {
-                    // if it's not recycled, initialize some attributes
-                    Log.d("here", "were");
-                    view = new View(getActivity()){
-                        @Override
-                        protected void onDraw(Canvas canvas) {
-                            Resources res = getResources();
-                            float imageSize = res.getDimension(R.dimen.imageAdapterImageSize);
-                            Paint paint = new Paint();
-                            paint.setColor( mThumbIds[position]);
-                            paint.setStyle(Paint.Style.FILL_AND_STROKE);
-                            canvas.drawCircle((int)(imageSize/2),(int)(imageSize/2),(int)(imageSize/2), paint);
-                        }
-                    };
-                    Resources res = getResources();
-                    float imageSize = res.getDimension(R.dimen.imageAdapterImageSize);
-                    view.setLayoutParams(new GridView.LayoutParams((int)imageSize, (int)imageSize));
-                    view.setPadding(8, 8, 8, 8);
-
-                } else {
-                    view =  convertView;
-                }
-                return view;
-            }
-        };
-        View view = inflater.inflate(R.layout.fragment_instrumen_panel_list, null);
-        gridView = (GridView) view.findViewById(R.id.gridPanelImage);
-        gridView.setAdapter(dataAdapter);
-        //gridView.setAlpha(0.5f);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ColorAdapter colorAdapter = new ColorAdapter(container.getContext(), R.layout.item_color
+                , arrayList);
+        GridView listView = new GridView(container.getContext());
+        listView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
+                , ViewGroup.LayoutParams.WRAP_CONTENT));
+        listView.setNumColumns(arrayList.size());
+        listView.setAdapter(colorAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(onItemClickListener != null) {
@@ -83,10 +62,14 @@ public class PanelColors extends ImageAdapter{
                 }
             }
         });
-        return view;
+       // container.addView(listView);
+        return listView;
 
     }
 
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
 
+    }
 
 }
