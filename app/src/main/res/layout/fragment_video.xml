@@ -9,6 +9,7 @@
         android:layout_height="match_parent"
         android:background="#000000">
         <LinearLayout
+            android:layout_gravity="center"
             android:id="@+id/videoEditorLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
             </FrameLayout>
             -->
             <FrameLayout
+                android:layout_gravity="center"
                 android:id="@+id/video_surface_view_pos"
                 android:background="#00FF00"
                 android:layout_width="match_parent"

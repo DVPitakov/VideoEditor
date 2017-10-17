@@ -83,8 +83,8 @@ public class ConvertingProgressFragment extends DialogFragment {
         if (context instanceof OnConvertingFragmentInteractionListener) {
             mListener = (OnConvertingFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -126,6 +126,10 @@ public class ConvertingProgressFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
+    public void setOnConvertingFragmentInteractionListener(OnConvertingFragmentInteractionListener listener) {
+        mListener = listener;
+    }
     public interface OnConvertingFragmentInteractionListener {
         // TODO: Update argument type and name
         void onConvertingFragmentInteraction(Uri uri);

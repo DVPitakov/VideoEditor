@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
-import com.edmodo.rangebar.RangeBar;
+
 import com.example.dmitry.videoeditor.R;
+
+import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 
 /**
@@ -45,7 +47,7 @@ public class VideoPlayerFragment extends Fragment {
     ImageButton convertButton;
     ImageButton crosButton;
     ImageButton showKroper;
-    RangeBar rangebar;
+    RangeSeekBar rangebar;
     private OnVideoPlayerFragmentInteractionListener mListener;
 
     public VideoPlayerFragment() {
@@ -90,7 +92,7 @@ public class VideoPlayerFragment extends Fragment {
         playButton = (ImageButton)(rootView.findViewById(R.id.playButton));
         convertButton = (ImageButton)(rootView.findViewById(R.id.show_convert_menu));
         seekBar = (SeekBar)(rootView.findViewById(R.id.videoProgress));
-        rangebar = (RangeBar)(rootView.findViewById(R.id.rangebar1));
+        rangebar = (RangeSeekBar)(rootView.findViewById(R.id.rangebar1));
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,10 +123,10 @@ public class VideoPlayerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mListener != null) {
-                    int ll = rangebar.getLeftIndex();
-                    int rr = rangebar.getRightIndex();
-                    int left = rangebar.getLeft();
-                    int right = rangebar.getRight();
+                    int ll = rangebar.getSelectedMinValue().intValue();
+                    int rr = rangebar.getSelectedMaxValue().intValue();
+                    int left = rangebar.getAbsoluteMinValue().intValue();
+                    int right = rangebar.getAbsoluteMaxValue().intValue();
                     mListener.doVideoKrop(left, right, ll, rr);
                 }
             }

@@ -46,6 +46,7 @@ public class VideoFragment extends Fragment
     private Decoder decoder;
     private FrameLayout surfaceViewPos;
     private ImageHolder imageHolder;
+    private ConvertingProgressFragment convertingProgressFragment;
     private Handler handler = new Handler();
 
     // TODO: Rename and change types of parameters
@@ -153,6 +154,7 @@ public class VideoFragment extends Fragment
     @Override
     public void show_compression_menu_request() {
              compressionModeFragment = new CompressionModeFragment();
+             compressionModeFragment.setOnCompressionModeFragmentInteractionListener(this);
              compressionModeFragment.show(getActivity().getFragmentManager(), "123");
     }
 
@@ -183,7 +185,8 @@ public class VideoFragment extends Fragment
     //TODO устанавливает режим конвертации видео
     @Override
     public void onCompressionModeFragmentInteraction(String buttonType) {
-        ConvertingProgressFragment convertingProgressFragment = new ConvertingProgressFragment();
+        convertingProgressFragment = new ConvertingProgressFragment();
+        convertingProgressFragment.setOnConvertingFragmentInteractionListener(this);
         compressionModeFragment.dismiss();
         switch (buttonType) {
             case CompressionModeFragment.FAST_COMPRESS: {

@@ -10,7 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/FFmpegAndroid" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/rangebar" />
+            <option value="$PROJECT_DIR$/rangeseekbar-release" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
