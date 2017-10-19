@@ -25,7 +25,7 @@ public class EditorActivity extends Activity {
     ImageFragment imageFragment;
     VideoFragment videoFragment;
 
-    FFmpeg ffmpeg;
+  //  FFmpeg ffmpeg;
 
 
     protected void onCreate(Bundle savedInstanceState) {

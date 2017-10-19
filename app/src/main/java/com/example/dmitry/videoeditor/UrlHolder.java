@@ -22,6 +22,7 @@ public class UrlHolder {
     private static Uri _inputUri;
     private static Uri _outputUri;
     private static UrlHolder instance;
+    private static long time;
 
     public static UrlHolder getInstance() {
         if(instance == null) {
@@ -127,5 +128,13 @@ public class UrlHolder {
 
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static long getTime() {
+        return time;
+    }
+
+    public static void setTime(long time) {
+        UrlHolder.time = time;
     }
 }

@@ -61,14 +61,33 @@ public class DecodeVideo {
                 public void onSuccess(String s) {
            //         addTextViewToLayout("SUCCESS with output : "+s);
                 }
-
+*/
                 @Override
                 public void onProgress(String s) {
            //         Log.d(TAG, "Started command : ffmpeg "+command);
            //         addTextViewToLayout("progress : "+s);
            //         progressDialog.setMessage("Processing\n"+s);
-                }
 
+                    System.out.println(s);
+
+                    String [] list_1 = s.split("time=");
+                    if (list_1.length==1) return;
+                    String [] list_2 = list_1[1].split(" ");
+                    String time_full = list_2[0];
+                    String [] time_1 = time_full.split("\\.");
+                    String [] time_2 = time_1[0].split(":");
+                    String num;
+                    long times = 0;
+                    for (int i =0; i <time_2.length; i++){
+                        times *= 60;
+                        num = time_2[i];
+                        times += Long.parseLong(num);
+                    }
+                    times *= 1000;
+                    times += Long.parseLong(time_1[1]);
+                    UrlHolder.setTime(times);
+                }
+/*
                 @Override
                 public void onStart() {
           //          outputLayout.removeAllViews();
