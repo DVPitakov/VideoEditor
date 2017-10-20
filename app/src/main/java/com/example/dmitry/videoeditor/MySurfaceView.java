@@ -28,10 +28,30 @@ import static java.util.Collections.swap;
  * Created by dmitry on 08.09.17.
  */
 
-public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
+public class MySurfaceView extends SurfaceView implements
+        SurfaceHolder.Callback, View.OnTouchListener,
+        CurrentVideoHolder.VideoShower {
 
     private long oldClickTime;
     private long newClickTime;
+
+    @Override
+    public void showNewVideo() {
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        try {
+            Log.d("1130", UrlHolder.getOutputUrl());
+            mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getOutputUrl()));
+            mediaPlayer.setSurface(surfaceHolder.getSurface());
+            mediaPlayer.setLooping(true);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            Log.d("1130", "survive");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public interface FocusListener {
         void focusLosed();
         void focusTaken();
@@ -135,15 +155,6 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     }
 
-    public int getMediaPlayerDuration() {
-        if(mediaPlayer != null) {
-            return mediaPlayer.getDuration();
-        }
-        else {
-            return -1;
-        }
-
-    }
 
     public Rect getKropRect() {
         if(x1 > x2) {
@@ -230,6 +241,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        CurrentVideoHolder.getInstance().setCurrentMediaPlayer(this);
         this.surfaceHolder = surfaceHolder;
         try {
             if (Tools.isVideo(UrlHolder.getInpurUrl())) {
@@ -239,6 +251,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
+                CurrentVideoHolder.getInstance().setVideoLen(mediaPlayer.getDuration());
                 mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                     @Override
                     public void onSeekComplete(MediaPlayer mediaPlayer) {

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.example.dmitry.videoeditor.CurrentVideoHolder;
 import com.example.dmitry.videoeditor.R;
 
 /**
@@ -23,7 +24,7 @@ import com.example.dmitry.videoeditor.R;
  * Use the {@link ConvertingProgressFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConvertingProgressFragment extends DialogFragment {
+public class ConvertingProgressFragment extends DialogFragment implements CurrentVideoHolder.UpdatedVideoLenChangedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -63,8 +64,8 @@ public class ConvertingProgressFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 /*
@@ -88,15 +89,21 @@ public class ConvertingProgressFragment extends DialogFragment {
         }
     }
 
-    public void setProgess(int cur, int max) {
+    public void setProgess() {
         if(progressBar != null) {
-            progressBar.setMax(max);
-            progressBar.setProgress(cur);
+            progressBar.setMax((int)CurrentVideoHolder.getInstance().getVideoLen());
+            progressBar.setProgress((int)CurrentVideoHolder.getInstance().getUpdatedVideoLen());
+            if(CurrentVideoHolder.getInstance().getVideoLen()
+                    == CurrentVideoHolder.getInstance().getUpdatedVideoLen()) {
+                ConvertingProgressFragment.this.dismiss();
+                CurrentVideoHolder.getInstance().showNewVideo();
+            }
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        CurrentVideoHolder.getInstance().setListener(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -105,6 +112,7 @@ public class ConvertingProgressFragment extends DialogFragment {
         // Pass null as the parent view because its going in the dialog layout
         View rootView = inflater.inflate(R.layout.fragment_converting_progress, null);
         progressBar = (ProgressBar) (rootView.findViewById(R.id.converting_progress_bar));
+
         builder.setView(rootView);
         // Add action buttons
         return builder.create();
@@ -113,6 +121,7 @@ public class ConvertingProgressFragment extends DialogFragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        CurrentVideoHolder.getInstance().removeListener();
         mListener = null;
     }
 
@@ -130,6 +139,12 @@ public class ConvertingProgressFragment extends DialogFragment {
     public void setOnConvertingFragmentInteractionListener(OnConvertingFragmentInteractionListener listener) {
         mListener = listener;
     }
+
+    @Override
+    public void updatedVideoLenChanged(long updatedVideoLen) {
+        setProgess();
+    }
+
     public interface OnConvertingFragmentInteractionListener {
         // TODO: Update argument type and name
         void onConvertingFragmentInteraction(Uri uri);

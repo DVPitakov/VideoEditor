@@ -1,6 +1,7 @@
 package com.example.dmitry.videoeditor;
 
 import android.content.Context;
+import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -56,18 +57,16 @@ public class DecodeVideo {
                 public void onFailure(String s) {
                   //  addTextViewToLayout("FAILED with output : "+s);
                 }
-
+    */
                 @Override
                 public void onSuccess(String s) {
-           //         addTextViewToLayout("SUCCESS with output : "+s);
+                    super.onSuccess(s);
+                    CurrentVideoHolder.getInstance()
+                            .setUpdatedVideoLen(CurrentVideoHolder.getInstance().getVideoLen());
                 }
-*/
                 @Override
                 public void onProgress(String s) {
-           //         Log.d(TAG, "Started command : ffmpeg "+command);
-           //         addTextViewToLayout("progress : "+s);
-           //         progressDialog.setMessage("Processing\n"+s);
-
+                    super.onProgress(s);
                     System.out.println(s);
 
                     String [] list_1 = s.split("time=");
@@ -85,7 +84,7 @@ public class DecodeVideo {
                     }
                     times *= 1000;
                     times += Long.parseLong(time_1[1]);
-                    UrlHolder.setTime(times);
+                    CurrentVideoHolder.getInstance().setUpdatedVideoLen(times);
                 }
 /*
                 @Override
