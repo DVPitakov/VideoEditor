@@ -127,7 +127,7 @@ public class VideoPlayerFragment extends Fragment {
                     int rr = rangebar.getSelectedMaxValue().intValue();
                     int left = rangebar.getAbsoluteMinValue().intValue();
                     int right = rangebar.getAbsoluteMaxValue().intValue();
-                    mListener.doVideoKrop(left, right, ll, rr);
+                    mListener.doVideoKrop(ll, rr, left, right);
                 }
             }
         });

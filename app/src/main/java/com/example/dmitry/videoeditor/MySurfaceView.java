@@ -40,8 +40,8 @@ public class MySurfaceView extends SurfaceView implements
         mediaPlayer.stop();
         mediaPlayer.reset();
         try {
-            Log.d("1130", UrlHolder.getOutputUrl());
-            mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getOutputUrl()));
+            Log.d("1130", UrlHolder.getInpurUrl() + "tmp.mp4");
+            mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getInpurUrl() + "tmp.mp4"));
             mediaPlayer.setSurface(surfaceHolder.getSurface());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();

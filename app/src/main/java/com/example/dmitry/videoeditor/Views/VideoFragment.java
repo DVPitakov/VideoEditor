@@ -178,7 +178,10 @@ public class VideoFragment extends Fragment
                 = new ConvertingProgressFragment();
         convertingProgressFragment
                 .show(getFragmentManager(), ConvertingProgressFragment.class.getName());
-        new DecodeVideo(getActivity(), time_start,time_end,DecodeVideo.Type.COPY);
+        new DecodeVideo(getActivity(), time_start,time_end
+                , CurrentVideoHolder.getInstance().getCompressType());
+        Log.d("1312", "START TIME: " +  String.valueOf(time_start));
+        Log.d("1312", "END TIME: " +  String.valueOf(time_end));
     }
 
     @Override
@@ -198,6 +201,7 @@ public class VideoFragment extends Fragment
          switch (buttonType) {
             case CompressionModeFragment.FAST_COMPRESS: {
                 Log.d("1150", "FAST");
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.LOW_QUALITY);
                 decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
                 decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
                 decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
@@ -205,14 +209,18 @@ public class VideoFragment extends Fragment
             }
             case CompressionModeFragment.QUALITY_COMPRESS: {
                 Log.d("1150", "QUALITY_COMPRESS");
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.HIGH_QUALITY);
                 decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
                 decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
-                decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
+                decoder.setVideoCodec(Decoder.name_video_codec.H264);
                 break;
             }
             case CompressionModeFragment.WITHOUT_COMPRESS: {
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.COPY);
                 Log.d("1150", "WITHOUT_COMPRESS");
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
                 decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
+                decoder.setVideoCodec(Decoder.name_video_codec.COPY);
                 break;
             }
         }

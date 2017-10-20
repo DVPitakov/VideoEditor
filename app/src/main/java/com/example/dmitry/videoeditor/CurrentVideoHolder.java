@@ -22,6 +22,15 @@ public class CurrentVideoHolder {
     private long videoLen;
     private long updatedVideoLen;
     private VideoShower mediaPlayer;
+    private DecodeVideo.Type compressType;
+
+    public DecodeVideo.Type getCompressType() {
+        return compressType;
+    }
+
+    public void setCompressType(DecodeVideo.Type compressType) {
+        this.compressType = compressType;
+    }
 
     public void setListener(UpdatedVideoLenChangedListener listener) {
         this.listener = listener;
