@@ -4,14 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dmitry.videoeditor.EditorActivity"
-    android:background="#0FF000">
+    tools:context="com.example.dmitry.videoeditor.EditorActivity">
+    <EditText
+        android:id="@+id/edutText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
 
     <FrameLayout
-        android:id="@+id/content_pos"
+        android:id="@+id/body_pos"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/header_pos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#A0000000">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/footer_pos"
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </FrameLayout>
+
     <FrameLayout
         android:background="@drawable/dialog_background"
         android:id="@+id/message_pos"

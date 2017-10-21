@@ -1,14 +1,15 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Vidgets;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
+
+import com.example.dmitry.videoeditor.R;
+import com.example.dmitry.videoeditor.Tools;
 
 /**
  * Created by dmitry on 13.09.17.

@@ -5,13 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -19,10 +16,18 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import java.io.IOException;
+import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
+import com.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
+import com.example.dmitry.videoeditor.Holders.ImageHolder;
+import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import com.example.dmitry.videoeditor.Holders.UrlHolder;
+import com.example.dmitry.videoeditor.Vidgets.IconImage;
+import com.example.dmitry.videoeditor.Vidgets.ImageEditorQueue;
+import com.example.dmitry.videoeditor.Vidgets.ImageElement;
+import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
+import com.example.dmitry.videoeditor.Vidgets.TextImage;
 
-import static java.lang.Math.sqrt;
-import static java.util.Collections.swap;
+import java.io.IOException;
 
 /**
  * Created by dmitry on 08.09.17.
@@ -49,6 +54,15 @@ public class MySurfaceView extends SurfaceView implements
             Log.d("1130", "survive");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void deleteCurrentItem() {
+        imageEditorQueue.deleteElement(CurrentElementHolder.getInstance().getCurrentElement());
+        CurrentElementHolder.getInstance().removeCurrentElement();
+        selectedImageElement = null;
+        if(focusListener != null) {
+            focusListener.focusLosed();
         }
     }
 
@@ -127,12 +141,11 @@ public class MySurfaceView extends SurfaceView implements
 
     public MySurfaceView(Context context) {
         super(context);
-        Log.d("1996", "0003");
         getHolder().addCallback(this);
         this.cR = context.getContentResolver();
         this.context = context;
         this.setOnTouchListener(this);
-        imageEditorQueue = new ImageEditorQueue();
+        imageEditorQueue = ImageEditorQueue.getInstance();
 
 
     }
@@ -241,6 +254,7 @@ public class MySurfaceView extends SurfaceView implements
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        SurfaceViewHolder.getInstance().setMySurfaceView(this);
         CurrentVideoHolder.getInstance().setCurrentMediaPlayer(this);
         this.surfaceHolder = surfaceHolder;
         try {
@@ -311,13 +325,22 @@ public class MySurfaceView extends SurfaceView implements
                             fingerY2 = motionEvent.getY(1);
                         }
                         if(count == 1) {
+                            ImageElement imageElement = selectedImageElement;
                             selectedImageElement = imageEditorQueue.find((int)((x1- alignLeft)/loupeX),
                                     (int)((y1 - alignTop)/loupeY));
                             if(selectedImageElement == null) {
-                                focusLosed();
+                                if(imageElement instanceof RisunocImage
+                                        && !((RisunocImage)imageElement).isReady()) {
+                                    selectedImageElement = imageElement;
+                                }
+                                else {
+                                    focusLosed();
+                                    CurrentElementHolder.getInstance().removeCurrentElement();
+                                }
                             }
                             else {
                                 focusTaken();
+                                CurrentElementHolder.getInstance().setCurrentElement(selectedImageElement);
                             }
                         }
                     }
@@ -326,16 +349,29 @@ public class MySurfaceView extends SurfaceView implements
                 case MotionEvent.ACTION_MOVE: {
                     x2 = motionEvent.getX();
                     y2 = motionEvent.getY();
+
                     if(isKrop == false && count == 1) {
                         if(selectedImageElement == null) {
                             alignLeft = (float) (alignLeftOld + x2 - x1);
                             alignTop = (float) (alignTopOld + y2 - y1);
                         }
-                        else {
+                        else if (selectedImageElement instanceof RisunocImage
+                                && !((RisunocImage)selectedImageElement).isReady()) {
+
+                        }
+                        else{
                             selectedImageElement.setLeft((int)((x2 - x1)/loupeX));
                             selectedImageElement.setTop((int)((y2 - y1)/loupeY));
                             ImageHolder.getInstance().setBitmapWithElements(null);
                         }
+                    }
+                    if (selectedImageElement != null
+                            && selectedImageElement.getClass() == RisunocImage.class
+                            && !((RisunocImage)selectedImageElement).isReady()) {
+                        ((RisunocImage)selectedImageElement).addDrawingPoint((int)(x2 - alignLeft)
+                                , (int)(y2 - alignTop));
+                        ImageHolder.getInstance().setBitmapWithElements(null);
+                        draw();
                     }
                     break;
                 }
@@ -356,6 +392,9 @@ public class MySurfaceView extends SurfaceView implements
                         selectedImageElement.saveLeft();
                         selectedImageElement.saveTop();
                         ImageHolder.getInstance().setBitmapWithElements(null);
+                        if(selectedImageElement instanceof RisunocImage) {
+                          ((RisunocImage)selectedImageElement).newLine();
+                        }
                     }
 
                     break;
@@ -379,7 +418,7 @@ public class MySurfaceView extends SurfaceView implements
                                             fingernX1, fingernY1,
                                             fingernX2, fingernY2), 6, (float)0.2));
                         }
-                        else {
+                        else if (selectedImageElement instanceof IconImage){
                             ((IconImage)selectedImageElement).setImageSize(
                                     Tools.normalizator(Tools.getLoupe(fingerX1, fingerY1,
                                             fingerX2, fingerY2,
@@ -414,7 +453,7 @@ public class MySurfaceView extends SurfaceView implements
                         if(selectedImageElement.getClass() == TextImage.class) {
                             ((TextImage)selectedImageElement).saveTextSize();
                         }
-                        else {
+                        else if (selectedImageElement instanceof  IconImage) {
                             ((IconImage)selectedImageElement).saveImageSize();
                         }
                         selectedImageElement.saveAlpha();
@@ -434,6 +473,9 @@ public class MySurfaceView extends SurfaceView implements
         if (selectedImageElement != null && selectedImageElement.getClass() == TextImage.class) {
             ((TextImage)selectedImageElement).setColor(color);
         }
+        if (selectedImageElement != null && selectedImageElement.getClass() == RisunocImage.class) {
+            ((RisunocImage)selectedImageElement).beginNewLineGroop(color);
+        }
     }
 
     public void draw() {
@@ -442,9 +484,7 @@ public class MySurfaceView extends SurfaceView implements
     }
     private void draw(SurfaceHolder surfaceHolder) {
 
-        if (Tools.isVideo(UrlHolder.getInpurUrl())) {
-
-        } else {
+        if (Tools.isNotVideo(UrlHolder.getInpurUrl())) {
             Surface surface = surfaceHolder.getSurface();
             Canvas canvas = surface.lockCanvas(null);
             Paint paint = new Paint();

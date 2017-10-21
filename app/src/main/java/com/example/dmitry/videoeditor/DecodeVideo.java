@@ -1,10 +1,9 @@
 package com.example.dmitry.videoeditor;
 
 import android.content.Context;
-import android.util.Log;
 
-import javax.inject.Inject;
-
+import com.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
+import com.example.dmitry.videoeditor.Holders.UrlHolder;
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
@@ -23,7 +22,7 @@ public class DecodeVideo {
         loadFFMpegBinary();
         float duration =end - start;
         Decoder decoder = new Decoder();
-        decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH,UrlHolder.getInpurUrl());
+        decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
         decoder.outputFile(UrlHolder.getOutputUrl());
         decoder.addCommand(Decoder.name_command.START_CROP_VIDEO, String.valueOf(start));
         decoder.addCommand(Decoder.name_command.DURATION_CROP_VIDEO, String.valueOf(duration));

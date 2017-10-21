@@ -1,8 +1,8 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Holders;
 
-import android.media.MediaPlayer;
 import android.util.Log;
-import android.widget.Button;
+
+import com.example.dmitry.videoeditor.DecodeVideo;
 
 /**
  * Created by dmitry on 20.10.17.

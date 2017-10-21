@@ -4,27 +4,22 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
-import com.example.dmitry.videoeditor.CurrentVideoHolder;
+import com.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
 import com.example.dmitry.videoeditor.DecodeVideo;
 import com.example.dmitry.videoeditor.Decoder;
-import com.example.dmitry.videoeditor.ImageHolder;
+import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Tools;
-import com.example.dmitry.videoeditor.UrlHolder;
+import com.example.dmitry.videoeditor.Holders.UrlHolder;
 
 /**
  * A simple {@link Fragment} subclass.

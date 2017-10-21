@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.dmitry.videoeditor.Adapters.ColorAdapter;
+import com.example.dmitry.videoeditor.Holders.ImageHolder;
+import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.Models.IconWithText;
 import com.example.dmitry.videoeditor.R;
 
@@ -62,13 +65,24 @@ public class PanelColors extends Fragment {
                 }
             }
         });
-       // container.addView(listView);
+        this.onItemClickListener = new AdapterView.OnItemClickListener() {
+            int[] Colors = {
+                    Color.WHITE,
+                    Color.BLUE,
+                    Color.RED,
+                    Color.GREEN,
+                    Color.GRAY,
+                    Color.YELLOW};
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                SurfaceViewHolder.getInstance().getMySurfaceView().setImageColor(Colors[i]);
+                ImageHolder.getInstance().setBitmapWithElements(null);
+                SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+
+            }
+        };
         return listView;
-
-    }
-
-    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
 
     }
 

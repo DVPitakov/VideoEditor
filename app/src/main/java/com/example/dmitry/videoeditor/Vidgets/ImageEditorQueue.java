@@ -1,7 +1,9 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Vidgets;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+
+import com.example.dmitry.videoeditor.Vidgets.ImageElement;
 
 import java.util.ArrayList;
 
@@ -11,10 +13,17 @@ import java.util.ArrayList;
 
 public class ImageEditorQueue {
     ArrayList<ImageElement> images = new ArrayList<>();
+    private static ImageEditorQueue instance;
+    private ImageEditorQueue() {}
 
-    public ImageEditorQueue() {
-
+    public static ImageEditorQueue getInstance() {
+        if(instance == null) {
+            instance = new ImageEditorQueue();
+        }
+        return instance;
     }
+
+
 
     public void addElement(ImageElement imageElement) {
         images.add(imageElement);
@@ -35,6 +44,7 @@ public class ImageEditorQueue {
 
     }
 
+
     public ImageElement find(int x, int y) {
         for(ImageElement imageElement: images) {
             if (imageElement.contains(x, y)) {
@@ -46,6 +56,14 @@ public class ImageEditorQueue {
 
     }
 
+    public void deleteElement(ImageElement element) {
+        for(int i = 0; i < images.size(); i++) {
+            if (images.get(i) == element) {
+                images.remove(i);
+                break;
+            }
+        }
+    }
     public void clear() {
         images = new ArrayList<>();
 
