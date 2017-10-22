@@ -1,1 +1,1 @@
-include ':app', ':FFmpegAndroid', ':rangeseekbar-release'
+include ':app', ':FFmpegAndroid', ':rangeseekbar-release', ':videocompressor'

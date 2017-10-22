@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.example.dmitry.videoeditor.Holders.UrlHolder;
+
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,7 +103,7 @@ public class Tools {
     }
 
     public static void sendVideo(Context context) {
-        Uri videoUri = Uri.parse(UrlHolder.getOutputUrl());
+        Uri videoUri = UrlHolder._getOutputUri();
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);

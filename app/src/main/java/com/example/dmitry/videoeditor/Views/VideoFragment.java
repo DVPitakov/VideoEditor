@@ -204,14 +204,14 @@ public class VideoFragment extends Fragment
             }
             case CompressionModeFragment.QUALITY_COMPRESS: {
                 Log.d("1150", "QUALITY_COMPRESS");
-                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.HIGH_QUALITY);
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.MEDIUM_QUALITY);
                 decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
                 decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
                 decoder.setVideoCodec(Decoder.name_video_codec.H264);
                 break;
             }
             case CompressionModeFragment.WITHOUT_COMPRESS: {
-                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.COPY);
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.HIGK_QUALITY);
                 Log.d("1150", "WITHOUT_COMPRESS");
                 decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
                 decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");

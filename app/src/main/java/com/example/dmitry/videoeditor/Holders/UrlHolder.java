@@ -9,6 +9,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.File;
+
 /**
  * Created by dmitry on 15.10.17.
  */
@@ -42,6 +44,7 @@ public class UrlHolder {
 
     public static void setOutputUrl(String oUrl) {
         outputUrl = oUrl;
+        _outputUri = Uri.fromFile(new File(UrlHolder.getOutputUrl()));
 
     }
 
