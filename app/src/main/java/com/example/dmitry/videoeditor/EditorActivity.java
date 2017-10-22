@@ -20,6 +20,7 @@ import com.example.dmitry.videoeditor.Holders.UrlHolder;
 import com.example.dmitry.videoeditor.Views.ElementRedactorFragment;
 import com.example.dmitry.videoeditor.Views.ImageFragment;
 import com.example.dmitry.videoeditor.Views.VideoFragment;
+import com.example.dmitry.videoeditor.Views.VideoPlayerFragment;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -35,7 +36,6 @@ public class EditorActivity extends Activity {
 
     public EditText editText;
 
-    VideoFragment videoFragment;
     PanelColors panelColors;
     PanelStckers panelStckers;
     ElementRedactorFragment elementRedactorFragment;
@@ -133,6 +133,8 @@ public class EditorActivity extends Activity {
     }
 
     public void showVideoBody() {
+        VideoFragment videoFragment
+                = (VideoFragment)getFragmentManager().findFragmentByTag(VideoFragment.class.getName());
         if(videoFragment == null) {
             videoFragment = new VideoFragment();
         }
@@ -206,9 +208,6 @@ public class EditorActivity extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (videoFragment != null) {
-            fragmentTransaction.remove(videoFragment);
-        }
         SurfaceViewHolder.getInstance().setMySurfaceView(null);
         fragmentTransaction.commit();
         super.onSaveInstanceState(savedInstanceState);
