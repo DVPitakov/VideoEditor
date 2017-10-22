@@ -26,6 +26,22 @@ import com.example.dmitry.videoeditor.Vidgets.ImageEditorQueue;
 import com.example.dmitry.videoeditor.Vidgets.ImageElement;
 import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
 import com.example.dmitry.videoeditor.Vidgets.TextImage;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
 
@@ -43,18 +59,34 @@ public class MySurfaceView extends SurfaceView implements
     @Override
     public void showNewVideo() {
         mediaPlayer.stop();
-        mediaPlayer.reset();
-        try {
+        //mediaPlayer.reset();
+        //try {
+            // Measures bandwidth during playback. Can be null if not required.
+            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+                    Util.getUserAgent(context, "yourApplicationName"), bandwidthMeter);
+            // Produces Extractor instances for parsing the media data.
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            // This is the MediaSource representing the media to be played.
+            MediaSource videoSource = new ExtractorMediaSource(Uri.parse(UrlHolder.getInpurUrl() + "tmp.mp4"),
+                    dataSourceFactory, extractorsFactory, null, null);
+            // Prepare the player with the source.
+            mediaPlayer.prepare(videoSource);
+            mediaPlayer.setVideoSurface(surfaceHolder.getSurface());
+            mediaPlayerStart();
+
+/*
             Log.d("1130", UrlHolder.getInpurUrl() + "tmp.mp4");
             mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getInpurUrl() + "tmp.mp4"));
             mediaPlayer.setSurface(surfaceHolder.getSurface());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
-            mediaPlayer.start();
+            mediaPlayer.start();//*/
             Log.d("1130", "survive");
+        /*
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }//*/
     }
 
     public void deleteCurrentItem() {
@@ -96,7 +128,7 @@ public class MySurfaceView extends SurfaceView implements
         }
     }
 
-    MediaPlayer mediaPlayer;
+    SimpleExoPlayer mediaPlayer;
     Context context;
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
@@ -157,10 +189,10 @@ public class MySurfaceView extends SurfaceView implements
         y2 = 0;
 
     }
-    public int getMediaPlayerCurrentPosition() {
+    public long getMediaPlayerCurrentPosition() {
         if(mediaPlayer != null) {
             mediaPlayer.getDuration();
-            return mediaPlayer.getCurrentPosition();
+            return mediaPlayer.getContentPosition();
         }
         else {
             return -1;
@@ -191,19 +223,19 @@ public class MySurfaceView extends SurfaceView implements
 
     public void mediaPlayerStart() {
         if(mediaPlayer != null) {
-            mediaPlayer.start();
+            mediaPlayer.setPlayWhenReady(true);
         }
 
     }
 
     public void mediaPlayerPause() {
         if(mediaPlayer != null) {
-            mediaPlayer.pause();
+            mediaPlayer.setPlayWhenReady(false);
         }
     }
 
     public boolean mediaPlayerIsPlaying() {
-            return (mediaPlayer != null) && mediaPlayer.isPlaying();
+            return (mediaPlayer != null) && mediaPlayer.getPlayWhenReady();
 
     }
 
@@ -233,22 +265,37 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     public void updateVideo(Uri uri) {
+        // Stop ExoPlayer working, but still
         mediaPlayer.stop();
-        mediaPlayer.reset();
-        try {
+        //try {
+            // Measures bandwidth during playback. Can be null if not required.
+            DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+                    Util.getUserAgent(context, "yourApplicationName"), bandwidthMeter);
+            // Produces Extractor instances for parsing the media data.
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            // This is the MediaSource representing the media to be played.
+            MediaSource videoSource = new ExtractorMediaSource(Uri.parse(UrlHolder.getInpurUrl()),
+                    dataSourceFactory, extractorsFactory, null, null);
+            // Prepare the player with the source.
+            mediaPlayer.prepare(videoSource);
+            /*
             mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getInpurUrl()));
             mediaPlayer.setSurface(surfaceHolder.getSurface());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
+            //*/
+            /*
             mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                 @Override
                 public void onSeekComplete(MediaPlayer mediaPlayer) {
                     Log.d("db", "next");
                 }
-            });
+            });//*/
+        /*
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }//*/
 
     }
 
@@ -257,10 +304,35 @@ public class MySurfaceView extends SurfaceView implements
         SurfaceViewHolder.getInstance().setMySurfaceView(this);
         CurrentVideoHolder.getInstance().setCurrentMediaPlayer(this);
         this.surfaceHolder = surfaceHolder;
-        try {
+        //try {
             if (Tools.isVideo(UrlHolder.getInpurUrl())) {
+                // 1. Create a default TrackSelector
+                //Handler mainHandler = new Handler();
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                TrackSelection.Factory videoTrackSelectionFactory =
+                        new AdaptiveTrackSelection.Factory(bandwidthMeter);
+                TrackSelector trackSelector =
+                        new DefaultTrackSelector(videoTrackSelectionFactory);
 
-                mediaPlayer = new MediaPlayer();
+                // 2. Create the player
+                /*SimpleExoPlayer*/ mediaPlayer =
+                        ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+
+
+                // Bind the player to the view.
+                mediaPlayer.setVideoSurface(surfaceHolder.getSurface());
+
+                // Measures bandwidth during playback. Can be null if not required.
+                DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(context,
+                        Util.getUserAgent(context, "VideoEditor"));
+                // Produces Extractor instances for parsing the media data.
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                // This is the MediaSource representing the media to be played.
+                MediaSource videoSource = new ExtractorMediaSource(Uri.parse(UrlHolder.getInpurUrl()),
+                        dataSourceFactory, extractorsFactory, null, null);
+                // Prepare the player with the source.
+                mediaPlayer.prepare(videoSource);
+                /*mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(context, UrlHolder._getInputUri());
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
                 mediaPlayer.setLooping(true);
@@ -271,7 +343,7 @@ public class MySurfaceView extends SurfaceView implements
                     public void onSeekComplete(MediaPlayer mediaPlayer) {
                         Log.d("db", "next");
                     }
-                });
+                });*/
             }
             else {
                 ImageHolder.getInstance().setMaxImageSize(getWidth(), getHeight());
@@ -287,10 +359,11 @@ public class MySurfaceView extends SurfaceView implements
                 alignTopOld = alignTop;
                 draw(surfaceHolder);
             }
+        /*
         }
         catch (IOException e) {
             Log.d("exc", "IOExcepiton in MySurfaceView.surfaceCreated");
-        }
+        }//*/
 
     }
 

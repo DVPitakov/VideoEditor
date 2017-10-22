@@ -139,7 +139,7 @@ public class VideoFragment extends Fragment
                @Override
                public void run() {
                    if(videoPlayerFragment != null)
-                       videoPlayerFragment.updateProgess(mySurfaceView.getMediaPlayerCurrentPosition(),
+                       videoPlayerFragment.updateProgess((int)mySurfaceView.getMediaPlayerCurrentPosition(),
                                (int)CurrentVideoHolder.getInstance().getVideoLen());
                        handler.postDelayed(this, 100);
                }

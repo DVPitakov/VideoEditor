@@ -180,7 +180,7 @@ public final class MediaSessionConnector {
   public interface QueueNavigator {
 
     long ACTIONS = PlaybackStateCompat.ACTION_SKIP_TO_QUEUE_ITEM
-        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;/*
         | PlaybackStateCompat.ACTION_SET_SHUFFLE_MODE_ENABLED;
 
     /**
