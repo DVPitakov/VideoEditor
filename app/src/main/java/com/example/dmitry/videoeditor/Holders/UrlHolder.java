@@ -16,55 +16,8 @@ import java.io.File;
  */
 
 public class UrlHolder {
-    private static String inputUrl;
-    private static String outputUrl;
-    private static Uri _inputUri;
-    private static Uri _outputUri;
-    private static UrlHolder instance;
-    private static long time;
-
-    public static UrlHolder getInstance() {
-        if(instance == null) {
-            instance = new UrlHolder();
-        }
-        return instance;
-    }
-
-    public static void setInputUrl(Uri iUrl, Context context) {
-        _inputUri = iUrl;
-        inputUrl = getFilePath(context, iUrl);
-
-    }
-
-    public static void setOutputUrl(Uri oUrl, Context context) {
-        _outputUri = oUrl;
-        outputUrl = getFilePath(context, oUrl);
-
-    }
-
-    public static void setOutputUrl(String oUrl) {
-        outputUrl = oUrl;
-        _outputUri = Uri.fromFile(new File(UrlHolder.getOutputUrl()));
-
-    }
-
-    public static String getInpurUrl() {
-        return inputUrl;
-
-    }
-
-    public static String getOutputUrl() {
-        return outputUrl;
-
-    }
-
-    public static Uri _getInputUri() {
-        return _inputUri;
-
-    }
-
-    public static Uri _getOutputUri() {
-        return _outputUri;
+    public static Uri getUri(String path){
+        return Uri.fromFile(new File(path));
     }
 
     public static String getFilePath(Context context, Uri uri)  {
@@ -118,23 +71,15 @@ public class UrlHolder {
         return null;
     }
 
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-    public static boolean isDownloadsDocument(Uri uri) {
+    private static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
-    public static boolean isMediaDocument(Uri uri) {
+    private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    public static long getTime() {
-        return time;
-    }
-
-    public static void setTime(long time) {
-        UrlHolder.time = time;
     }
 }

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.example.dmitry.videoeditor.SettingsVideo;
+
 import java.io.IOException;
 
 /**
@@ -31,7 +33,7 @@ public class ImageHolder {
         if (defaultBitmap == null) {
             try {
                 defaultBitmap = MediaStore.Images.Media.getBitmap(
-                        activity.getContentResolver(), UrlHolder._getInputUri()
+                        activity.getContentResolver(), SettingsVideo.getInput()
                 );
                 Log.d("1996", "defaultBitmap: " + String.valueOf(defaultBitmap));
                 freshBitmap = defaultBitmap;

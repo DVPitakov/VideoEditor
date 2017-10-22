@@ -188,7 +188,7 @@ public class EditorActivity extends Activity {
                                             }
                                         });
         FontHolder.getInstance(getBaseContext());
-        if(Tools.isVideo(UrlHolder.getInpurUrl())) {
+        if(Tools.isVideo(SettingsVideo.getInput(""))) {
             showDefaultVideoHeader();
             showVideoBody();
         }

@@ -103,7 +103,7 @@ public class Tools {
     }
 
     public static void sendVideo(Context context) {
-        Uri videoUri = UrlHolder._getOutputUri();
+        Uri videoUri = SettingsVideo.getOutput();
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);

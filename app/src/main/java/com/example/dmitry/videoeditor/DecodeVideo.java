@@ -50,21 +50,21 @@ public class DecodeVideo {
         switch (type){
             case HIGK_QUALITY:
                 //decoder.setVideoCodec(Decoder.name_video_codec.HIGK_QUALITY);
-                VideoCompress.compressVideoHigh(UrlHolder.getInpurUrl(),UrlHolder.getOutputUrl(),newListener());
+                VideoCompress.compressVideoHigh(SettingsVideo.getInput(""),SettingsVideo.getOutput(""),newListener());
                 break;
             case MEDIUM_QUALITY:
                 //decoder.setVideoCodec(Decoder.name_video_codec.H264);
-                VideoCompress.compressVideoMedium(UrlHolder.getInpurUrl(),UrlHolder.getOutputUrl(),newListener());
+                VideoCompress.compressVideoMedium(SettingsVideo.getInput(""),SettingsVideo.getOutput(""),newListener());
                 break;
             case LOW_QUALITY:
                 //decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
-                VideoCompress.compressVideoLow(UrlHolder.getInpurUrl(),UrlHolder.getOutputUrl(),newListener());
+                VideoCompress.compressVideoLow(SettingsVideo.getInput(""),SettingsVideo.getOutput(""),newListener());
                 break;
 
         }
         /*
-        decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
-        decoder.outputFile(UrlHolder.getOutputUrl());
+        decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, SettingsVideo.getInput());
+        decoder.outputFile(SettingsVideo.getOutput(""));
         decoder.addCommand(Decoder.name_command.START_CROP_VIDEO, String.valueOf(start));
         decoder.addCommand(Decoder.name_command.DURATION_CROP_VIDEO, String.valueOf(duration));
         decoder.addCommand(Decoder.name_command.OVERWRITE_FILE,"");
