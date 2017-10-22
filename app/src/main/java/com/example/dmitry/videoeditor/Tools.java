@@ -94,6 +94,17 @@ public class Tools {
 
     }
 
+    public static void sendVideo(Context context) {
+        Uri videoUri = Uri.parse(UrlHolder.getOutputUrl());
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);
+        shareIntent.setType("video/mp4");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(Intent.createChooser(shareIntent, "send"));
+
+    }
+
     public static void hh() {
 
     }
