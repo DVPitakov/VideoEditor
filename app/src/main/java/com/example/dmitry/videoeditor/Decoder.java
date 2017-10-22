@@ -1,5 +1,7 @@
 package com.example.dmitry.videoeditor;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -83,6 +85,7 @@ public class Decoder {
 
     public void outputFile(String path_name){
         output_name_file = path_name;
+        Log.d("Decoder1234", output_name_file);
     }
 
     public void setVideoCodec(name_video_codec name){

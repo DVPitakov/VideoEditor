@@ -8,6 +8,7 @@
 
     <!-- TODO: Update blank fragment layout -->
         <LinearLayout
+            android:id="@+id/fragment_video_player_main_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="vertical">
@@ -18,49 +19,78 @@
                 android:layout_height="wrap_content"
                 android:background="#A0000000"
                 android:layout_gravity="center"/>
-            <LinearLayout
-                android:gravity="center"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="#A0000000"
-                android:paddingBottom="8dp">
-                <ImageButton
-                    android:layout_margin="10dp"
-                    android:id="@+id/show_convert_menu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                android:layout_height="match_parent"
+                android:background="#A0000000">
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+                <LinearLayout
                     android:layout_gravity="center"
-                    android:src="@drawable/menu2"
-                    android:scaleType="fitXY"
-                    android:background="#00000000"/>
-                <ImageButton
-                    android:layout_margin="10dp"
-                    android:id="@+id/show_kroper"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_content_cut_black_24dp"
-                    android:scaleType="fitXY"
-                    android:background="#00000000"/>
-                <ImageButton
-                    android:layout_margin="10dp"
-                    android:id="@+id/playButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_play_circle_outline_black_24dp"
-                    android:scaleType="fitXY"
-                    android:background="#00000000"/>
-                <ImageButton
-                    android:layout_margin="10dp"
-                    android:id="@+id/crosButton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/close"
-                    android:scaleType="fitXY"
-                    android:background="#00000000"/>
-            </LinearLayout>
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                        <ImageButton
+                            android:layout_margin="10dp"
+                            android:id="@+id/show_convert_menu"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/menu2"
+                            android:scaleType="fitXY"
+                            android:background="#00000000"/>
+                    <ImageButton
+                        android:layout_margin="10dp"
+                        android:id="@+id/show_kroper"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_content_cut_black_24dp"
+                        android:scaleType="fitXY"
+                        android:background="#00000000"/>
+
+                    <ImageButton
+                        android:layout_margin="10dp"
+                        android:id="@+id/crosButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/close"
+                        android:scaleType="fitXY"
+                        android:background="#00000000"/>
+                </LinearLayout>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_gravity="start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <ImageButton
+                        android:layout_margin="10dp"
+                        android:id="@+id/playButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_play_circle_outline_black_24dp"
+                        android:scaleType="fitXY"
+                        android:background="#00000000"/>
+                </FrameLayout>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end">
+                    <ImageButton
+                        android:layout_margin="10dp"
+                        android:id="@+id/crosButton2"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_send_white_24dp"
+                        android:scaleType="fitXY"
+                        android:background="#00000000"/>
+                </FrameLayout>
+            </FrameLayout>
         </LinearLayout>
     <org.florescu.android.rangeseekbar.RangeSeekBar
         android:id="@+id/rangebar1"
@@ -72,4 +102,29 @@
         rsb:showLabels="false"
         rsb:absoluteMaxValue="10000"
         rsb:absoluteMinValue="0"/>
+        <LinearLayout
+            android:id="@+id/fragment_video_player_buttons"
+            android:visibility="gone"
+            android:background="#A0000000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/fragment_video_player_assert_button"
+                android:layout_margin="2dp"
+                android:background="#20000000"
+                android:textColor="@android:color/white"
+                android:text="Применить"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/fragment_video_player_cancel_button"
+                android:layout_margin="2dp"
+                android:background="#20000000"
+                android:textColor="@android:color/white"
+                android:text="Отмена"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
 </LinearLayout>

@@ -1,12 +1,9 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Holders;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
 import java.io.IOException;
 

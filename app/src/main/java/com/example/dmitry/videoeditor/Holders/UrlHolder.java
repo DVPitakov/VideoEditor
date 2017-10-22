@@ -1,16 +1,13 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Holders;
 
-import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 
 /**
  * Created by dmitry on 15.10.17.

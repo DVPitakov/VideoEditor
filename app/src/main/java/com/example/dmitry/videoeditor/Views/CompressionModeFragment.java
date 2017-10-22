@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,7 @@ public class CompressionModeFragment extends DialogFragment implements View.OnCl
                     break;
                 }
                 case R.id.without_compress_button: {
+                    Log.d("1014", String.valueOf(mListener));
                     mListener.onCompressionModeFragmentInteraction(WITHOUT_COMPRESS);
                     break;
                 }

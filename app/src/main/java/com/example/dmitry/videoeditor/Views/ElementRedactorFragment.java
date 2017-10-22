@@ -9,8 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.dmitry.videoeditor.EditorActivity;
+import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
+import com.example.dmitry.videoeditor.Holders.ImageHolder;
+import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.R;
+import com.example.dmitry.videoeditor.Vidgets.ImageElement;
+import com.example.dmitry.videoeditor.Vidgets.TextImage;
+
+import layout.PanelColors;
 
 public class ElementRedactorFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -21,7 +30,9 @@ public class ElementRedactorFragment extends Fragment {
     private ImageButton cancelButton;
     private ImageButton saveButton;
     private ImageButton fontButton;
-    private ImageButton garbageButton;
+    private ImageButton italicButton;
+    private ImageButton boldButton;
+    private ImageButton colorButton;
 
 
     // TODO: Rename and change types of parameters
@@ -66,37 +77,71 @@ public class ElementRedactorFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_element_redactor, container, false);
-        cancelButton = (ImageButton) rootView.findViewById(R.id.cancel_fragment_button);
-        saveButton = (ImageButton) rootView.findViewById(R.id.save_fragment_button);
-        fontButton = (ImageButton) rootView.findViewById(R.id.font_fragment_button);
-        garbageButton = (ImageButton)  rootView.findViewById(R.id.grabage_button);
+        cancelButton = (ImageButton) rootView.findViewById(R.id.fragment_element_redactor_cancel_button);
+        saveButton = (ImageButton) rootView.findViewById(R.id.fragment_element_redactor_ok_button);
+        fontButton = (ImageButton) rootView.findViewById(R.id.fragment_element_redactor_font_button);
+        boldButton = (ImageButton) rootView.findViewById(R.id.fragment_element_redactor_bold_button);
+        italicButton = (ImageButton) rootView.findViewById(R.id.fragment_element_redactor_italic_button);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ((EditorActivity)(getActivity())).removeFragment(PanelColors.class);
+                ((EditorActivity)(getActivity())).showDefaultImageHeader();
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SurfaceViewHolder.getInstance().getMySurfaceView().deleteCurrentItem();
+                ((EditorActivity)(getActivity())).removeFragment(PanelColors.class);
+                ((EditorActivity)(getActivity())).showDefaultImageHeader();
+                ImageHolder.getInstance().setBitmapWithElements(null);
+                SurfaceViewHolder.getInstance().getMySurfaceView().draw();
             }
         });
 
 
         fontButton.setOnClickListener(new View.OnClickListener() {
+            int curFont = 0;
             @Override
             public void onClick(View view) {
-
+                ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
+                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextImage.class) {
+                    ((TextImage)imageElement).setFont(curFont);
+                    ImageHolder.getInstance().setBitmapWithElements(null);
+                    SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                }
+                curFont = (curFont + 1) % 3;
             }
         });
 
-        garbageButton.setOnClickListener(new View.OnClickListener() {
+        italicButton.setOnClickListener(new View.OnClickListener() {
+            boolean italic = true;
             @Override
             public void onClick(View view) {
+                ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
+                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextImage.class) {
+                    ((TextImage)imageElement).setItalic(italic);
+                    italic = !italic;
+                    ImageHolder.getInstance().setBitmapWithElements(null);
+                    SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                }
+            }
+        });
 
+        boldButton.setOnClickListener(new View.OnClickListener() {
+            boolean bold = true;
+            @Override
+            public void onClick(View view) {
+                ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
+                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextImage.class) {
+                    ((TextImage)imageElement).setBold(bold);
+                    bold = !bold;
+                    ImageHolder.getInstance().setBitmapWithElements(null);
+                    SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                }
             }
         });
         return rootView;

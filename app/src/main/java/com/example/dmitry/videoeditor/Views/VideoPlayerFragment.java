@@ -11,7 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.SeekBar;
 
 
@@ -48,6 +51,10 @@ public class VideoPlayerFragment extends Fragment {
     ImageButton crosButton;
     ImageButton showKroper;
     RangeSeekBar rangebar;
+    LinearLayout buttonsLayout;
+    LinearLayout mainLinearLayout;
+    Button assertButton;
+    Button cancelButton;
     private OnVideoPlayerFragmentInteractionListener mListener;
 
     public VideoPlayerFragment() {
@@ -89,6 +96,10 @@ public class VideoPlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_video_player, container, false);
+        mainLinearLayout = (LinearLayout)(rootView.findViewById(R.id.fragment_video_player_main_linear_layout));
+        assertButton = (Button)(rootView.findViewById(R.id.fragment_video_player_assert_button));
+        cancelButton = (Button)(rootView.findViewById(R.id.fragment_video_player_cancel_button));
+        buttonsLayout = (LinearLayout)(rootView.findViewById(R.id.fragment_video_player_buttons));
         playButton = (ImageButton)(rootView.findViewById(R.id.playButton));
         convertButton = (ImageButton)(rootView.findViewById(R.id.show_convert_menu));
         seekBar = (SeekBar)(rootView.findViewById(R.id.videoProgress));
@@ -127,7 +138,7 @@ public class VideoPlayerFragment extends Fragment {
                     int rr = rangebar.getSelectedMaxValue().intValue();
                     int left = rangebar.getAbsoluteMinValue().intValue();
                     int right = rangebar.getAbsoluteMaxValue().intValue();
-                    mListener.doVideoKrop(left, right, ll, rr);
+                    mListener.doVideoKrop(ll, rr, left, right);
                 }
             }
         });
@@ -137,10 +148,30 @@ public class VideoPlayerFragment extends Fragment {
             public void onClick(View view) {
                 if (rangebar.getVisibility() == View.GONE) {
                     rangebar.setVisibility(View.VISIBLE);
+                    buttonsLayout.setVisibility(View.VISIBLE);
+                    mainLinearLayout.setVisibility(View.GONE);
                 }
                 else {
                     rangebar.setVisibility(View.GONE);
+                    buttonsLayout.setVisibility(View.GONE);
+                    mainLinearLayout.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rangebar.setVisibility(View.GONE);
+                buttonsLayout.setVisibility(View.GONE);
+                mainLinearLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        assertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rangebar.setVisibility(View.GONE);
+                buttonsLayout.setVisibility(View.GONE);
+                mainLinearLayout.setVisibility(View.VISIBLE);
             }
         });
         redyForUpdating = true;

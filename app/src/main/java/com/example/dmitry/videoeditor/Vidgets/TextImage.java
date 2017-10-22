@@ -1,15 +1,14 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Vidgets;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
-import android.view.View;
+
+import com.example.dmitry.videoeditor.Holders.FontHolder;
+import com.example.dmitry.videoeditor.Tools;
 
 /**
  * Created by dmitry on 11.09.17.
@@ -20,6 +19,9 @@ public class TextImage extends ImageElement {
     private int textSize = 60;
     private int textSizeD = 60;
     private int color = Color.WHITE;
+    private boolean isBold = false;
+    private boolean isItalic = false;
+    private int textType = 0;
 
     public TextImage(String text, int left, int bottom) {
         super();
@@ -44,8 +46,8 @@ public class TextImage extends ImageElement {
 
     }
 
-    public void setFont() {
-
+    public void setFont(int textType) {
+        this.textType = textType;
     }
 
 
@@ -67,6 +69,14 @@ public class TextImage extends ImageElement {
         this.color = color;
     }
 
+    public void setBold(boolean isBold) {
+        this.isBold = isBold;
+    }
+
+    public void setItalic(boolean isItalic) {
+        this.isItalic = isItalic;
+    }
+
     public void draw(Canvas canvas) {
         float senterX = Tools.getCenter(rect.right + x, rect.left + x);
         float senterY = Tools.getCenter(rect.top + y , rect.bottom + y);
@@ -78,13 +88,15 @@ public class TextImage extends ImageElement {
         inverseMatrix.setRotate(-alpha -oldAlpha, senterX, senterY);
         inverseMatrix.postTranslate(-rect.left - x, - rect.top  - y);
 
+        int textStyle = 0;
+        if(isBold) textStyle += Typeface.BOLD;
+        if(isItalic) textStyle += Typeface.ITALIC;
         Paint fontPaint = new Paint();
 
-        //Typeface typeface = FontHolder.getInstance().getType();
+        Typeface typeface = FontHolder.getInstance().getType(textType);
 
-        //FontHolder.getInstance().getType();
-        //fontPaint.setTypeface(typeface);
         fontPaint.setColor(color);
+        fontPaint.setTypeface(Typeface.create(typeface, textStyle));
         fontPaint.setStrokeWidth(5.0f);
         fontPaint.setStyle(Paint.Style.FILL);
         fontPaint.setTextSize(textSizeD);

@@ -1,4 +1,4 @@
-package com.example.dmitry.videoeditor;
+package com.example.dmitry.videoeditor.Vidgets;
 
 import android.graphics.Canvas;
 import android.graphics.Matrix;

@@ -19,28 +19,35 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
+import com.example.dmitry.videoeditor.EditorActivity;
 import com.example.dmitry.videoeditor.Models.IconWithText;
 import com.example.dmitry.videoeditor.R;
 
 import java.util.ArrayList;
 
 
-class ImageAdapter extends Fragment {
+public class ImageAdapter extends Fragment {
     public ArrayList<IconWithText> arrayList = new ArrayList<>();
     protected int layout = R.layout.fragment_instrumen_panel_list;
     protected int id = R.id.gridPanelImage;
     protected int itemSize = R.dimen.imageAdapterImageSize;
-    protected Context mContext;
+    //protected Context mContext;
     protected ImageWithTextAdapter dataAdapter;
+    protected EditorActivity editorActivity;
     AdapterView.OnItemClickListener onItemClickListener;
 
     // references to our images
     public	Integer[] mThumbIds;
 
-    public ImageAdapter(Context c) {
-        mContext = c;
-
+    public ImageAdapter() {
+        super();
     }
+
+    //public ImageAdapter(Context c) {
+    //    super();
+    //    mContext = c;
+    //
+    //}
 
     public int getCount() {
         return mThumbIds.length;
@@ -54,15 +61,27 @@ class ImageAdapter extends Fragment {
     }
 
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (getActivity() instanceof EditorActivity) {
+            editorActivity = (EditorActivity) getActivity();
+        }
+        else {
+            throw new RuntimeException(context.toString()
+                    + "shud called by editorActivity err id 001");
+        }
+
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        dataAdapter = new ImageWithTextAdapter(mContext, R.layout.item_image_with_text, arrayList);
-        //container.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        //        ViewGroup.LayoutParams.WRAP_CONTENT ));
+        editorActivity = (EditorActivity) getActivity();
+        dataAdapter = new ImageWithTextAdapter(getActivity().getBaseContext()
+                , R.layout.item_image_with_text, arrayList);
         GridView listView = new GridView(container.getContext());
         GridView.LayoutParams layoutParams = new GridView.LayoutParams(
                 GridView.LayoutParams.MATCH_PARENT
@@ -70,7 +89,6 @@ class ImageAdapter extends Fragment {
         listView.setLayoutParams(layoutParams);
         listView.setNumColumns(arrayList.size());
         listView.setAdapter(dataAdapter);
-        //container.addView(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -4,26 +4,22 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
+import com.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
 import com.example.dmitry.videoeditor.DecodeVideo;
 import com.example.dmitry.videoeditor.Decoder;
-import com.example.dmitry.videoeditor.ImageHolder;
+import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Tools;
-import com.example.dmitry.videoeditor.UrlHolder;
+import com.example.dmitry.videoeditor.Holders.UrlHolder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -144,7 +140,7 @@ public class VideoFragment extends Fragment
                public void run() {
                    if(videoPlayerFragment != null)
                        videoPlayerFragment.updateProgess(mySurfaceView.getMediaPlayerCurrentPosition(),
-                                 mySurfaceView.getMediaPlayerDuration());
+                               (int)CurrentVideoHolder.getInstance().getVideoLen());
                        handler.postDelayed(this, 100);
                }
            });
@@ -155,15 +151,16 @@ public class VideoFragment extends Fragment
     public void show_compression_menu_request() {
              compressionModeFragment = new CompressionModeFragment();
              compressionModeFragment.setOnCompressionModeFragmentInteractionListener(this);
-             compressionModeFragment.show(getActivity().getFragmentManager(), "123");
+             compressionModeFragment.show(getActivity().getFragmentManager()
+                     , CompressionModeFragment.class.getName());
     }
 
     //TODO для обрезки видео leftCur, leftMax - текущее положение (leftCur / (rightMax - leftMax))
     @Override
     public void doVideoKrop(int leftCur, int rightCur, int leftMax, int rightMax) {
         int len =  rightMax - leftMax;
-        int len_video = mySurfaceView.getMediaPlayerDuration();
-        float time_end = (rightCur - leftMax) *len_video/ len / 1000;
+        int len_video =(int)CurrentVideoHolder.getInstance().getVideoLen();
+        float time_end = (rightCur - leftMax) * len_video/ len / 1000;
         float time_start = (leftCur - leftMax) * len_video / len / 1000;
 
         if (time_end < time_start){
@@ -171,7 +168,15 @@ public class VideoFragment extends Fragment
             time_end=time_start;
             time_start=time;
         }
-        new DecodeVideo(getActivity(), time_start,time_end,DecodeVideo.Type.COPY);
+
+        ConvertingProgressFragment convertingProgressFragment
+                = new ConvertingProgressFragment();
+        convertingProgressFragment
+                .show(getFragmentManager(), ConvertingProgressFragment.class.getName());
+        new DecodeVideo(getActivity(), time_start,time_end
+                , CurrentVideoHolder.getInstance().getCompressType());
+        Log.d("1312", "START TIME: " +  String.valueOf(time_start));
+        Log.d("1312", "END TIME: " +  String.valueOf(time_end));
     }
 
     @Override
@@ -188,22 +193,29 @@ public class VideoFragment extends Fragment
         convertingProgressFragment = new ConvertingProgressFragment();
         convertingProgressFragment.setOnConvertingFragmentInteractionListener(this);
         compressionModeFragment.dismiss();
-        switch (buttonType) {
+         switch (buttonType) {
             case CompressionModeFragment.FAST_COMPRESS: {
-                convertingProgressFragment.show(getActivity().getFragmentManager(), "456");
+                Log.d("1150", "FAST");
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.LOW_QUALITY);
                 decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
                 decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
                 decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
-
-                //mySurfaceView.updateVideo(Uri.parse(inputUri.toString() + ".mp4"));
                 break;
             }
             case CompressionModeFragment.QUALITY_COMPRESS: {
-                convertingProgressFragment.show(getActivity().getFragmentManager(), "456");
+                Log.d("1150", "QUALITY_COMPRESS");
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.HIGH_QUALITY);
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
+                decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
+                decoder.setVideoCodec(Decoder.name_video_codec.H264);
                 break;
             }
             case CompressionModeFragment.WITHOUT_COMPRESS: {
-                //convertingProgressFragment.show(EditorActivity.this.getFragmentManager(), "456");
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.COPY);
+                Log.d("1150", "WITHOUT_COMPRESS");
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
+                decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
+                decoder.setVideoCodec(Decoder.name_video_codec.COPY);
                 break;
             }
         }

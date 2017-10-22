@@ -1,6 +1,8 @@
 package layout;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -14,7 +16,12 @@ import android.widget.ListView;
 
 import com.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
 import com.example.dmitry.videoeditor.Adapters.StickerAdapter;
+import com.example.dmitry.videoeditor.EditorActivity;
+import com.example.dmitry.videoeditor.Holders.ImageHolder;
+import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
+import com.example.dmitry.videoeditor.Vidgets.IconImage;
 
 import java.util.ArrayList;
 
@@ -33,7 +40,7 @@ public class PanelStckers extends Fragment {
     public static final Integer[] ITEMS =  new Integer[] {
 
     };
-    public PanelStckers(Context c) {
+    public PanelStckers() {
         arrayList.add( R.drawable.s1);
         arrayList.add( R.drawable.s2);
         arrayList.add( R.drawable.s3);
@@ -63,7 +70,6 @@ public class PanelStckers extends Fragment {
         GridView gridView = new GridView(container.getContext());
         gridView.setNumColumns(5);
         gridView.setAdapter(dataAdapter);
-        //container.addView(gridView);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -72,12 +78,17 @@ public class PanelStckers extends Fragment {
                 }
             }
         });
+        this.onStickerClickListener = new PanelStckers.OnStickerClickListener() {
+            @Override
+            public void onStickerClick(int sticker) {
+                MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
+                mySurfaceView.addImageElement(new IconImage(sticker, mySurfaceView, 60, 60));
+                ImageHolder.getInstance().setBitmapWithElements(null);
+                mySurfaceView.draw();
+                ((EditorActivity)(getActivity())).removeFragment(PanelStckers.class);
+            }
+        };
         return gridView;
-
-    }
-
-    public void setOnStickerClickListener(OnStickerClickListener onStickerClickListener) {
-        this.onStickerClickListener = onStickerClickListener;
 
     }
 }
