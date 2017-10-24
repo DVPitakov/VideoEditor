@@ -7,4 +7,9 @@
     <dimen name="mySurfaceViewSize">450dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
+    <dimen name="krop_frame_touch_len">16dp</dimen>
+    <dimen name="krop_frame_in_line_len">2dp</dimen>
+    <dimen name="krop_frame_out_line_len">3dp</dimen>
+    <dimen name="krop_frame_border_len">5dp</dimen>
+    <dimen name="krop_frame_corner_len">30dp</dimen>
 </resources>

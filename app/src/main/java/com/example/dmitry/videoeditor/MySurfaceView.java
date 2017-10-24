@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import com.example.dmitry.videoeditor.Holders.UrlHolder;
 import com.example.dmitry.videoeditor.Vidgets.IconImage;
 import com.example.dmitry.videoeditor.Vidgets.ImageEditorQueue;
 import com.example.dmitry.videoeditor.Vidgets.ImageElement;
+import com.example.dmitry.videoeditor.Vidgets.KropFrame;
 import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
 import com.example.dmitry.videoeditor.Vidgets.TextImage;
 
@@ -39,19 +42,20 @@ public class MySurfaceView extends SurfaceView implements
 
     private long oldClickTime;
     private long newClickTime;
+    private KropFrame kropFrame;
+    private int iw;
+    private int ih;
 
     @Override
     public void showNewVideo() {
         mediaPlayer.stop();
         mediaPlayer.reset();
         try {
-            Log.d("1130", UrlHolder.getInpurUrl() + "tmp.mp4");
             mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getInpurUrl() + "tmp.mp4"));
             mediaPlayer.setSurface(surfaceHolder.getSurface());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
             mediaPlayer.start();
-            Log.d("1130", "survive");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,6 +106,8 @@ public class MySurfaceView extends SurfaceView implements
     ContentResolver cR;
     public ImageEditorQueue imageEditorQueue;
     public ImageElement selectedImageElement;
+    public ImageEventTransformator eventTransformator = new ImageEventTransformator();
+
     int effect = 0;
 
     double x1;
@@ -109,28 +115,15 @@ public class MySurfaceView extends SurfaceView implements
     double x2;
     double y2;
 
-    float fingerX1;
-    float fingerY1;
-    float fingerX2;
-    float fingerY2;
-
-    float fingernX1;
-    float fingernY1;
-    float fingernX2;
-    float fingernY2;
-
-    float alignLeft = 0.0f;
-    float alignTop = 0.0f;
-    float loupeX = 1.0f;
-    float loupeY = 1.0f;
-    float oldLoupeX = 1.0f;
-    float oldLoupeY = 1.0f;
+    private float alignLeft = 0.0f;
+    private float alignTop = 0.0f;
+    private float loupeX = 1.0f;
+    private float loupeY = 1.0f;
 
     float alignLeftOld = 0.0f;
     float alignTopOld = 0.0f;
 
     FocusListener focusListener;
-
 
     boolean isKrop = false;
 
@@ -139,6 +132,159 @@ public class MySurfaceView extends SurfaceView implements
 
     }
 
+    private ImageEventTransformator.OnClickListener clickListener
+            = new ImageEventTransformator.OnClickListener() {
+        @Override
+        public void onClick(float dx, float dy) {
+            x1 = dx;
+            y1 = dy;
+            x2 = 0;
+            y2 = 0;
+            ImageElement imageElement = selectedImageElement;
+            selectedImageElement =
+                    imageEditorQueue.find((int)((dx/loupeX - alignLeft)),
+                    (int)((dy/loupeY - alignTop)));
+            if(selectedImageElement == null) {
+                if(imageElement instanceof RisunocImage
+                        && !((RisunocImage)imageElement).isReady()) {
+                    selectedImageElement = imageElement;
+                }
+                else {
+                    focusLosed();
+                    CurrentElementHolder.getInstance().removeCurrentElement();
+                }
+            }
+            else {
+                focusTaken();
+                CurrentElementHolder.getInstance().setCurrentElement(selectedImageElement);
+            }
+            if (isKrop) {
+                kropFrame.onClick((int)(dx/loupeX), (int)(dy/loupeY));
+            }
+        }
+    };
+
+    private ImageEventTransformator.OnScaleListener scaleListener = new ImageEventTransformator.OnScaleListener() {
+        @Override
+        public void onScale(float scale) {
+            if (selectedImageElement != null) {
+                if(selectedImageElement.getClass() == TextImage.class) {
+                    ((TextImage)selectedImageElement).setTextSize(
+                            Tools.normalizator(scale, 6, (float)0.2));
+                }
+                else if (selectedImageElement instanceof IconImage) {
+                    ((IconImage)selectedImageElement).setImageSize(
+                            Tools.normalizator(scale, 6, (float)0.2));
+                }
+            }
+            else {
+                loupeX = scale;
+                loupeY = loupeX;
+                loupeX = Tools.normalizator(loupeX, 4, (float)0.2);
+                loupeY = Tools.normalizator(loupeY, 4, (float)0.2);
+                ImageHolder.getInstance().setScaledBitmap(null);
+            }
+        }
+
+        @Override
+        public void onScaleEnd(float scale) {
+            if (selectedImageElement != null) {
+                if(selectedImageElement.getClass() == TextImage.class) {
+                    ((TextImage)selectedImageElement).saveTextSize();
+                }
+                else if (selectedImageElement instanceof  IconImage) {
+                    ((IconImage)selectedImageElement).saveImageSize();
+                }
+
+            }
+        }
+    };
+
+    public PointF getCenter() {
+        PointF p = new PointF();
+        p.x = iw / loupeX / 4 - alignLeft;
+        p.y = ih / loupeY / 3 - alignTop;
+        return p;
+    }
+
+    private ImageEventTransformator.OnMoveListener moveListener = new ImageEventTransformator.OnMoveListener() {
+        @Override
+        public void onMove(float dx, float dy) {
+            x2 = dx;
+            y2 = dy;
+            if(!isKrop || !kropFrame.moveCanched()) {
+                if (isKrop) {
+                    kropFrame.move((int)(dx / loupeX), (int)(dy / loupeY));
+                }
+                if(selectedImageElement == null) {
+                    alignLeft = (float) (alignLeftOld + x2/loupeX);
+                    alignTop = (float) (alignTopOld + y2/loupeY);
+                }
+                else if (selectedImageElement instanceof RisunocImage
+                        && !((RisunocImage)selectedImageElement).isReady()) {
+
+                }
+                else{
+                    selectedImageElement.setLeft((int)((x2/loupeX)));
+                    selectedImageElement.setTop((int)((y2/loupeY)));
+                    ImageHolder.getInstance().setBitmapWithElements(null);
+                }
+            }
+            else {
+                kropFrame.onMove((int)((x1 + x2)/loupeX), (int)((y1 + y2)/loupeY));
+                draw();
+            }
+            if (selectedImageElement != null
+                    && selectedImageElement.getClass() == RisunocImage.class
+                    && !((RisunocImage)selectedImageElement).isReady()) {
+                ((RisunocImage)selectedImageElement)
+                        .addDrawingPoint(
+                                (int)((x2 + x1) / loupeX - alignLeft)
+                        , (int)((y2 + y1) / loupeY  - alignTop));
+                ImageHolder.getInstance().setBitmapWithElements(null);
+                draw();
+            }
+
+        }
+
+        @Override
+        public void onMoveEnd(float dx, float dy) {
+            x2 = dx;
+            y2 = dy;
+
+            alignLeftOld = alignLeft;
+            alignTopOld = alignTop;
+            if (selectedImageElement != null) {
+                selectedImageElement.saveLeft();
+                selectedImageElement.saveTop();
+                ImageHolder.getInstance().setBitmapWithElements(null);
+                if(selectedImageElement instanceof RisunocImage) {
+                    ((RisunocImage)selectedImageElement).newLine();
+                }
+            }
+            if (isKrop) {
+                kropFrame.onDetouch();
+            }
+        }
+    };
+
+    private ImageEventTransformator.OnRotateListener rotateListener = new ImageEventTransformator.OnRotateListener() {
+        @Override
+        public void onRotate(float alphaNotDegree) {
+            if (selectedImageElement != null) {
+                selectedImageElement.setAlpha(alphaNotDegree);
+                ImageHolder.getInstance().setBitmapWithElements(null);
+            }
+        }
+
+        @Override
+        public void onRotateEnd(float alphaNotDegree) {
+            if (selectedImageElement != null) {
+                selectedImageElement.saveAlpha();
+            }
+        }
+    };
+
     public MySurfaceView(Context context) {
         super(context);
         getHolder().addCallback(this);
@@ -146,6 +292,10 @@ public class MySurfaceView extends SurfaceView implements
         this.context = context;
         this.setOnTouchListener(this);
         imageEditorQueue = ImageEditorQueue.getInstance();
+        eventTransformator.setMoveListener(moveListener);
+        eventTransformator.setScaleListener(scaleListener);
+        eventTransformator.setOnRotateListener(rotateListener);
+        eventTransformator.setOnClickListener(clickListener);
 
 
     }
@@ -170,20 +320,11 @@ public class MySurfaceView extends SurfaceView implements
 
 
     public Rect getKropRect() {
-        if(x1 > x2) {
-            double x = x1;
-            x1 = x2;
-            x2 = x;
-        }
-        if (y1 > y2) {
-            double y = y1;
-            y1 = y2;
-            y2 = y;
-        }
-        int left = (int)((x1) / loupeX - alignLeft);
-        int top = (int)((y1) / loupeY - alignTop);
-        int right = (int)((x2) / loupeX - alignLeft);
-        int bottom = (int)((y2) / loupeY - alignTop);
+        Rect kropRect = kropFrame.getRect();
+        int left = (int)((kropRect.left) - alignLeft);
+        int top = (int)((kropRect.top) - alignTop);
+        int right = (int)((kropRect.right) - alignLeft);
+        int bottom = (int)((kropRect.bottom) - alignTop);
         Rect resultRect = new Rect(left, top, right, bottom);
         return resultRect;
 
@@ -209,10 +350,18 @@ public class MySurfaceView extends SurfaceView implements
 
     public void kropSet() {
         isKrop = true;
+        kropFrame = new KropFrame(
+                (int)alignLeft
+                ,(int)alignTop
+                ,(int)(iw + alignLeft)
+                ,(int)(ih + alignTop)
+                ,context);
+        draw();
 
     }
     public void kropUnset() {
         isKrop = false;
+        draw();
 
     }
     public void addImageElement(ImageElement imageElement) {
@@ -285,6 +434,8 @@ public class MySurfaceView extends SurfaceView implements
 
                 alignLeftOld = alignLeft;
                 alignTopOld = alignTop;
+
+
                 draw(surfaceHolder);
             }
         }
@@ -306,164 +457,7 @@ public class MySurfaceView extends SurfaceView implements
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        int mark = motionEvent.getActionMasked();
-        int count = motionEvent.getPointerCount();
-        int index = motionEvent.getActionIndex();
-
-
-            switch (motionEvent.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN: {
-                    x1 = motionEvent.getX();
-                    y1 = motionEvent.getY();
-                    x2 = x1;
-                    y2 = y1;
-                    fingerX1 = motionEvent.getX();
-                    fingerY1 = motionEvent.getY();
-                    if (isKrop == false) {
-                        if(count > 1) {
-                            fingerX2 = motionEvent.getX(1);
-                            fingerY2 = motionEvent.getY(1);
-                        }
-                        if(count == 1) {
-                            ImageElement imageElement = selectedImageElement;
-                            selectedImageElement = imageEditorQueue.find((int)((x1- alignLeft)/loupeX),
-                                    (int)((y1 - alignTop)/loupeY));
-                            if(selectedImageElement == null) {
-                                if(imageElement instanceof RisunocImage
-                                        && !((RisunocImage)imageElement).isReady()) {
-                                    selectedImageElement = imageElement;
-                                }
-                                else {
-                                    focusLosed();
-                                    CurrentElementHolder.getInstance().removeCurrentElement();
-                                }
-                            }
-                            else {
-                                focusTaken();
-                                CurrentElementHolder.getInstance().setCurrentElement(selectedImageElement);
-                            }
-                        }
-                    }
-                    break;
-                }
-                case MotionEvent.ACTION_MOVE: {
-                    x2 = motionEvent.getX();
-                    y2 = motionEvent.getY();
-
-                    if(isKrop == false && count == 1) {
-                        if(selectedImageElement == null) {
-                            alignLeft = (float) (alignLeftOld + x2 - x1);
-                            alignTop = (float) (alignTopOld + y2 - y1);
-                        }
-                        else if (selectedImageElement instanceof RisunocImage
-                                && !((RisunocImage)selectedImageElement).isReady()) {
-
-                        }
-                        else{
-                            selectedImageElement.setLeft((int)((x2 - x1)/loupeX));
-                            selectedImageElement.setTop((int)((y2 - y1)/loupeY));
-                            ImageHolder.getInstance().setBitmapWithElements(null);
-                        }
-                    }
-                    if (selectedImageElement != null
-                            && selectedImageElement.getClass() == RisunocImage.class
-                            && !((RisunocImage)selectedImageElement).isReady()) {
-                        ((RisunocImage)selectedImageElement).addDrawingPoint((int)(x2 - alignLeft)
-                                , (int)(y2 - alignTop));
-                        ImageHolder.getInstance().setBitmapWithElements(null);
-                        draw();
-                    }
-                    break;
-                }
-                case MotionEvent.ACTION_POINTER_DOWN: {
-                    fingerX2 = motionEvent.getX(1);
-                    fingerY2 = motionEvent.getY(1);
-                    break;
-                }
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL: {
-                    x2 = motionEvent.getX();
-                    y2 = motionEvent.getY();
-
-                    alignLeftOld = alignLeft;
-                    alignTopOld = alignTop;
-
-                    if (selectedImageElement != null) {
-                        selectedImageElement.saveLeft();
-                        selectedImageElement.saveTop();
-                        ImageHolder.getInstance().setBitmapWithElements(null);
-                        if(selectedImageElement instanceof RisunocImage) {
-                          ((RisunocImage)selectedImageElement).newLine();
-                        }
-                    }
-
-                    break;
-                }
-            }
-        if (count == 2) {
-            switch (motionEvent.getActionMasked()) {
-                case MotionEvent.ACTION_MOVE: {
-
-                    fingernX1 = motionEvent.getX(0);
-                    fingernY1 = motionEvent.getY(0);
-                    fingernX2 = motionEvent.getX(1);
-                    fingernY2 = motionEvent.getY(1);
-
-
-                    if (selectedImageElement != null) {
-                        if(selectedImageElement.getClass() == TextImage.class) {
-                            ((TextImage)selectedImageElement).setTextSize(
-                                    Tools.normalizator(Tools.getLoupe(fingerX1, fingerY1,
-                                            fingerX2, fingerY2,
-                                            fingernX1, fingernY1,
-                                            fingernX2, fingernY2), 6, (float)0.2));
-                        }
-                        else if (selectedImageElement instanceof IconImage){
-                            ((IconImage)selectedImageElement).setImageSize(
-                                    Tools.normalizator(Tools.getLoupe(fingerX1, fingerY1,
-                                            fingerX2, fingerY2,
-                                            fingernX1, fingernY1,
-                                            fingernX2, fingernY2), 6, (float)0.2));
-                        }
-                        selectedImageElement.setAlpha(
-                                Tools.getAlpha(fingerX1, fingerY1,
-                                        fingerX2, fingerY2,
-                                        fingernX1, fingernY1,
-                                        fingernX2, fingernY2));
-                        ImageHolder.getInstance().setBitmapWithElements(null);
-                        //}
-                    }
-                    else {
-                        loupeX = Tools.getLoupe(fingerX1, fingerY1,
-                                fingerX2, fingerY2,
-                                fingernX1, fingernY1,
-                                fingernX2, fingernY2) * oldLoupeX;
-                        loupeY = loupeX;
-                        loupeX = Tools.normalizator(loupeX, 4, (float)0.2);
-                        loupeY = Tools.normalizator(loupeY, 4, (float)0.2);
-                        ImageHolder.getInstance().setScaledBitmap(null);
-                    }
-
-                    break;
-                }
-                case MotionEvent.ACTION_POINTER_UP: {
-                    oldLoupeX = loupeX;
-                    oldLoupeY = loupeY;
-                    if (selectedImageElement != null) {
-                        if(selectedImageElement.getClass() == TextImage.class) {
-                            ((TextImage)selectedImageElement).saveTextSize();
-                        }
-                        else if (selectedImageElement instanceof  IconImage) {
-                            ((IconImage)selectedImageElement).saveImageSize();
-                        }
-                        selectedImageElement.saveAlpha();
-
-                    }
-
-                    break;
-                }
-            }
-        }
+        eventTransformator.onTouch(view, motionEvent);
         draw(surfaceHolder);
         return true;
 
@@ -502,6 +496,10 @@ public class MySurfaceView extends SurfaceView implements
                             kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
                             ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
                         }
+                        alignLeft = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
+                        alignTop = getHeight() / loupeY / 2 - kropedBitmap.getHeight() / 2;
+                        alignLeftOld = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
+                        alignTopOld = getHeight() /loupeY / 2 - kropedBitmap.getHeight() / 2;
                         switch (effect) {
                             case 0: {
                                 freshBitmap = kropedBitmap;
@@ -523,15 +521,17 @@ public class MySurfaceView extends SurfaceView implements
                                 freshBitmap = kropedBitmap;
                             }
                         }
+
                         ImageHolder.getInstance().setFreshBitmap(freshBitmap);
                     }
                     bitmapWithElements = imageEditorQueue.draw(freshBitmap);
                     ImageHolder.getInstance().setBitmapWithElements(bitmapWithElements);
                 }
-                int iw = bitmapWithElements.getWidth();
-                int ih = bitmapWithElements.getHeight();
-                scaledBitmap = Bitmap.createScaledBitmap(bitmapWithElements, (int) (iw * loupeX), (int) (ih * loupeY), true);
-                ImageHolder.getInstance().setScaledBitmap(scaledBitmap);
+                iw = bitmapWithElements.getWidth();
+                ih = bitmapWithElements.getHeight();
+                //scaledBitmap = Bitmap.createScaledBitmap(bitmapWithElements, (int) (iw * loupeX), (int) (ih * loupeY), true);
+                //ImageHolder.getInstance().setScaledBitmap(scaledBitmap);
+                scaledBitmap = bitmapWithElements;
             }
             canvas.scale(loupeX, loupeY);
             canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
@@ -540,7 +540,8 @@ public class MySurfaceView extends SurfaceView implements
             paint.setStyle(Paint.Style.FILL);
             paint.setAntiAlias(true);
             if (isKrop) {
-                canvas.drawRect((float) x1, (float) y1, (float) x2, (float) y2, paint);
+                kropFrame.draw(canvas);
+
             }
             surface.unlockCanvasAndPost(canvas);
         }

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +83,11 @@ public class PanelStckers extends Fragment {
             @Override
             public void onStickerClick(int sticker) {
                 MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
-                mySurfaceView.addImageElement(new IconImage(sticker, mySurfaceView, 60, 60));
+                PointF pf = SurfaceViewHolder.getInstance().getMySurfaceView().getCenter();
+                mySurfaceView.addImageElement(new IconImage(sticker
+                        , mySurfaceView
+                        , (int)pf.x
+                        , (int)pf.y));
                 ImageHolder.getInstance().setBitmapWithElements(null);
                 mySurfaceView.draw();
                 ((EditorActivity)(getActivity())).removeFragment(PanelStckers.class);

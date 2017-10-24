@@ -66,6 +66,7 @@ public class ImageAdapter extends Fragment {
         super.onAttach(context);
         if (getActivity() instanceof EditorActivity) {
             editorActivity = (EditorActivity) getActivity();
+
         }
         else {
             throw new RuntimeException(context.toString()

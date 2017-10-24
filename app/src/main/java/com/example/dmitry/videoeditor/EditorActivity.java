@@ -227,11 +227,5 @@ public class EditorActivity extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
-
-
-
-
-
 }
 

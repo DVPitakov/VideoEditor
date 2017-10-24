@@ -1,5 +1,6 @@
 package com.example.dmitry.videoeditor;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,14 +18,17 @@ public class ImageEventTransformator implements View.OnTouchListener {
 
     public interface OnScaleListener {
         void onScale(float scale);
+        void onScaleEnd(float scale);
     }
 
     public interface OnMoveListener {
         void onMove(float dx, float dy);
+        void onMoveEnd(float dx, float dy);
     }
 
     public interface OnRotateListener {
         void onRotate(float alphaNotDegree);
+        void onRotateEnd(float alphaNotDegree);
     }
 
     public OnScaleListener scaleListener;
@@ -32,7 +36,25 @@ public class ImageEventTransformator implements View.OnTouchListener {
     public OnRotateListener rotateListener;
     public OnClickListener clickListener;
 
-    public ImageEventTransformator() {}
+    public void setMoveListener(OnMoveListener moveListener) {
+        this.moveListener = moveListener;
+    }
+
+    public void setScaleListener(OnScaleListener scaleListener) {
+        this.scaleListener = scaleListener;
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.clickListener = onClickListener;
+    }
+
+    public void setOnRotateListener(OnRotateListener onRotateListener) {
+        this.rotateListener = onRotateListener;
+    }
+
+    public ImageEventTransformator() {
+
+    }
 
     private int imgLeftX;
     private int imgTopY;
@@ -40,7 +62,16 @@ public class ImageEventTransformator implements View.OnTouchListener {
     private int imgWidth;
     private int imgHeight;
 
+    private int alignLeft;
+    private int alighRight;
+
     private int fingerTouchsCount = 0;
+    View.OnTouchListener listener;
+
+    public void setListener(View.OnTouchListener listener) {
+        this.listener = listener;
+
+    }
 
     private HashMap<Integer, Float> fingerTouchX = new HashMap<>();
     private HashMap<Integer, Float> fingerTouchY = new HashMap<>();
@@ -62,6 +93,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
 
         switch (motionEvent.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
+                Log.d("1130", "ACTION_DOWN");
                 fingerTouchsCount = 1;
                 for (int i = 0; i < count; i++) {
                     fingerTouchX.put(i, motionEvent.getX(i));
@@ -74,6 +106,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
 
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
+                Log.d("1130", "ACTION_POINTER_DOWN");
                 fingerTouchsCount++;
                 for (int i = 0; i < count; i++) {
                     fingerTouchX.put(i, motionEvent.getX(i));
@@ -83,31 +116,73 @@ public class ImageEventTransformator implements View.OnTouchListener {
             }
 
             case MotionEvent.ACTION_MOVE: {
+                Log.d("1130", "ACTION_MOVE");
                 for (int i = 0; i < count; i++) {
                     fingerMoveX.put(i, motionEvent.getX(i));
                     fingerMoveY.put(i, motionEvent.getY(i));
                 }
                 if(moveListener != null && count == 1) {
                     moveListener.onMove(fingerMoveX.get(0) - fingerTouchX.get(0)
-                            , fingerMoveX.get(0) - fingerTouchX.get(0));
+                            , fingerMoveY.get(0) - fingerTouchY.get(0));
+                }
+                else if (count == 2) {
+                    if(scaleListener != null) {
+                        scaleListener.onScale(Tools.getLoupe(
+                                fingerTouchX.get(0), fingerTouchY.get(0)
+                                , fingerTouchX.get(1), fingerTouchY.get(1)
+                                , fingerMoveX.get(0), fingerMoveY.get(0)
+                                , fingerMoveX.get(1), fingerMoveY.get(1)));
+                    }
+                    if(rotateListener != null) {
+                      rotateListener.onRotate(Tools.getAlpha(
+                              fingerTouchX.get(0), fingerTouchY.get(0)
+                              , fingerTouchX.get(1), fingerTouchY.get(1)
+                              , fingerMoveX.get(0), fingerMoveY.get(0)
+                              , fingerMoveX.get(1), fingerMoveY.get(1)));
+                    }
                 }
                 break;
             }
             case MotionEvent.ACTION_POINTER_UP: {
+                Log.d("1130", "ACTION_POINTER_UP");
                 for (int i = 0; i < count; i++) {
                     fingerMoveX.put(i, motionEvent.getX(i));
                     fingerMoveY.put(i, motionEvent.getY(i));
+                }
+                if(scaleListener != null) {
+                    scaleListener.onScaleEnd(Tools.getLoupe(
+                            fingerTouchX.get(0), fingerTouchY.get(0)
+                            , fingerTouchX.get(1), fingerTouchY.get(1)
+                            , fingerMoveX.get(0), fingerMoveY.get(0)
+                            , fingerMoveX.get(1), fingerMoveY.get(1)));
+                }
+                if(rotateListener != null) {
+                    rotateListener.onRotateEnd(Tools.getAlpha(
+                            fingerTouchX.get(0), fingerTouchY.get(0)
+                            , fingerTouchX.get(1), fingerTouchY.get(1)
+                            , fingerMoveX.get(0), fingerMoveY.get(0)
+                            , fingerMoveX.get(1), fingerMoveY.get(1)));
                 }
                 break;
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
+                Log.d("1130", "ACTION_UP");
                 for (int i = 0; i < count; i++) {
                     fingerMoveX.put(i, motionEvent.getX(i));
                     fingerMoveY.put(i, motionEvent.getY(i));
+                    fingerDetouchX.put(i, motionEvent.getX(i));
+                    fingerDetouchY.put(i, motionEvent.getY(i));
+                }
+                if (moveListener != null) {
+                    moveListener.onMoveEnd(fingerMoveX.get(0) - fingerTouchX.get(0)
+                            , fingerMoveY.get(0) - fingerTouchY.get(0));
                 }
                 break;
             }
+        }
+        if(listener != null) {
+            listener.onTouch(view, motionEvent);
         }
         return true;
     }

@@ -60,6 +60,10 @@ public class UrlHolder {
 
     }
 
+    //private setReservedUri() {
+    //    _inputUri.toString();
+    //}
+
     public static Uri _getOutputUri() {
         return _outputUri;
     }
@@ -127,11 +131,4 @@ public class UrlHolder {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    public static long getTime() {
-        return time;
-    }
-
-    public static void setTime(long time) {
-        UrlHolder.time = time;
-    }
 }

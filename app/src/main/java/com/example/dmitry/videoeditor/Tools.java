@@ -79,7 +79,34 @@ public class Tools {
 
         float dx1 = x11 - x10;
         float dy1 = y11 - y10;
-        float val =(float)(Math.atan(dy1 / dx1) - Math.atan(dy0 / dx0));
+
+        if(Math.abs(dx0) < 0.000001) {
+            if (dx0 > 0) {
+                dx0 = 0.000001f;
+            }
+            else {
+                dx0 = -0.000001f;
+            }
+        }
+        if(Math.abs(dx1) < 0.000001) {
+            if (dx1 > 0) {
+                dx1 = 0.000001f;
+            }
+            else {
+                dx1 = -0.000001f;
+            }
+        }
+
+        float val = 0;
+        if (dy1 < 0 && dx1 < 0) {
+            val += Math.PI;
+        }
+        if (dy1 > 0 && dx1 < 0) {
+            val += Math.PI;
+        }
+        val += (float)(Math.atan(dy1 / dx1) - Math.atan(dy0 / dx0));
+        Log.d("1240", "Math.atan(dy1 / dx1)=" + String.valueOf(Math.atan(dy1 / dx1)));
+        Log.d("1240", "Math.atan(dy0 / dx0)=" + String.valueOf(Math.atan(dy0 / dx0)));
         if(val == 0) {
             return 0;
         }

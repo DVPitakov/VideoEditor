@@ -14,14 +14,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import com.example.dmitry.videoeditor.EditorActivity;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
@@ -53,6 +56,7 @@ public class ImageFragment extends Fragment {
     private EditText editText;
     private FrameLayout surfaceViewPos;
     private OnFragmentInteractionListener mListener;
+    private ImageButton sendButton;
 
     ElementRedactorFragment elementRedactorHeader;
 
@@ -98,13 +102,30 @@ public class ImageFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_image, container, false);
         ImageHolder.getInstance().tryInit(getActivity());
 
+
+        sendButton = (ImageButton)(rootView.findViewById(R.id.fragment_image_send_button));
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+                }
+                else {
+                    Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
+                    MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "image" , null);
+                    Tools.saveAndSendImage(bitmap, getActivity());}
+            }
+        });
         surfaceViewPos = (FrameLayout)(rootView.findViewById(R.id.surface_view_pos));
         mySurfaceView = new MySurfaceView(surfaceViewPos.getContext());
         surfaceViewPos.addView(mySurfaceView);
         editText = ((EditorActivity)(getActivity())).editText;
         final float imageSize = getResources().getDimension(R.dimen.mySurfaceViewSize);
         mySurfaceView.setLayoutParams(
-                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int)imageSize));
+                new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT
+                        , FrameLayout.LayoutParams.MATCH_PARENT));
         mySurfaceView.setFocusListener(
                 new MySurfaceView.FocusListener() {
             @Override

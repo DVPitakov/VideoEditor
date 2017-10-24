@@ -43,22 +43,44 @@ public class ImageHolder {
 
     public void setMaxImageSize(int maxWidth, int maxHeight) {
         if (maxWidth != 0 && maxHeight != 0 && defaultBitmap != null) {
-            float x =  defaultBitmap.getWidth() / maxWidth;
-            float y = defaultBitmap.getHeight() / maxHeight;
-            if (x > 1 || y > 1) {
-                float actor;
+
+
+            float x = 1.0f *  maxWidth / defaultBitmap.getWidth() ;
+            float y = 1.0f * maxHeight / defaultBitmap.getHeight();
+            float actor;
+            if (x < 1 && y < 1) {
+                if (x < y) {
+                    actor = x;
+                }
+                else {
+                    actor = y;
+                }
+
+
+            }
+            else {
                 if (x > y) {
                     actor = x;
                 }
                 else {
                     actor = y;
                 }
-                int iw = defaultBitmap.getWidth();
-                int ih = defaultBitmap.getHeight();
-                defaultBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int) (iw / actor), (int) (ih / actor), true);
-                setFreshBitmap(null);
-
             }
+
+
+            int iw = defaultBitmap.getWidth();
+            int ih = defaultBitmap.getHeight();
+
+
+            Log.d("1850", "maxWidth:" + maxWidth);
+            Log.d("1850", "maxHeigh:" + maxHeight);
+
+            Log.d("1850", "iw * actor:" + iw * actor);
+            Log.d("1850", "ih * actor:" + ih * actor);
+
+            if (iw > 0 && ih > 0)
+                defaultBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int) (iw * actor), (int) (ih * actor), true);
+            setFreshBitmap(null);
         }
     }
 

@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -38,6 +39,7 @@ public class PanelInstrumentImage extends ImageAdapter{
     public final static int KROP_BUTTON = 0;
     public final static int TEXT_BUTTON = 1;
     public final static int EFFECT_BUTTON = 2;
+    static boolean b = false;
     final int MY_PERMISION = 1;
     public PanelInstrumentImage() {
         super();
@@ -46,12 +48,10 @@ public class PanelInstrumentImage extends ImageAdapter{
         arrayList.add(new IconWithText(R.drawable.ic_text_fields_white_24dp, "Текст"));
         arrayList.add(new IconWithText(R.drawable.ic_photo_filter_white_24dp, "Эффект"));
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
-        arrayList.add(new IconWithText(R.drawable.ic_save_white_24dp, "Готово"));
         arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
         arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
 
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            boolean b = false;
             int i = 0;
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -61,6 +61,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                         if (b) {
                             mySurfaceView.kropUnset();
                             Rect rect = mySurfaceView.getKropRect();
+                            Log.d("1806", "!!!" +rect.toString());
                             Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
                             if (kropedBitmap == null) {
                                 kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
@@ -82,7 +83,8 @@ public class PanelInstrumentImage extends ImageAdapter{
                         ((EditText)(editorActivity.findViewById(R.id.edutText))).setText("");
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(((EditText)(editorActivity.findViewById(R.id.edutText))), InputMethodManager.SHOW_FORCED);
-                        mySurfaceView.addImageElement(new TextImage("Новый текст", 60, 60));
+                        PointF pf = SurfaceViewHolder.getInstance().getMySurfaceView().getCenter();
+                        mySurfaceView.addImageElement(new TextImage("Новый текст", (int)pf.x, (int)pf.y));
                         ImageHolder.getInstance().setBitmapWithElements(null);
                         mySurfaceView.draw();
                         editorActivity.showColors();
@@ -101,26 +103,12 @@ public class PanelInstrumentImage extends ImageAdapter{
                         break;
                     }
                     case 4: {
-                        if (Build.VERSION.SDK_INT >= 23) {
-                            ActivityCompat.requestPermissions(getActivity(),
-                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                    MY_PERMISION);
-
-                        }
-                        else {
-                            Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
-                            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "image" , null);
-                            Tools.saveAndSendImage(bitmap, getActivity());
-                        }
-                        break;
-                    }
-                    case 5: {
                         ImageHolder.getInstance().setKropedBitmap(null);
                         mySurfaceView.imageEditorQueue.clear();
                         mySurfaceView.draw();
                         break;
                     }
-                    case 6: {
+                    case 5: {
                         mySurfaceView.selectedImageElement = null;
                         mySurfaceView.addImageElement(
                                 new RisunocImage(SurfaceViewHolder.getInstance().getMySurfaceView()

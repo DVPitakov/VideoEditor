@@ -26,7 +26,7 @@ public class TextImage extends ImageElement {
     public TextImage(String text, int left, int bottom) {
         super();
         rect = new Rect();
-        rect.set(left, bottom - textSizeD, left + textSizeD / 2 * text.length(), bottom);
+        rect.set(left - textSizeD / 4  * text.length(), bottom - textSizeD, left + textSizeD / 4 * text.length(), bottom);
         this.text = text;
 
     }
@@ -38,7 +38,7 @@ public class TextImage extends ImageElement {
 
     public void setTextSize(float loupe) {
         Log.d("step", "setTextSize");
-        textSizeD = (int)(textSize * loupe);
+        textSizeD = (int)(textSize * loupe * 1.2);
         rect.set(rect.left,
                 rect.bottom - textSizeD,
                 rect.left + textSizeD / 2 * text.length(),
