@@ -102,6 +102,8 @@ public class RisunocImage extends ImageElement {
     public void scale(float scale) {
 
     }
+
+
     public void draw(Canvas canvas) {
         float senterX = Tools.getCenter(rect.right + x, rect.left + x);
         float senterY = Tools.getCenter(rect.top + y , rect.bottom + y);

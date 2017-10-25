@@ -203,7 +203,7 @@ public class MySurfaceView extends SurfaceView implements
     public PointF getCenter() {
         PointF p = new PointF();
         p.x = getWidth()  / loupeX / 2 - alignLeft;
-        p.y = getHeight()  / loupeY / 3 - alignTop ;
+        p.y = getHeight()  / loupeY / 2.5f - alignTop ;
         return p;
     }
 

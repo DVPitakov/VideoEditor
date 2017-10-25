@@ -2,8 +2,11 @@ package com.example.dmitry.videoeditor.Models;
 
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.os.Build;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -12,14 +15,14 @@ import java.util.Comparator;
 
 
 public class MathZalivka {
-    private static class YPointComparator implements Comparator<Point> {
-
-        @Override
-        public int compare(Point point, Point t1) {
-            return point.y - t1.y;
-        }
-    }
     public static void sortArrayByY(ArrayList<Point> point) {
-        point.sort(new YPointComparator());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(point, new Comparator<Point>(){
+                @Override
+                public int compare(Point point, Point t1) {
+                    return point.x - t1.x;
+                }
+            });
+        }
     }
 }

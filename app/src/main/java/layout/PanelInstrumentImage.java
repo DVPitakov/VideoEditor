@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Build;
@@ -28,7 +29,9 @@ import com.example.dmitry.videoeditor.Tools;
 import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
 import com.example.dmitry.videoeditor.Vidgets.TextImage;
 import com.example.dmitry.videoeditor.Views.ElementRedactorFragment;
+import com.example.dmitry.videoeditor.Views.Rest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -50,7 +53,7 @@ public class PanelInstrumentImage extends ImageAdapter{
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
         arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
         arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
-
+        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             int i = 0;
             @Override
@@ -119,6 +122,20 @@ public class PanelInstrumentImage extends ImageAdapter{
                         editorActivity.showColors();
                         editorActivity.showFragment(PanelRisunoc.class, R.id.header_pos);
                         break;
+                    }
+                    case 6: {
+
+                        try {
+
+                            Rest.getInstance()
+                                    .sendRequest(ImageHolder
+                                            .getInstance()
+                                            .getDefaultBitmap()
+                                            , BitmapFactory
+                                                    .decodeResource(getResources(), R.drawable.s1));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
