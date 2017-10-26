@@ -61,6 +61,13 @@ public class MySurfaceView extends SurfaceView implements
         }
     }
 
+    public void canselKrop() {
+        isKrop = false;
+        kropFrame = null;
+        kropClear();
+        draw();
+    }
+
     public void deleteCurrentItem() {
         imageEditorQueue.deleteElement(CurrentElementHolder.getInstance().getCurrentElement());
         CurrentElementHolder.getInstance().removeCurrentElement();
@@ -88,7 +95,7 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     private void focusTaken() {
-        if(focusListener != null) {
+        if(focusListener != null && !isKrop) {
             oldClickTime = newClickTime;
             newClickTime = System.currentTimeMillis();
             if((newClickTime - oldClickTime) < 250) {
@@ -144,7 +151,7 @@ public class MySurfaceView extends SurfaceView implements
             selectedImageElement =
                     imageEditorQueue.find((int)((dx/loupeX - alignLeft)),
                     (int)((dy/loupeY - alignTop)));
-            if(selectedImageElement == null) {
+            if(selectedImageElement == null && !isKrop) {
                 if(imageElement instanceof RisunocImage
                         && !((RisunocImage)imageElement).isReady()) {
                     selectedImageElement = imageElement;
@@ -167,7 +174,7 @@ public class MySurfaceView extends SurfaceView implements
     private ImageEventTransformator.OnScaleListener scaleListener = new ImageEventTransformator.OnScaleListener() {
         @Override
         public void onScale(float scale) {
-            if (selectedImageElement != null) {
+            if (selectedImageElement != null && !isKrop) {
                 if(selectedImageElement.getClass() == TextImage.class) {
                     ((TextImage)selectedImageElement).setTextSize(
                             Tools.normalizator(scale, 6, (float)0.2));
@@ -221,10 +228,10 @@ public class MySurfaceView extends SurfaceView implements
                     alignTop = (float) (alignTopOld + y2/loupeY);
                 }
                 else if (selectedImageElement instanceof RisunocImage
-                        && !((RisunocImage)selectedImageElement).isReady()) {
+                        && !((RisunocImage)selectedImageElement).isReady() && !isKrop) {
 
                 }
-                else{
+                else if (!isKrop) {
                     selectedImageElement.setLeft((int)((x2/loupeX)));
                     selectedImageElement.setTop((int)((y2/loupeY)));
                     ImageHolder.getInstance().setBitmapWithElements(null);

@@ -58,19 +58,6 @@ public class ImageHolder {
 
             int iw = defaultBitmap.getWidth();
             int ih = defaultBitmap.getHeight();
-            Log.d("1110", "bm width: " + defaultBitmap.getWidth());
-            Log.d("1110", "bm height" + defaultBitmap.getHeight());
-
-            Log.d("1110", "maxWidth / defaultBitmap.getWidth(): " +  1.0f *  maxWidth / defaultBitmap.getWidth());
-            Log.d("1110", "maxHeight / defaultBitmap.getHeight():" + 1.0 * maxHeight / defaultBitmap.getHeight());
-
-
-            Log.d("1110", "iw * actor: " +  iw * actor);
-            Log.d("1110", "ih * actor:" + ih * actor);
-
-            Log.d("1110", "maxWidth: " +  maxWidth);
-            Log.d("1110", "maxHeight:" + maxHeight);
-
 
             if (iw > 0 && ih > 0)
                 defaultBitmap = Bitmap.createScaledBitmap(defaultBitmap, (int) (iw * actor), (int) (ih * actor), true);

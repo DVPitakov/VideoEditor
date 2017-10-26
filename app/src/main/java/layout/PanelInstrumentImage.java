@@ -61,13 +61,8 @@ public class PanelInstrumentImage extends ImageAdapter{
                 MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
                 switch (i) {
                     case KROP_BUTTON: {
-                        if (b) {
-                            mySurfaceView.doKrop();
-                        }
-                        else {
-                            mySurfaceView.kropSet();
-                        }
-                        b = !b;
+                        mySurfaceView.kropSet();
+                        editorActivity.showFragment(PanelKrop.class, R.id.header_pos);
                         break;
                     }
                     case TEXT_BUTTON: {

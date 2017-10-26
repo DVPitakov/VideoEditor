@@ -122,7 +122,6 @@ public class ImageFragment extends Fragment {
         mySurfaceView = new MySurfaceView(surfaceViewPos.getContext());
         surfaceViewPos.addView(mySurfaceView);
         editText = ((EditorActivity)(getActivity())).editText;
-        final float imageSize = getResources().getDimension(R.dimen.mySurfaceViewSize);
         mySurfaceView.setLayoutParams(
                 new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT
                         , FrameLayout.LayoutParams.MATCH_PARENT));
