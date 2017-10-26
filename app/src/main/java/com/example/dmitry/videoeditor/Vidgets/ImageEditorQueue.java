@@ -56,6 +56,15 @@ public class ImageEditorQueue {
 
     }
 
+    public void moveAll(int dx, int dy) {
+        for(ImageElement imageElement: images) {
+            imageElement.setLeft(dx);
+            imageElement.setTop(dy);
+            imageElement.saveLeft();
+            imageElement.saveTop();
+        }
+    }
+
     public void deleteElement(ImageElement element) {
         for(int i = 0; i < images.size(); i++) {
             if (images.get(i) == element) {

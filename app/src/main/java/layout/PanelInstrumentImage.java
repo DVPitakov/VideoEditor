@@ -53,7 +53,7 @@ public class PanelInstrumentImage extends ImageAdapter{
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
         arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
         arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
-        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
+        //arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             int i = 0;
             @Override
@@ -62,18 +62,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                 switch (i) {
                     case KROP_BUTTON: {
                         if (b) {
-                            mySurfaceView.kropUnset();
-                            Rect rect = mySurfaceView.getKropRect();
-                            Log.d("1806", "!!!" +rect.toString());
-                            Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
-                            if (kropedBitmap == null) {
-                                kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
-                            }
-                            kropedBitmap = ImageEditor.krop(kropedBitmap,
-                                    rect.left, rect.top, rect.right, rect.bottom);
-                            ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
-                            mySurfaceView.kropClear();
-                            mySurfaceView.draw();
+                            mySurfaceView.doKrop();
                         }
                         else {
                             mySurfaceView.kropSet();

@@ -330,6 +330,21 @@ public class MySurfaceView extends SurfaceView implements
 
     }
 
+    public void doKrop() {
+        kropUnset();
+        Rect rect =getKropRect();
+        Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
+        if (kropedBitmap == null) {
+            kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
+        }
+        kropedBitmap = ImageEditor.krop(kropedBitmap,
+                rect.left, rect.top, rect.right, rect.bottom);
+        ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
+        imageEditorQueue.moveAll(-rect.left, -rect.top);
+        kropClear();
+        draw();
+    }
+
     public void mediaPlayerStart() {
         if(mediaPlayer != null) {
             mediaPlayer.start();

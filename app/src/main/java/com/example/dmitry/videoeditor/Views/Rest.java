@@ -52,6 +52,8 @@ public class Rest {
     }
 
     public Bitmap sendRequest(Bitmap withMan, Bitmap fone) throws IOException {
+        Log.d("2152", withMan.toString());
+        Log.d("2152", fone.toString());
         new DownloadTask().execute(withMan, fone);
         return null;
     }
@@ -96,8 +98,8 @@ public class Rest {
                         .build()
                         .toString();
                 HttpURLConnection conn = (HttpURLConnection) new URL(uri).openConnection();
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(40000);
+                conn.setConnectTimeout(60000);
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
                 conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -125,8 +127,6 @@ public class Rest {
 
                 request.write(pixels);
 
-                DataOutputStream request2 = new DataOutputStream(
-                        conn.getOutputStream());
 
                 request.writeBytes(twoHyphens + boundary + crlf);
                 request.writeBytes("Content-Disposition: form-data; name=\"" +
@@ -153,18 +153,21 @@ public class Rest {
 
 
 
+
                 conn.connect();
+
+
                 request.flush();
                 request.close();
 
 
-
                 int responseCode = conn.getResponseCode();
                 is = conn.getInputStream();
-                if (responseCode == 200) {
+                Log.d("2152", String.valueOf(conn.getResponseCode()));
+               // if (responseCode == 200) {
 
                     return inputStreamToString(is);
-                }
+              //  }
             } catch (ProtocolException e) {
                 e.printStackTrace();
             } catch (MalformedURLException e) {
