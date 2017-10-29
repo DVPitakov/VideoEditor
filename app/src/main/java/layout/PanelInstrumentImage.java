@@ -29,6 +29,7 @@ import com.example.dmitry.videoeditor.Tools;
 import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
 import com.example.dmitry.videoeditor.Vidgets.TextImage;
 import com.example.dmitry.videoeditor.Views.ElementRedactorFragment;
+import com.example.dmitry.videoeditor.Views.HorizontalImagesScrallFragment;
 import com.example.dmitry.videoeditor.Views.Rest;
 
 import java.io.IOException;
@@ -38,12 +39,22 @@ import java.util.ArrayList;
  * Created by alexandr on 10.09.17.
  */
 
+
 public class PanelInstrumentImage extends ImageAdapter{
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().findViewById(R.id.fragment_image_ok_button).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.fragment_image_send_button).setVisibility(View.VISIBLE);
+
+    }
+
     public final static int KROP_BUTTON = 0;
     public final static int TEXT_BUTTON = 1;
     public final static int EFFECT_BUTTON = 2;
     static boolean b = false;
     final int MY_PERMISION = 1;
+
     public PanelInstrumentImage() {
         super();
         arrayList = new ArrayList<IconWithText>();
@@ -53,7 +64,7 @@ public class PanelInstrumentImage extends ImageAdapter{
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
         arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
         arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
-        //arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
+        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Фон"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             int i = 0;
             @Override
@@ -79,10 +90,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                         break;
                     }
                     case EFFECT_BUTTON: {
-                        this.i = (this.i + 1) % 4;
-                        ImageHolder.getInstance().setFreshBitmap(null);
-                        mySurfaceView.setEffect(this.i);
-                        mySurfaceView.draw();
+                        editorActivity.showFragment(HorizontalImagesScrallFragment.class, R.id.header_pos);
                         break;
                     }
                     case 3: {
@@ -114,9 +122,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                             Rest.getInstance()
                                     .sendRequest(ImageHolder
                                             .getInstance()
-                                            .getDefaultBitmap()
-                                            , BitmapFactory
-                                                    .decodeResource(getResources(), R.drawable.s1));
+                                            .getDefaultBitmap());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -128,3 +134,5 @@ public class PanelInstrumentImage extends ImageAdapter{
 
 
 }
+
+

@@ -12,4 +12,6 @@
     <dimen name="krop_frame_out_line_len">3dp</dimen>
     <dimen name="krop_frame_border_len">5dp</dimen>
     <dimen name="krop_frame_corner_len">30dp</dimen>
+    <dimen name="small_img_width">80dp</dimen>
+    <dimen name="small_img_height">80dp</dimen>
 </resources>

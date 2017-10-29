@@ -35,11 +35,13 @@ public class PanelRisunoc extends ImageAdapter{
         super();
         arrayList = new ArrayList<IconWithText>();
         arrayList.add(new IconWithText(R.drawable.ic_check_white_24dp, "Принять"));
+        arrayList.add(new IconWithText(R.drawable.ic_paint_size_white_24dp, "Размер"));
         arrayList.add(new IconWithText(R.drawable.ic_delete_white_24dp, "Удалить"));
 
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             boolean b = false;
             int i = 0;
+            int j = 0;
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
@@ -54,6 +56,13 @@ public class PanelRisunoc extends ImageAdapter{
                         break;
                     }
                     case 1: {
+                        SurfaceViewHolder.getInstance().getMySurfaceView().setImageSize(j);
+                        ImageHolder.getInstance().setBitmapWithElements(null);
+                        SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                        j = (j + 1) % 5;
+                        break;
+                    }
+                    case 2: {
                         ((RisunocImage)mySurfaceView.selectedImageElement).setReady(true);
                         mySurfaceView.deleteCurrentItem();
                         mySurfaceView.selectedImageElement = null;

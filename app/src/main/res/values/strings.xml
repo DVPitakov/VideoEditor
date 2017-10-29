@@ -4,4 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ready">Готово</string>
+
+
+    <string name="img_server_for_fon_cut">http://95.165.134.46:12177</string>
+    <string name="img_server_for_fon_cut_method">/drop_bg</string>
 </resources>

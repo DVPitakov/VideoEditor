@@ -8,7 +8,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/.." />
+            <option value="$PROJECT_DIR$/../FFmpegAndroid" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/../rangeseekbar-release" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

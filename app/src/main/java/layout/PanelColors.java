@@ -35,6 +35,14 @@ import java.util.ArrayList;
  */
 
 public class PanelColors extends Fragment {
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().findViewById(R.id.fragment_image_ok_button).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.fragment_image_send_button).setVisibility(View.GONE);
+
+    }
+
     private ArrayList<Integer> arrayList = new ArrayList<>();
     AdapterView.OnItemClickListener onItemClickListener;
     public  PanelColors() {

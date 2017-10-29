@@ -118,6 +118,14 @@ public class ImageFragment extends Fragment {
                     Tools.saveAndSendImage(bitmap, getActivity());}
             }
         });
+        rootView.findViewById(R.id.fragment_image_ok_button).setVisibility(View.GONE);
+        rootView.findViewById(R.id.fragment_image_ok_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((EditorActivity)(getActivity())).showDefaultImageHeader();
+                getActivity().findViewById(R.id.fragment_image_ok_button).setVisibility(View.GONE);
+            }
+        });
         surfaceViewPos = (FrameLayout)(rootView.findViewById(R.id.surface_view_pos));
         mySurfaceView = new MySurfaceView(surfaceViewPos.getContext());
         surfaceViewPos.addView(mySurfaceView);

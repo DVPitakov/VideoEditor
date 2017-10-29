@@ -2,8 +2,11 @@ package com.example.dmitry.videoeditor.Holders;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import com.example.dmitry.videoeditor.R;
 
 import java.io.IOException;
 
@@ -17,6 +20,7 @@ public class ImageHolder {
     private  Bitmap freshBitmap;
     private  Bitmap bitmapWithElements;
     private  Bitmap scaledBitmap;
+    private Bitmap superSmall;
     private static ImageHolder instance;
 
     public static ImageHolder getInstance() {
@@ -39,6 +43,16 @@ public class ImageHolder {
                 Log.d("2245", "101128");
             }
         }
+    }
+
+    public Bitmap getSmallImage(Activity activity) {
+
+        return Bitmap
+                .createScaledBitmap(kropedBitmap,
+                        (int)activity.getResources().getDimension(R.dimen.small_img_width)
+                        , (int)(activity.getResources().getDimension(R.dimen.small_img_width)
+                                / kropedBitmap.getWidth() * kropedBitmap.getHeight())
+                        , false);
     }
 
     public void setMaxImageSize(int maxWidth, int maxHeight) {

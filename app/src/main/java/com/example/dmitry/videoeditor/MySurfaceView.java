@@ -403,6 +403,15 @@ public class MySurfaceView extends SurfaceView implements
         }
     }
 
+
+    public void setImageSize(int imgSize) {
+        if (selectedImageElement != null) {
+            ((RisunocImage)selectedImageElement).beginNewLineGroop(0, imgSize);
+            draw();
+
+        }
+    }
+
     public void updateVideo(Uri uri) {
         mediaPlayer.stop();
         mediaPlayer.reset();
@@ -522,28 +531,7 @@ public class MySurfaceView extends SurfaceView implements
                         alignTop = getHeight() / loupeY / 2 - kropedBitmap.getHeight() / 2;
                         alignLeftOld = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
                         alignTopOld = getHeight() /loupeY / 2 - kropedBitmap.getHeight() / 2;
-                        switch (effect) {
-                            case 0: {
-                                freshBitmap = kropedBitmap;
-                                break;
-                            }
-                            case 1: {
-                                freshBitmap = ImageEditor.bombit(kropedBitmap);
-                                break;
-                            }
-                            case 2: {
-                                freshBitmap = ImageEditor.bombit2(kropedBitmap);
-                                break;
-                            }
-                            case 3: {
-                                freshBitmap = ImageEditor.inversion(kropedBitmap);
-                                break;
-                            }
-                            default: {
-                                freshBitmap = kropedBitmap;
-                            }
-                        }
-
+                        freshBitmap = ImageEditor.getEffectByNum(effect, kropedBitmap);
                         ImageHolder.getInstance().setFreshBitmap(freshBitmap);
                     }
                     bitmapWithElements = imageEditorQueue.draw(freshBitmap);

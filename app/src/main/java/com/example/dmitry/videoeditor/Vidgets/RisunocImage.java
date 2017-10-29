@@ -24,6 +24,7 @@ public class RisunocImage extends ImageElement {
     private int imageSize = 60;
     private int imageSizeD = 60;
     private int inheritedColor = 255 << 16 & 255 << 8;
+    private int inheritedSize = 0;
     private boolean ready = false;
     private float oldScale = 1;
     private float newScale = 1;
@@ -33,6 +34,7 @@ public class RisunocImage extends ImageElement {
 
     ArrayList<Point> arrayList = new ArrayList<>();
     HashMap<Integer, Integer> colors = new HashMap<>();
+    HashMap<Integer, Integer> sizes = new HashMap<>();
 
     public RisunocImage(View view, int left, int top) {
         super();
@@ -55,6 +57,13 @@ public class RisunocImage extends ImageElement {
     public void beginNewLineGroop(int color) {
         inheritedColor = color;
         colors.put(arrayList.size(), color);
+        sizes.put(arrayList.size(), inheritedSize);
+    }
+
+    public void beginNewLineGroop(int color, int size) {
+        inheritedSize = size;
+        colors.put(arrayList.size(), inheritedColor);
+        sizes.put(arrayList.size(), inheritedSize);
     }
 
     public void newLine() {
@@ -117,7 +126,7 @@ public class RisunocImage extends ImageElement {
         canvas.setMatrix(matrix);
         Paint fontPaint = new Paint();
         fontPaint.setColor(inheritedColor);
-        fontPaint.setStrokeWidth(10);
+        fontPaint.setStrokeWidth((inheritedSize + 1) * 15);
         if (arrayList.size() > 0) {
             Point start = arrayList.get(0);
             Point stop;
@@ -126,6 +135,12 @@ public class RisunocImage extends ImageElement {
                 stop = arrayList.get(i);
                 if (colors.get(i) != null) {
                     fontPaint.setColor(colors.get(i));
+                    if (sizes.get(i) != null) {
+                        fontPaint.setStrokeWidth((sizes.get(i) + 1) * 15);
+                    }
+                    else {
+                        fontPaint.setStrokeWidth(15);
+                    }
                     i+=1;
                     if (arrayList.size() - 1 > i)
                         start = arrayList.get(i);
