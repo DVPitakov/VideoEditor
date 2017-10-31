@@ -72,7 +72,7 @@ public class MySurfaceView extends SurfaceView implements
     public void deleteCurrentItem() {
         imageEditorQueue.deleteElement(CurrentElementHolder.getInstance().getCurrentElement());
         CurrentElementHolder.getInstance().removeCurrentElement();
-        selectedImageElement = null;
+        CurrentElementHolder.getInstance().removeCurrentElement();
         if(focusListener != null) {
             focusListener.focusLosed();
         }
@@ -113,7 +113,6 @@ public class MySurfaceView extends SurfaceView implements
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
     public ImageEditorQueue imageEditorQueue;
-    public ImageElement selectedImageElement;
     public ImageEventTransformator eventTransformator = new ImageEventTransformator();
 
     int effect = 0;
@@ -148,14 +147,16 @@ public class MySurfaceView extends SurfaceView implements
             y1 = dy;
             x2 = 0;
             y2 = 0;
-            ImageElement imageElement = selectedImageElement;
-            selectedImageElement =
-                    imageEditorQueue.find((int)((dx/loupeX - alignLeft)),
-                    (int)((dy/loupeY - alignTop)));
-            if(selectedImageElement == null && !isKrop) {
+            ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
+            CurrentElementHolder
+                    .getInstance()
+                    .setCurrentElement(imageEditorQueue.find((int)((dx/loupeX - alignLeft)),
+                    (int)((dy/loupeY - alignTop))));
+
+            if(CurrentElementHolder.getInstance().getCurrentElement() == null && !isKrop) {
                 if(imageElement instanceof RisunocImage
                         && !((RisunocImage)imageElement).isReady()) {
-                    selectedImageElement = imageElement;
+                    CurrentElementHolder.getInstance().setCurrentElement(imageElement);
                 }
                 else {
                     focusLosed();
@@ -164,7 +165,6 @@ public class MySurfaceView extends SurfaceView implements
             }
             else {
                 focusTaken();
-                CurrentElementHolder.getInstance().setCurrentElement(selectedImageElement);
             }
             if (isKrop) {
                 kropFrame.onClick((int)(dx/loupeX), (int)(dy/loupeY));
@@ -175,13 +175,13 @@ public class MySurfaceView extends SurfaceView implements
     private ImageEventTransformator.OnScaleListener scaleListener = new ImageEventTransformator.OnScaleListener() {
         @Override
         public void onScale(float scale) {
-            if (selectedImageElement != null && !isKrop) {
-                if(selectedImageElement.getClass() == TextImage.class) {
-                    ((TextImage)selectedImageElement).setTextSize(
+            if (CurrentElementHolder.getInstance().getCurrentElement() != null && !isKrop) {
+                if(CurrentElementHolder.getInstance().getCurrentElement() instanceof TextImage) {
+                    ((TextImage)CurrentElementHolder.getInstance().getCurrentElement()).setTextSize(
                             Tools.normalizator(scale, 6, (float)0.2));
                 }
-                else if (selectedImageElement instanceof IconImage) {
-                    ((IconImage)selectedImageElement).setImageSize(
+                else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof IconImage) {
+                    ((IconImage) CurrentElementHolder.getInstance().getCurrentElement()).setImageSize(
                             Tools.normalizator(scale, 6, (float)0.2));
                 }
             }
@@ -196,15 +196,13 @@ public class MySurfaceView extends SurfaceView implements
 
         @Override
         public void onScaleEnd(float scale) {
-            if (selectedImageElement != null) {
-                if(selectedImageElement.getClass() == TextImage.class) {
-                    ((TextImage)selectedImageElement).saveTextSize();
-                }
-                else if (selectedImageElement instanceof  IconImage) {
-                    ((IconImage)selectedImageElement).saveImageSize();
-                }
-
+            if(CurrentElementHolder.getInstance().getCurrentElement() instanceof TextImage) {
+                ((TextImage) CurrentElementHolder.getInstance().getCurrentElement()).saveTextSize();
             }
+            else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof  IconImage) {
+                ((IconImage) CurrentElementHolder.getInstance().getCurrentElement()).saveImageSize();
+            }
+
         }
     };
 
@@ -224,17 +222,16 @@ public class MySurfaceView extends SurfaceView implements
                 if (isKrop) {
                     kropFrame.move((int)(dx / loupeX), (int)(dy / loupeY));
                 }
-                if(selectedImageElement == null) {
+                if(CurrentElementHolder.getInstance().getCurrentElement() == null) {
                     alignLeft = (float) (alignLeftOld + x2/loupeX);
                     alignTop = (float) (alignTopOld + y2/loupeY);
                 }
-                else if (selectedImageElement instanceof RisunocImage
-                        && !((RisunocImage)selectedImageElement).isReady() && !isKrop) {
+                else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage
+                        && !((RisunocImage)CurrentElementHolder.getInstance().getCurrentElement()).isReady() && !isKrop) {
 
                 }
-                else if (!isKrop) {
-                    selectedImageElement.setLeft((int)((x2/loupeX)));
-                    selectedImageElement.setTop((int)((y2/loupeY)));
+                else if (!isKrop && CurrentElementHolder.getInstance().getCurrentElement() != null) {
+                    CurrentElementHolder.getInstance().getCurrentElement().move((int)((x2/loupeX)), (int)((y2/loupeY)));
                     ImageHolder.getInstance().setBitmapWithElements(null);
                 }
             }
@@ -242,10 +239,9 @@ public class MySurfaceView extends SurfaceView implements
                 kropFrame.onMove((int)((x1 + x2)/loupeX), (int)((y1 + y2)/loupeY));
                 draw();
             }
-            if (selectedImageElement != null
-                    && selectedImageElement.getClass() == RisunocImage.class
-                    && !((RisunocImage)selectedImageElement).isReady()) {
-                ((RisunocImage)selectedImageElement)
+            if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage
+                    && !((RisunocImage)CurrentElementHolder.getInstance().getCurrentElement()).isReady()) {
+                ((RisunocImage)CurrentElementHolder.getInstance().getCurrentElement())
                         .addDrawingPoint(
                                 (int)((x2 + x1) / loupeX - alignLeft)
                         , (int)((y2 + y1) / loupeY  - alignTop));
@@ -262,12 +258,12 @@ public class MySurfaceView extends SurfaceView implements
 
             alignLeftOld = alignLeft;
             alignTopOld = alignTop;
-            if (selectedImageElement != null) {
-                selectedImageElement.saveLeft();
-                selectedImageElement.saveTop();
+            if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
+                CurrentElementHolder.getInstance().getCurrentElement().saveLeft();
+                CurrentElementHolder.getInstance().getCurrentElement().saveTop();
                 ImageHolder.getInstance().setBitmapWithElements(null);
-                if(selectedImageElement instanceof RisunocImage) {
-                    ((RisunocImage)selectedImageElement).newLine();
+                if(CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage) {
+                    ((RisunocImage) CurrentElementHolder.getInstance().getCurrentElement()).newLine();
                 }
             }
             if (isKrop) {
@@ -279,16 +275,16 @@ public class MySurfaceView extends SurfaceView implements
     private ImageEventTransformator.OnRotateListener rotateListener = new ImageEventTransformator.OnRotateListener() {
         @Override
         public void onRotate(float alphaNotDegree) {
-            if (selectedImageElement != null) {
-                selectedImageElement.setAlpha(alphaNotDegree);
+            if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
+                CurrentElementHolder.getInstance().getCurrentElement().setAlpha(alphaNotDegree);
                 ImageHolder.getInstance().setBitmapWithElements(null);
             }
         }
 
         @Override
         public void onRotateEnd(float alphaNotDegree) {
-            if (selectedImageElement != null) {
-                selectedImageElement.saveAlpha();
+            if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
+                CurrentElementHolder.getInstance().getCurrentElement().saveAlpha();
             }
         }
     };
@@ -389,15 +385,15 @@ public class MySurfaceView extends SurfaceView implements
     }
     public void addImageElement(ImageElement imageElement) {
         imageEditorQueue.addElement(imageElement);
-        selectedImageElement = imageElement;
+        CurrentElementHolder.getInstance().setCurrentElement(imageElement);
         focusListener.focusTaken();
 
     }
 
     public void setImageText(String text) {
-        if (selectedImageElement != null) {
-            if(selectedImageElement.getClass() == TextImage.class) {
-                ((TextImage)selectedImageElement).setText(text);
+        if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
+            if(CurrentElementHolder.getInstance().getCurrentElement() instanceof TextImage) {
+                ((TextImage)CurrentElementHolder.getInstance().getCurrentElement()).setText(text);
             }
             draw();
 
@@ -406,8 +402,8 @@ public class MySurfaceView extends SurfaceView implements
 
 
     public void setImageSize(int imgSize) {
-        if (selectedImageElement != null) {
-            ((RisunocImage)selectedImageElement).beginNewLineGroop(0, imgSize);
+        if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
+            ((RisunocImage)CurrentElementHolder.getInstance().getCurrentElement()).beginNewLineGroop(0, imgSize);
             draw();
 
         }
@@ -496,11 +492,11 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     public void  setImageColor(int color) {
-        if (selectedImageElement != null && selectedImageElement.getClass() == TextImage.class) {
-            ((TextImage)selectedImageElement).setColor(color);
+        if (CurrentElementHolder.getInstance().getCurrentElement() instanceof TextImage) {
+            ((TextImage) CurrentElementHolder.getInstance().getCurrentElement()).setColor(color);
         }
-        if (selectedImageElement != null && selectedImageElement.getClass() == RisunocImage.class) {
-            ((RisunocImage)selectedImageElement).beginNewLineGroop(color);
+        if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage) {
+            ((RisunocImage) CurrentElementHolder.getInstance().getCurrentElement()).beginNewLineGroop(color);
         }
     }
 

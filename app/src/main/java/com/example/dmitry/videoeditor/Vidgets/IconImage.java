@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.example.dmitry.videoeditor.R;
@@ -22,12 +24,10 @@ public class IconImage extends ImageElement {
     private Bitmap bitmapSource;
     private Bitmap originalBitmapSource;
 
-    View view;
-
     public IconImage(int imageType, View view, int left, int top) {
-        super();
+        super(view);
+
         image = imageType;
-        this.view = view;
         rect = new Rect();
         rect.set(left, top, left + imageSizeD, top +  imageSizeD);
         bitmapSource = BitmapFactory.decodeResource(view.getResources(), image);
@@ -55,11 +55,6 @@ public class IconImage extends ImageElement {
 
     }
 
-    public void setPos(int left, int top) {
-        rect.set(left, top, left + imageSizeD, top +  imageSizeD);
-
-    }
-
     public void setImageSize(float loupe) {
         imageSizeD = (int)(imageSize * loupe);
         bitmapSource = Bitmap.createScaledBitmap(originalBitmapSource, imageSizeD, imageSizeD, false);
@@ -67,6 +62,11 @@ public class IconImage extends ImageElement {
         rect.right = rect.left + bitmapSource.getWidth();
         rect.bottom = rect.top + bitmapSource.getHeight();
 
+    }
+
+    @Override
+    public void scale(float scale) {
+        setImageSize(scale);
     }
 
     public void saveImageSize() {
@@ -96,7 +96,11 @@ public class IconImage extends ImageElement {
         Paint fontPaint = new Paint();
         canvas.drawBitmap(bitmapSource, 0, 0, fontPaint);
 
-        //fontPaint.setStyle(Paint.Style.STROKE);
-        //canvas.drawRect(0,0, rect.right - rect.left, rect.bottom - rect.top, fontPaint);
+        fontPaint.setStyle(Paint.Style.STROKE);
+        fontPaint.setStrokeWidth(20);
+
+        drawFrame(canvas);
     }
+
+
 }

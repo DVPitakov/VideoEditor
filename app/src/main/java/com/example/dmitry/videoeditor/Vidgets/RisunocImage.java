@@ -37,7 +37,7 @@ public class RisunocImage extends ImageElement {
     HashMap<Integer, Integer> sizes = new HashMap<>();
 
     public RisunocImage(View view, int left, int top) {
-        super();
+        super(view);
         this.view = view;
         rect = new Rect();
         rect.set(left, top, left, top);
@@ -108,6 +108,7 @@ public class RisunocImage extends ImageElement {
 
     }
 
+    @Override
     public void scale(float scale) {
 
     }
@@ -151,8 +152,8 @@ public class RisunocImage extends ImageElement {
 
             }
         }
-        //fontPaint.setStyle(Paint.Style.STROKE);
-        //canvas.drawRect(0,0, rect.right - rect.left, rect.bottom - rect.top, fontPaint);
+        fontPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawRect(0,0, rect.right - rect.left, rect.bottom - rect.top, fontPaint);
     }
 
     @Override
@@ -165,6 +166,7 @@ public class RisunocImage extends ImageElement {
 
 
     }
+
 
     @Override
     public void saveTop() {

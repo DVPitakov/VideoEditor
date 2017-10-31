@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.example.dmitry.videoeditor.EditorActivity;
+import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.Vidgets.IconImage;
 import com.example.dmitry.videoeditor.ImageEditor;
@@ -152,13 +153,13 @@ public class ImageFragment extends Fragment {
 
             @Override
             public void doubleClick() {
-                if (SurfaceViewHolder.getInstance().getMySurfaceView().selectedImageElement instanceof TextImage) {
+                if (CurrentElementHolder.getInstance().getCurrentElement() instanceof TextImage) {
                     ((EditorActivity)(getActivity())).showColors();
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
                     ((EditorActivity) (getActivity())).showRedactorItemHeader();
                 }
-                else if (SurfaceViewHolder.getInstance().getMySurfaceView().selectedImageElement instanceof RisunocImage) {
+                else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage) {
                     ((EditorActivity) (getActivity())).showFragment(PanelRisunoc.class, R.id.header_pos);
                 }
             }

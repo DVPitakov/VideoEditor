@@ -46,8 +46,14 @@ public class ImageEditorQueue {
 
 
     public ImageElement find(int x, int y) {
+        int action;
         for(ImageElement imageElement: images) {
-            if (imageElement.contains(x, y)) {
+            action = imageElement.contains(x, y);
+            if (action > 0) {
+                if(action == 3) {
+                    deleteElement(imageElement);
+                    return null;
+                }
                 return imageElement;
 
             }
@@ -58,8 +64,7 @@ public class ImageEditorQueue {
 
     public void moveAll(int dx, int dy) {
         for(ImageElement imageElement: images) {
-            imageElement.setLeft(dx);
-            imageElement.setTop(dy);
+            imageElement.move(dx, dy);
             imageElement.saveLeft();
             imageElement.saveTop();
         }

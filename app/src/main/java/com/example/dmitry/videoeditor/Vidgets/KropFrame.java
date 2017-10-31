@@ -145,6 +145,15 @@ public class KropFrame {
                + " " + String.valueOf(left)
                + " " + String.valueOf(bottom)
                + " " + String.valueOf(right));
+        Paint dark = new Paint();
+        dark.setStyle(Paint.Style.FILL);
+        dark.setColor(0xA0000000);
+
+        canvas.drawRect(0, 0, mright, top, dark);
+        canvas.drawRect(0, bottom, mright, mbotton, dark);
+        canvas.drawRect(0, top, left, bottom, dark);
+        canvas.drawRect(right, top, mright, bottom, dark);
+
         Paint paint = new Paint();
         Paint cornersPaint = new Paint();
         Paint tablePaint = new Paint();

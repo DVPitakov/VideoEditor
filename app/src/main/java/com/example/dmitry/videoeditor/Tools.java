@@ -117,6 +117,50 @@ public class Tools {
 
     }
 
+
+
+    public static float getAlpha(float x0, float y0, float xc, float yc,
+                                 float x1, float y1) {
+        float dx0 = x0 - xc;
+        float dy0 = y0 - yc;
+
+        float dx1 = x1 - xc;
+        float dy1 = y1 - yc;
+
+        if(Math.abs(dx0) < 0.000001) {
+            if (dx0 > 0) {
+                dx0 = 0.000001f;
+            }
+            else {
+                dx0 = -0.000001f;
+            }
+        }
+        if(Math.abs(dx1) < 0.000001) {
+            if (dx1 > 0) {
+                dx1 = 0.000001f;
+            }
+            else {
+                dx1 = -0.000001f;
+            }
+        }
+
+        float val = 0;
+        if (dy1 < 0 && dx1 < 0) {
+            val += Math.PI;
+        }
+        if (dy1 > 0 && dx1 < 0) {
+            val += Math.PI;
+        }
+        val += (float)(Math.atan(dy1 / dx1) - Math.atan(dy0 / dx0));
+        Log.d("1240", "Math.atan(dy1 / dx1)=" + String.valueOf(Math.atan(dy1 / dx1)));
+        Log.d("1240", "Math.atan(dy0 / dx0)=" + String.valueOf(Math.atan(dy0 / dx0)));
+        if(val == 0) {
+            return 0;
+        }
+        return (float)(180 * val / Math.PI);
+
+    }
+
     public static void saveAndSendImage(Bitmap bitmap, Context context) {
         String str = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "image.jpg" , null);
         Uri imageUri = Uri.parse(str);

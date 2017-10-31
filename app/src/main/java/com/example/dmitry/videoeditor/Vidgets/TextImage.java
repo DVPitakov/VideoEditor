@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
+import android.view.View;
 
 import com.example.dmitry.videoeditor.Holders.FontHolder;
 import com.example.dmitry.videoeditor.Tools;
@@ -23,8 +24,8 @@ public class TextImage extends ImageElement {
     private boolean isItalic = false;
     private int textType = 0;
 
-    public TextImage(String text, int left, int bottom) {
-        super();
+    public TextImage(View view, String text, int left, int bottom) {
+        super(view);
         rect = new Rect();
         rect.set(left - textSizeD / 4  * text.length(), bottom - textSizeD, left + textSizeD / 4 * text.length(), bottom);
         this.text = text;
@@ -33,6 +34,10 @@ public class TextImage extends ImageElement {
 
     public void setPos(int left, int bottom) {
         rect.set(left, bottom - textSizeD, left + textSizeD / 2 * text.length(), bottom);
+
+    }
+    @Override
+    public void scale(float scale) {
 
     }
 

@@ -47,9 +47,9 @@ public class PanelRisunoc extends ImageAdapter{
                 MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
                 switch (i) {
                     case 0: {
-                        if (mySurfaceView.selectedImageElement instanceof RisunocImage) {
-                            ((RisunocImage)mySurfaceView.selectedImageElement).setReady(true);
-                            mySurfaceView.selectedImageElement = null;
+                        if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage) {
+                            ((RisunocImage)CurrentElementHolder.getInstance().getCurrentElement()).setReady(true);
+                            CurrentElementHolder.getInstance().removeCurrentElement();
                         }
                         ((EditorActivity) (getActivity())).removeFragment(PanelColors.class);
                         ((EditorActivity) (getActivity())).showDefaultImageHeader();
@@ -63,9 +63,9 @@ public class PanelRisunoc extends ImageAdapter{
                         break;
                     }
                     case 2: {
-                        ((RisunocImage)mySurfaceView.selectedImageElement).setReady(true);
+                        ((RisunocImage) CurrentElementHolder.getInstance().getCurrentElement()).setReady(true);
                         mySurfaceView.deleteCurrentItem();
-                        mySurfaceView.selectedImageElement = null;
+                        CurrentElementHolder.getInstance().removeCurrentElement();
                         ((EditorActivity)(getActivity())).removeFragment(PanelColors.class);
                         ((EditorActivity)(getActivity())).showDefaultImageHeader();
                         ImageHolder.getInstance().setBitmapWithElements(null);

@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
+import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.ImageEditor;
@@ -77,12 +78,12 @@ public class PanelInstrumentImage extends ImageAdapter{
                         break;
                     }
                     case TEXT_BUTTON: {
-                        mySurfaceView.selectedImageElement = null;
+                        CurrentElementHolder.getInstance().removeCurrentElement();
                         ((EditText)(editorActivity.findViewById(R.id.edutText))).setText("");
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(((EditText)(editorActivity.findViewById(R.id.edutText))), InputMethodManager.SHOW_FORCED);
                         PointF pf = SurfaceViewHolder.getInstance().getMySurfaceView().getCenter();
-                        mySurfaceView.addImageElement(new TextImage("Новый текст", (int)pf.x, (int)pf.y));
+                        mySurfaceView.addImageElement(new TextImage(SurfaceViewHolder.getInstance().getMySurfaceView(),"Новый текст", (int)pf.x, (int)pf.y));
                         ImageHolder.getInstance().setBitmapWithElements(null);
                         mySurfaceView.draw();
                         editorActivity.showColors();
@@ -104,7 +105,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                         break;
                     }
                     case 5: {
-                        mySurfaceView.selectedImageElement = null;
+                        CurrentElementHolder.getInstance().removeCurrentElement();
                         mySurfaceView.addImageElement(
                                 new RisunocImage(SurfaceViewHolder.getInstance().getMySurfaceView()
                                         , 0
