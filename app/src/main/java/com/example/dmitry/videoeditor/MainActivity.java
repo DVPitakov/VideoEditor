@@ -1,6 +1,7 @@
 package com.example.dmitry.videoeditor;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -26,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     Uri inputUri;
     Uri outputUri;
-
-
 
 
     @Override
@@ -82,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d("1996", inputUri.toString());
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);//////////////////
-                UrlHolder.setInputUrl(inputUri, getApplicationContext());
-                UrlHolder.setOutputUrl(UrlHolder.getInpurUrl() +"tmp.mp4");
+                SettingsVideo.setInput(inputUri);
+                SettingsVideo.setOutput(SettingsVideo.getInput("") +"tmp.mp4");
                 intent.putExtra(EditorActivity.INPUT_URI, inputUri);
                 intent.putExtra(EditorActivity.OUTPUT_URI, outputUri);
                 startActivityForResult(intent, 3);
@@ -96,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         String[] mimetypes = {"image/*", "video/*"};
         pickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
         startActivityForResult(pickerIntent, 1);
+
+        SettingsVideo.setContext(getApplicationContext());
     }
 
     @Override

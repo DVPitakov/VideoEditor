@@ -4,51 +4,108 @@ import android.content.Context;
 
 import com.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
 import com.example.dmitry.videoeditor.Holders.UrlHolder;
-import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
-import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+//import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
+//import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+//import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+//import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+//import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import com.vincent.videocompressor.VideoCompress;
+import com.vincent.videocompressor.VideoController;
+
 
 public class DecodeVideo {
     public enum Type{
-        COPY,
-        HIGH_QUALITY,
+        HIGK_QUALITY,
+        MEDIUM_QUALITY,
         LOW_QUALITY,
     }
 
+    public static float getDuration() {
+        return duration;
+    }
+
+    public static void setDuration(float duration) {
+        DecodeVideo.duration = duration;
+    }
+
+    private static float duration;
+
+    private Context _context;
+
     public DecodeVideo( Context context, float start, float end, Type type){
+        /*
         ffmpeg = FFmpeg.getInstance(context);
         loadFFMpegBinary();
-        float duration =end - start;
+
         Decoder decoder = new Decoder();
-        decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
-        decoder.outputFile(UrlHolder.getOutputUrl());
+        */
+        _context = context;
+        long size = 1000000;
+        long scale = 1;
+        setDuration((end - start)*scale);
+        VideoController.setStartTime((long) start*size);
+        VideoController.setEndTime((long) end*size);
+       //   VideoController.setStartTime(-1);
+       //   VideoController.setEndTime(-1);
+        switch (type){
+            case HIGK_QUALITY:
+                //decoder.setVideoCodec(Decoder.name_video_codec.HIGK_QUALITY);
+                VideoCompress.compressVideoHigh(SettingsVideo.getInput(""),SettingsVideo.getOutput(""),newListener());
+                break;
+            case MEDIUM_QUALITY:
+                //decoder.setVideoCodec(Decoder.name_video_codec.H264);
+                VideoCompress.compressVideoMedium(SettingsVideo.getInput(""),SettingsVideo.getOutput(""),newListener());
+                break;
+            case LOW_QUALITY:
+                //decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
+                VideoCompress.compressVideoLow(SettingsVideo.getInput(""),SettingsVideo.getOutput(""),newListener());
+                break;
+
+        }
+        /*
+        decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, SettingsVideo.getInput());
+        decoder.outputFile(SettingsVideo.getOutput(""));
         decoder.addCommand(Decoder.name_command.START_CROP_VIDEO, String.valueOf(start));
         decoder.addCommand(Decoder.name_command.DURATION_CROP_VIDEO, String.valueOf(duration));
         decoder.addCommand(Decoder.name_command.OVERWRITE_FILE,"");
         decoder.setUltraFast();
-        switch (type){
-            case COPY:
-                decoder.setVideoCodec(Decoder.name_video_codec.COPY);
-                break;
-            case  HIGH_QUALITY:
-                decoder.setVideoCodec(Decoder.name_video_codec.H264);
-                break;
-            case LOW_QUALITY:
-                decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
-                break;
 
-        }
         String[] command = decoder.getComplexCommand();
         if (command.length != 0) {
             execFFmpegBinary(command);
         }
+        */
     }
 
 //    @Inject
-    private FFmpeg ffmpeg;
+//    private FFmpeg ffmpeg;
 
+    private VideoCompress.CompressListener newListener(){
+        return new VideoCompress.CompressListener() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                Tools.sendVideo(_context);
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+
+            @Override
+            public void onProgress(float percent) {
+   //             long time = (long)getDuration() * 1000;
+   //             time *= percent;
+                CurrentVideoHolder.getInstance().setUpdatedVideoLen(percent);
+            }
+        };
+    }
+/*
     private void execFFmpegBinary(final String[] command) {
         try {
             ffmpeg.execute(command, new ExecuteBinaryResponseHandler() {
@@ -56,12 +113,13 @@ public class DecodeVideo {
                 public void onFailure(String s) {
                   //  addTextViewToLayout("FAILED with output : "+s);
                 }
-    */
+    */ /*
                 @Override
                 public void onSuccess(String s) {
                     super.onSuccess(s);
                     CurrentVideoHolder.getInstance()
                             .setUpdatedVideoLen(CurrentVideoHolder.getInstance().getVideoLen());
+                    Tools.sendVideo(_context);
                 }
                 @Override
                 public void onProgress(String s) {
@@ -84,6 +142,7 @@ public class DecodeVideo {
                     times *= 1000;
                     times += Long.parseLong(time_1[1]);
                     CurrentVideoHolder.getInstance().setUpdatedVideoLen(times);
+                   /// Tools.sendVideo(_context);
                 }
 /*
                 @Override
@@ -93,19 +152,20 @@ public class DecodeVideo {
           //          Log.d(TAG, "Started command : ffmpeg " + command);
           //          progressDialog.setMessage("Processing...");
           //          progressDialog.show();
+          ///          Tools.sendVideo(_context);
                 }
 
                 @Override
                 public void onFinish() {
            //         Log.d(TAG, "Finished command : ffmpeg "+command);
            //         progressDialog.dismiss();
-                }*/
+                }*//*
             });
         } catch (FFmpegCommandAlreadyRunningException e) {
             // do nothing for now
         }
     }
-
+/*
     private void loadFFMpegBinary() {
         try {
             ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
@@ -117,5 +177,5 @@ public class DecodeVideo {
         } catch (FFmpegNotSupportedException e) {
         //    showUnsupportedExceptionDialog();
         }
-    }
+    }*/
 }

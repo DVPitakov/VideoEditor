@@ -55,12 +55,12 @@ public class CurrentVideoHolder {
         return  videoLen;
     }
 
-    public void setUpdatedVideoLen(long updatedVideoLen) {
-        this.updatedVideoLen = updatedVideoLen;
+    public void setUpdatedVideoLen(float updatedVideoLen) {
+        this.updatedVideoLen = (long) updatedVideoLen * videoLen/100;
         Log.d("1034pit", "video len: " + String.valueOf(videoLen));
-        Log.d("1034pit", "updated video len: " + String.valueOf(updatedVideoLen));
+        Log.d("1034pit", "updated video len: " + String.valueOf(this.updatedVideoLen));
         if(listener != null) {
-            listener.updatedVideoLenChanged(updatedVideoLen);
+            listener.updatedVideoLenChanged(this.updatedVideoLen);
         }
     }
 

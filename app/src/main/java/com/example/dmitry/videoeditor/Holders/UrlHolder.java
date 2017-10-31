@@ -9,6 +9,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.io.File;
+
 /**
  * Created by dmitry on 15.10.17.
  */
@@ -68,6 +70,10 @@ public class UrlHolder {
         return _outputUri;
     }
 
+    public static Uri getUri(String path){
+        return Uri.fromFile(new File(path));
+    }
+
     public static String getFilePath(Context context, Uri uri)  {
         final int MY_PERMISION = 1;
         String selection = null;
@@ -119,15 +125,15 @@ public class UrlHolder {
         return null;
     }
 
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
-    public static boolean isDownloadsDocument(Uri uri) {
+    private static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
-    public static boolean isMediaDocument(Uri uri) {
+    private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 

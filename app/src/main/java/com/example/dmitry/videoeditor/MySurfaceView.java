@@ -29,6 +29,7 @@ import com.example.dmitry.videoeditor.Vidgets.ImageElement;
 import com.example.dmitry.videoeditor.Vidgets.KropFrame;
 import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
 import com.example.dmitry.videoeditor.Vidgets.TextImage;
+import com.vincent.videocompressor.VideoCompress;
 
 import java.io.IOException;
 
@@ -416,7 +417,7 @@ public class MySurfaceView extends SurfaceView implements
         mediaPlayer.stop();
         mediaPlayer.reset();
         try {
-            mediaPlayer.setDataSource(context, Uri.parse(UrlHolder.getInpurUrl()));
+            mediaPlayer.setDataSource(context, Uri.parse(SettingsVideo.getInput("")));
             mediaPlayer.setSurface(surfaceHolder.getSurface());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
@@ -438,10 +439,10 @@ public class MySurfaceView extends SurfaceView implements
         CurrentVideoHolder.getInstance().setCurrentMediaPlayer(this);
         this.surfaceHolder = surfaceHolder;
         try {
-            if (Tools.isVideo(UrlHolder.getInpurUrl())) {
+            if (Tools.isVideo(SettingsVideo.getInput(""))) {
 
                 mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(context, UrlHolder._getInputUri());
+                mediaPlayer.setDataSource(context, SettingsVideo.getInput());
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
@@ -509,7 +510,7 @@ public class MySurfaceView extends SurfaceView implements
     }
     private void draw(SurfaceHolder surfaceHolder) {
 
-        if (Tools.isNotVideo(UrlHolder.getInpurUrl())) {
+        if (Tools.isNotVideo(SettingsVideo.getInput(""))) {
             Surface surface = surfaceHolder.getSurface();
             Canvas canvas = surface.lockCanvas(null);
             Paint paint = new Paint();

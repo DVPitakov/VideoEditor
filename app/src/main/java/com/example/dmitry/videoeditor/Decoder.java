@@ -54,7 +54,7 @@ public class Decoder {
         {
             put(name_video_codec.COPY, "copy");
             put(name_video_codec.H264, "libx264");
-            put(name_video_codec.MPEG4, "mp4");
+            put(name_video_codec.MPEG4, "mpeg4");
         }
     };
     private Map<String,String> command_map;

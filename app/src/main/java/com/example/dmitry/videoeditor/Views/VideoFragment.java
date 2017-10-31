@@ -20,6 +20,7 @@ import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
 import com.example.dmitry.videoeditor.Holders.UrlHolder;
+import com.example.dmitry.videoeditor.SettingsVideo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -197,24 +198,24 @@ public class VideoFragment extends Fragment
             case CompressionModeFragment.FAST_COMPRESS: {
                 Log.d("1150", "FAST");
                 CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.LOW_QUALITY);
-                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
-                decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, SettingsVideo.getInput(""));
+                decoder.outputFile(SettingsVideo.getInput("") + ".mp4");
                 decoder.setVideoCodec(Decoder.name_video_codec.MPEG4);
                 break;
             }
             case CompressionModeFragment.QUALITY_COMPRESS: {
                 Log.d("1150", "QUALITY_COMPRESS");
-                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.HIGH_QUALITY);
-                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
-                decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.MEDIUM_QUALITY);
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, SettingsVideo.getInput(""));
+                decoder.outputFile(SettingsVideo.getInput("") + ".mp4");
                 decoder.setVideoCodec(Decoder.name_video_codec.H264);
                 break;
             }
             case CompressionModeFragment.WITHOUT_COMPRESS: {
-                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.COPY);
+                CurrentVideoHolder.getInstance().setCompressType(DecodeVideo.Type.HIGK_QUALITY);
                 Log.d("1150", "WITHOUT_COMPRESS");
-                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, UrlHolder.getInpurUrl());
-                decoder.outputFile(UrlHolder.getInpurUrl() + ".mp4");
+                decoder.addCommand(Decoder.name_command.INPUT_FILE_FULL_PATH, SettingsVideo.getInput(""));
+                decoder.outputFile(SettingsVideo.getInput("") + ".mp4");
                 decoder.setVideoCodec(Decoder.name_video_codec.COPY);
                 break;
             }
