@@ -40,6 +40,7 @@ public abstract class BaseItem {
     protected int action = 0;
     protected float savedScale = 1;
     protected float timeScale = 1;
+    protected float frame_width = 1;
     boolean focused = false;
     float p1;
     float p2;
@@ -47,21 +48,22 @@ public abstract class BaseItem {
     public BaseItem(View view) {
         this.view = view;
         //if (rot == null) {
+            frame_width = view.getResources().getDimension(R.dimen.frame);
             rotate_button_width = view.getResources().getDimension(R.dimen.item_rotate_button_width);
             rotate_button_height = view.getResources().getDimension(R.dimen.item_rotate_button_height);
-            rot = BitmapFactory.decodeResource(view.getResources(), R.drawable.close);
+            rot = BitmapFactory.decodeResource(view.getResources(), R.drawable.refresh_button);
             rot = Bitmap.createScaledBitmap(rot, (int)rotate_button_width, (int)rotate_button_height, false);
         //}
         //if (scale == null) {
             rotate_button_width = view.getResources().getDimension(R.dimen.item_rotate_button_width);
             rotate_button_height = view.getResources().getDimension(R.dimen.item_rotate_button_height);
-            scale = BitmapFactory.decodeResource(view.getResources(), R.drawable.close);
+            scale = BitmapFactory.decodeResource(view.getResources(), R.drawable.enlarge_filled);
             scale = Bitmap.createScaledBitmap(scale, (int)rotate_button_width, (int)rotate_button_height, false);
         //}
         //if (delete == null) {
             rotate_button_width = view.getResources().getDimension(R.dimen.item_rotate_button_width);
             rotate_button_height = view.getResources().getDimension(R.dimen.item_rotate_button_height);
-            delete = BitmapFactory.decodeResource(view.getResources(), R.drawable.close);
+            delete = BitmapFactory.decodeResource(view.getResources(), R.drawable.delete_button);
             delete = Bitmap.createScaledBitmap(delete, (int)rotate_button_width, (int)rotate_button_height, false);
         //}
         rect = new Rect();
@@ -196,11 +198,29 @@ public abstract class BaseItem {
     public void drawFrame(Canvas canvas) {
         Paint fontPaint = new Paint();
         fontPaint.setStyle(Paint.Style.STROKE);
-        fontPaint.setStrokeWidth(20);
+        fontPaint.setStrokeWidth(frame_width);
+        fontPaint.setColor(0xFFFFFFFF);
         canvas.drawRect(0,0, rect.right - rect.left, rect.bottom - rect.top, fontPaint);
+        fontPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        canvas.drawCircle(0
+                , 0
+                , rotate_button_width / 2
+                , fontPaint);
         canvas.drawBitmap(rot, - rotate_button_width / 2, - rotate_button_height / 2, fontPaint);
+        canvas.drawCircle(rect.right - rect.left
+                , rect.bottom - rect.top
+                , rotate_button_width / 2
+                , fontPaint);
         canvas.drawBitmap(delete, rect.right - rect.left - rotate_button_width / 2 , rect.bottom - rect.top  - rotate_button_height / 2, fontPaint);
+        canvas.drawCircle(0
+                , rect.bottom - rect.top
+                , rotate_button_width / 2
+                , fontPaint);
         canvas.drawBitmap(scale, - rotate_button_width / 2, rect.bottom - rect.top  - rotate_button_height / 2, fontPaint);
+        canvas.drawCircle(rect.right - rect.left
+                , 0
+                , rotate_button_width / 2
+                , fontPaint);
         canvas.drawBitmap(scale, rect.right - rect.left - rotate_button_width / 2, - rotate_button_height / 2, fontPaint);
 
     }

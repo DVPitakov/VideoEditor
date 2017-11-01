@@ -27,7 +27,8 @@ public class TextItem extends BaseItem {
     public TextItem(View view, String text, int left, int bottom) {
         super(view);
         rect = new Rect();
-        rect.set(left - textSizeD / 4  * text.length(), bottom - textSizeD, left + textSizeD / 4 * text.length(), bottom);
+        rect.set(left - textSizeD / 4  * text.length(), bottom - textSizeD, left + textSizeD / 4 * text.length(), bottom + textSizeD / 2);
+        setTextSize(1);
         this.text = text;
 
     }
@@ -38,15 +39,15 @@ public class TextItem extends BaseItem {
     }
     @Override
     public void scale(float scale) {
-
+        setTextSize(scale);
     }
 
     public void setTextSize(float loupe) {
         Log.d("step", "setTextSize");
-        textSizeD = (int)(textSize * loupe * 1.2);
+        textSizeD = (int)(textSize * loupe * 1.3);
         rect.set(rect.left,
-                rect.bottom - textSizeD,
-                rect.left + textSizeD / 2 * text.length(),
+                rect.bottom - (int)(textSizeD * 1),
+                (int)(rect.left + textSizeD / 1.8 * text.length()),
                 rect.bottom);
 
     }
@@ -57,7 +58,6 @@ public class TextItem extends BaseItem {
 
 
     public void saveTextSize() {
-        Log.d("step", "saveTextSize");
         textSize = textSizeD;
 
     }
@@ -106,8 +106,10 @@ public class TextItem extends BaseItem {
         fontPaint.setStyle(Paint.Style.FILL);
         fontPaint.setTextSize(textSizeD);
         canvas.setMatrix(matrix);
-        canvas.drawText(text, 0, - rect.top + rect.bottom, fontPaint);
-        drawFrame(canvas);
+        canvas.drawText(text, 0, - rect.top + rect.bottom - textSizeD/4, fontPaint);
+        if(focused) {
+            drawFrame(canvas);
+        }
 
 
     }

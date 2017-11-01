@@ -70,7 +70,6 @@ public class MySurfaceView extends SurfaceView implements
     public void deleteCurrentItem() {
         imageEditorQueue.deleteElement(CurrentElementHolder.getInstance().getCurrentElement());
         CurrentElementHolder.getInstance().removeCurrentElement();
-        CurrentElementHolder.getInstance().removeCurrentElement();
         if(focusListener != null) {
             focusListener.focusLosed();
         }

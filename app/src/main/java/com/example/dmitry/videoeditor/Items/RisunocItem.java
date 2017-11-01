@@ -149,6 +149,9 @@ public class RisunocItem extends BaseItem {
         }
         fontPaint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(0,0, rect.right - rect.left, rect.bottom - rect.top, fontPaint);
+        if(focused) {
+            drawFrame(canvas);
+        }
     }
 
     @Override
