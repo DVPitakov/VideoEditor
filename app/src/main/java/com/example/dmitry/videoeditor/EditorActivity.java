@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.example.dmitry.videoeditor.Holders.FontHolder;
+import com.example.dmitry.videoeditor.Holders.HistoryHolder;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.Holders.UrlHolder;
@@ -40,6 +41,14 @@ public class EditorActivity extends Activity {
     PanelStckers panelStckers;
     ElementRedactorFragment elementRedactorFragment;
 
+
+    @Override
+    public void onBackPressed() {
+        if(HistoryHolder.getInstance().back()) {
+            SurfaceViewHolder.getInstance().getMySurfaceView().focusLose();
+            SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+        }
+    }
 
 
     public void removeFragment(Class fragmentClass) {

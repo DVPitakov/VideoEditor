@@ -3,6 +3,8 @@ package com.example.dmitry.videoeditor.Items;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.example.dmitry.videoeditor.Holders.HistoryHolder;
+
 import java.util.ArrayList;
 
 /**
@@ -49,6 +51,7 @@ public class ImageEditorQueue {
             action = baseItem.contains(x, y);
             if (action > 0) {
                 if(action == 3) {
+                    HistoryHolder.getInstance().addAction(new HistoryHolder.DeleteItem(baseItem));
                     deleteElement(baseItem);
                     return null;
                 }

@@ -27,6 +27,7 @@ public class SurfaceViewHolder {
         return mySurfaceView;
     }
 
+
     public void setMySurfaceView(MySurfaceView mySurfaceView) {
         this.mySurfaceView = mySurfaceView;
     }

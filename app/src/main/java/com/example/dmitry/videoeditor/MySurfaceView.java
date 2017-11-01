@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
 import com.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
+import com.example.dmitry.videoeditor.Holders.HistoryHolder;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.Holders.UrlHolder;
@@ -68,6 +69,7 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     public void deleteCurrentItem() {
+        HistoryHolder.getInstance().addAction(new HistoryHolder.DeleteItem(CurrentElementHolder.getInstance().getCurrentElement()));
         imageEditorQueue.deleteElement(CurrentElementHolder.getInstance().getCurrentElement());
         CurrentElementHolder.getInstance().removeCurrentElement();
         if(focusListener != null) {
@@ -113,7 +115,6 @@ public class MySurfaceView extends SurfaceView implements
     public ImageEditorQueue imageEditorQueue;
     public ImageEventTransformator eventTransformator = new ImageEventTransformator();
 
-    int effect = 0;
 
     double x1;
     double y1;
@@ -133,8 +134,8 @@ public class MySurfaceView extends SurfaceView implements
     boolean isKrop = false;
 
     public void setEffect(int i) {
-        effect = i;
-
+        HistoryHolder.getInstance().addAction(new HistoryHolder.Effect(HistoryHolder.getInstance().lastEffect, i));
+        HistoryHolder.getInstance().lastEffect = i;
     }
 
     private ImageEventTransformator.OnClickListener clickListener
@@ -258,6 +259,7 @@ public class MySurfaceView extends SurfaceView implements
             alignLeftOld = alignLeft;
             alignTopOld = alignTop;
             if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
+                HistoryHolder.getInstance().addAction(new HistoryHolder.Move(CurrentElementHolder.getInstance().getCurrentElement(), (int)dx, (int)dy));
                 CurrentElementHolder.getInstance().getCurrentElement().moveEnd();
                 ImageHolder.getInstance().setBitmapWithElements(null);
                 if(CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocItem) {
@@ -334,11 +336,29 @@ public class MySurfaceView extends SurfaceView implements
 
     public void doKrop() {
         kropUnset();
-        Rect rect =getKropRect();
+        Rect rect = getKropRect();
         Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
         if (kropedBitmap == null) {
             kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
         }
+        if (HistoryHolder.getInstance().lastKrop == null) {
+            HistoryHolder.getInstance().lastKrop = new Rect(0
+                    ,0
+                    ,ImageHolder.getInstance().getDefaultBitmap().getWidth()
+                    ,ImageHolder.getInstance().getDefaultBitmap().getHeight());
+        }
+        Rect last = HistoryHolder.getInstance().lastKrop;
+        Rect recto = new Rect(
+                last.left + rect.left
+                , last.top + rect.top
+                , rect.right
+                , rect.bottom);
+        HistoryHolder.getInstance().addAction(new HistoryHolder.Krop(
+                HistoryHolder.getInstance().lastKrop
+                , recto
+        ));
+        HistoryHolder.getInstance().lastKrop = recto;
+
         kropedBitmap = ImageEditor.krop(kropedBitmap,
                 rect.left, rect.top, rect.right, rect.bottom);
         ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
@@ -383,6 +403,7 @@ public class MySurfaceView extends SurfaceView implements
     }
     public void addImageElement(BaseItem baseItem) {
         imageEditorQueue.addElement(baseItem);
+        HistoryHolder.getInstance().addAction(new HistoryHolder.AddItem(baseItem));
         CurrentElementHolder.getInstance().setCurrentElement(baseItem);
         focusListener.focusTaken();
 
@@ -526,7 +547,8 @@ public class MySurfaceView extends SurfaceView implements
                         alignTop = getHeight() / loupeY / 2 - kropedBitmap.getHeight() / 2;
                         alignLeftOld = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
                         alignTopOld = getHeight() /loupeY / 2 - kropedBitmap.getHeight() / 2;
-                        freshBitmap = ImageEditor.getEffectByNum(effect, kropedBitmap);
+                        freshBitmap = ImageEditor.getEffectByNum(HistoryHolder.getInstance().lastEffect
+                                , kropedBitmap);
                         ImageHolder.getInstance().setFreshBitmap(freshBitmap);
                     }
                     bitmapWithElements = imageEditorQueue.draw(freshBitmap);
@@ -551,6 +573,12 @@ public class MySurfaceView extends SurfaceView implements
             surface.unlockCanvasAndPost(canvas);
         }
 
+    }
+
+    public void focusLose() {
+        if (focusListener != null) {
+            focusListener.focusLosed();
+        }
     }
 
 }
