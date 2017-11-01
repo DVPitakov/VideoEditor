@@ -1,4 +1,4 @@
-package com.example.dmitry.videoeditor.Vidgets;
+package com.example.dmitry.videoeditor.Items;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.example.dmitry.videoeditor.R;
@@ -17,14 +15,14 @@ import com.example.dmitry.videoeditor.Tools;
  * Created by dmitry on 13.09.17.
  */
 
-public class IconImage extends ImageElement {
+public class ImageItem extends BaseItem {
     private int image = R.drawable.shapka;
     private int imageSize = 60;
     private int imageSizeD = 60;
     private Bitmap bitmapSource;
     private Bitmap originalBitmapSource;
 
-    public IconImage(int imageType, View view, int left, int top) {
+    public ImageItem(int imageType, View view, int left, int top) {
         super(view);
 
         image = imageType;
@@ -56,7 +54,8 @@ public class IconImage extends ImageElement {
     }
 
     public void setImageSize(float loupe) {
-        imageSizeD = (int)(imageSize * loupe);
+        timeScale = savedScale * loupe;
+        imageSizeD = (int)(imageSize * timeScale);
         bitmapSource = Bitmap.createScaledBitmap(originalBitmapSource, imageSizeD, imageSizeD, false);
 
         rect.right = rect.left + bitmapSource.getWidth();
@@ -99,7 +98,9 @@ public class IconImage extends ImageElement {
         fontPaint.setStyle(Paint.Style.STROKE);
         fontPaint.setStrokeWidth(20);
 
-        drawFrame(canvas);
+        if (focused) {
+            drawFrame(canvas);
+        }
     }
 
 

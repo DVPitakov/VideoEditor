@@ -2,23 +2,20 @@ package com.example.dmitry.videoeditor.Views;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.dmitry.videoeditor.EditorActivity;
 import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Vidgets.ImageElement;
-import com.example.dmitry.videoeditor.Vidgets.TextImage;
+import com.example.dmitry.videoeditor.Items.BaseItem;
+import com.example.dmitry.videoeditor.Items.TextItem;
 
 import layout.PanelColors;
 
@@ -87,9 +84,9 @@ public class ElementRedactorFragment extends Fragment {
             int curFont = 0;
             @Override
             public void onClick(View view) {
-                ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
-                if (CurrentElementHolder.getInstance().getCurrentElement() instanceof  TextImage) {
-                    ((TextImage)imageElement).setFont(curFont);
+                BaseItem baseItem = CurrentElementHolder.getInstance().getCurrentElement();
+                if (CurrentElementHolder.getInstance().getCurrentElement() instanceof TextItem) {
+                    ((TextItem) baseItem).setFont(curFont);
                     ImageHolder.getInstance().setBitmapWithElements(null);
                     SurfaceViewHolder.getInstance().getMySurfaceView().draw();
                 }
@@ -101,9 +98,9 @@ public class ElementRedactorFragment extends Fragment {
             boolean italic = true;
             @Override
             public void onClick(View view) {
-                ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
-                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextImage.class) {
-                    ((TextImage)imageElement).setItalic(italic);
+                BaseItem baseItem = CurrentElementHolder.getInstance().getCurrentElement();
+                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextItem.class) {
+                    ((TextItem) baseItem).setItalic(italic);
                     italic = !italic;
                     ImageHolder.getInstance().setBitmapWithElements(null);
                     SurfaceViewHolder.getInstance().getMySurfaceView().draw();
@@ -115,9 +112,9 @@ public class ElementRedactorFragment extends Fragment {
             boolean bold = true;
             @Override
             public void onClick(View view) {
-                ImageElement imageElement = CurrentElementHolder.getInstance().getCurrentElement();
-                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextImage.class) {
-                    ((TextImage)imageElement).setBold(bold);
+                BaseItem baseItem = CurrentElementHolder.getInstance().getCurrentElement();
+                if (CurrentElementHolder.getInstance().getCurrentElement().getClass() == TextItem.class) {
+                    ((TextItem) baseItem).setBold(bold);
                     bold = !bold;
                     ImageHolder.getInstance().setBitmapWithElements(null);
                     SurfaceViewHolder.getInstance().getMySurfaceView().draw();

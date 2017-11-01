@@ -1,23 +1,13 @@
 package layout;
 
-import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.PointF;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 
-import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.Models.IconWithText;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
-import com.example.dmitry.videoeditor.Vidgets.TextImage;
-import com.example.dmitry.videoeditor.Views.Rest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**

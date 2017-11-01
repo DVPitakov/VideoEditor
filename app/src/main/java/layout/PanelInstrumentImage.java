@@ -1,35 +1,20 @@
 package layout;
 
-import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PointF;
-import android.graphics.Rect;
-import android.os.Build;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
 import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import com.example.dmitry.videoeditor.ImageEditor;
 import com.example.dmitry.videoeditor.Models.IconWithText;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Tools;
-import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
-import com.example.dmitry.videoeditor.Vidgets.TextImage;
-import com.example.dmitry.videoeditor.Views.ElementRedactorFragment;
+import com.example.dmitry.videoeditor.Items.RisunocItem;
+import com.example.dmitry.videoeditor.Items.TextItem;
 import com.example.dmitry.videoeditor.Views.HorizontalImagesScrallFragment;
 import com.example.dmitry.videoeditor.Views.Rest;
 
@@ -83,7 +68,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.showSoftInput(((EditText)(editorActivity.findViewById(R.id.edutText))), InputMethodManager.SHOW_FORCED);
                         PointF pf = SurfaceViewHolder.getInstance().getMySurfaceView().getCenter();
-                        mySurfaceView.addImageElement(new TextImage(SurfaceViewHolder.getInstance().getMySurfaceView(),"Новый текст", (int)pf.x, (int)pf.y));
+                        mySurfaceView.addImageElement(new TextItem(SurfaceViewHolder.getInstance().getMySurfaceView(),"Новый текст", (int)pf.x, (int)pf.y));
                         ImageHolder.getInstance().setBitmapWithElements(null);
                         mySurfaceView.draw();
                         editorActivity.showColors();
@@ -107,7 +92,7 @@ public class PanelInstrumentImage extends ImageAdapter{
                     case 5: {
                         CurrentElementHolder.getInstance().removeCurrentElement();
                         mySurfaceView.addImageElement(
-                                new RisunocImage(SurfaceViewHolder.getInstance().getMySurfaceView()
+                                new RisunocItem(SurfaceViewHolder.getInstance().getMySurfaceView()
                                         , 0
                                         , 0));
                         ImageHolder.getInstance().setBitmapWithElements(null);

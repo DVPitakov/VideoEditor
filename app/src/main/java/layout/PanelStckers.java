@@ -1,28 +1,21 @@
 package layout;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ListView;
 
-import com.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
 import com.example.dmitry.videoeditor.Adapters.StickerAdapter;
 import com.example.dmitry.videoeditor.EditorActivity;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Vidgets.IconImage;
+import com.example.dmitry.videoeditor.Items.ImageItem;
 
 import java.util.ArrayList;
 
@@ -98,7 +91,7 @@ public class PanelStckers extends Fragment {
             public void onStickerClick(int sticker) {
                 MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
                 PointF pf = SurfaceViewHolder.getInstance().getMySurfaceView().getCenter();
-                mySurfaceView.addImageElement(new IconImage(sticker
+                mySurfaceView.addImageElement(new ImageItem(sticker
                         , mySurfaceView
                         , (int)pf.x
                         , (int)pf.y));

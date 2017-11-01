@@ -2,46 +2,32 @@ package com.example.dmitry.videoeditor.Views;
 
 import android.Manifest;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.example.dmitry.videoeditor.EditorActivity;
 import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
-import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import com.example.dmitry.videoeditor.Vidgets.IconImage;
-import com.example.dmitry.videoeditor.ImageEditor;
 import com.example.dmitry.videoeditor.Holders.ImageHolder;
 import com.example.dmitry.videoeditor.MySurfaceView;
 import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
-import com.example.dmitry.videoeditor.Vidgets.TextImage;
+import com.example.dmitry.videoeditor.Items.RisunocItem;
+import com.example.dmitry.videoeditor.Items.TextItem;
 import com.example.dmitry.videoeditor.Tools;
 
 import layout.PanelColors;
-import layout.PanelInstrumentImage;
 import layout.PanelRisunoc;
-import layout.PanelStckers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -153,13 +139,13 @@ public class ImageFragment extends Fragment {
 
             @Override
             public void doubleClick() {
-                if (CurrentElementHolder.getInstance().getCurrentElement() instanceof TextImage) {
+                if (CurrentElementHolder.getInstance().getCurrentElement() instanceof TextItem) {
                     ((EditorActivity)(getActivity())).showColors();
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
                     ((EditorActivity) (getActivity())).showRedactorItemHeader();
                 }
-                else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocImage) {
+                else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocItem) {
                     ((EditorActivity) (getActivity())).showFragment(PanelRisunoc.class, R.id.header_pos);
                 }
             }

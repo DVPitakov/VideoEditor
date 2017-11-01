@@ -1,4 +1,4 @@
-package com.example.dmitry.videoeditor.Vidgets;
+package com.example.dmitry.videoeditor.Items;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 
 import com.example.dmitry.videoeditor.R;
@@ -16,7 +15,7 @@ import com.example.dmitry.videoeditor.Tools;
  * Created by dmitry on 11.09.17.
  */
 
-public abstract class ImageElement {
+public abstract class BaseItem {
     View view;
     protected static Bitmap rot = null;
     protected static Bitmap scale = null;
@@ -32,11 +31,16 @@ public abstract class ImageElement {
     protected float oldAlpha = 0;
     protected Matrix matrix;
     protected Matrix inverseMatrix;
+    protected int previosWidth;
+    protected int previosHeight;
     protected int action = 0;
+    protected float savedScale = 1;
+    protected float timeScale = 1;
+    boolean focused = false;
     float p1;
     float p2;
 
-    public ImageElement(View view) {
+    public BaseItem(View view) {
         this.view = view;
         //if (rot == null) {
             rotate_button_width = view.getResources().getDimension(R.dimen.item_rotate_button_width);
@@ -61,6 +65,15 @@ public abstract class ImageElement {
         inverseMatrix = new Matrix();
     }
 
+    public void focusLosed() {
+        focused = false;
+
+    }
+
+    public void setFocus() {
+        focused = true;
+    }
+
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
 
@@ -74,23 +87,40 @@ public abstract class ImageElement {
         action = 0;
         Rect myRect = new Rect(0, 0, rect.right - rect.left, rect.bottom - rect.top);
         if (rect != null && myRect.contains((int)points[0], (int)points[1])) action = 1;
-        if(points[0] < rotate_button_width/2 && points[1] < rotate_button_height/2) {
+        if(
+                points[0] > -rotate_button_width/2
+                && points[1] > -rotate_button_width/2
+                && points[0] < rotate_button_width/2
+                && points[1] < rotate_button_height/2) {
             action = 2;
             p1 = Tools.getCenter(0, rect.right - rect.left);
             p2 =Tools.getCenter(0, rect.bottom - rect.top);
         }
-        if(points[0] > rect.right - rect.left -rotate_button_width/2 && points[1] > rect.bottom - rect.top-rotate_button_height/2) {
+        if(points[0] < rect.right - rect.left + rotate_button_width/2
+                && points[1] < rect.bottom - rect.top + rotate_button_width/2
+                && points[0] > rect.right - rect.left -rotate_button_width/2
+                && points[1] > rect.bottom - rect.top-rotate_button_height/2) {
             action = 3;
             p1 = Tools.getCenter(0, rect.right - rect.left);
             p2 =Tools.getCenter(0, rect.bottom - rect.top);
         }
-        if(points[0] > rect.right - rect.left -rotate_button_width/2 && points[1] < rotate_button_height/2) {
+        if(points[0] < rect.right - rect.left + rotate_button_width/2
+                && points[1] >  -rotate_button_width/2
+                && points[0] > rect.right - rect.left -rotate_button_width/2
+                && points[1] < rotate_button_height/2) {
             action = 4;
+            previosWidth = rect.right - rect.left;
+            previosHeight = rect.bottom - rect.top;
             p1 = Tools.getCenter(0, rect.right - rect.left);
             p2 =Tools.getCenter(0, rect.bottom - rect.top);
         }
-        if(points[0] < rotate_button_width/2 && points[1] > rect.bottom - rect.top-rotate_button_height/2) {
+        if(points[0] < -rotate_button_width/2
+                && points[1] > rect.right - rect.left + rotate_button_width/2
+                && points[0] < rotate_button_width/2
+                && points[1] > rect.bottom - rect.top-rotate_button_height/2) {
             action = 5;
+            previosWidth = rect.right - rect.left;
+            previosHeight = rect.bottom - rect.top;
             p1 = Tools.getCenter(0, rect.right - rect.left);
             p2 =Tools.getCenter(0, rect.bottom - rect.top);
         }
@@ -116,20 +146,31 @@ public abstract class ImageElement {
             setAlpha(Tools.getAlpha(0, 0, p1, p2, x, y, p1, p2));
         }
         else if (action == 4) {
-            scale(1.0f * (x + (rect.right - rect.left))/ (rect.right - rect.left));
+            scale(1.0f * (x + (previosWidth))/ (previosWidth));
         }
 
     }
 
+    public void moveEnd() {
+        saveLeft();
+        saveTop();
+        saveAlpha();
+        saveScale();
+    }
+
+    protected void saveScale() {
+        savedScale = timeScale;
+    }
+
     public abstract void scale(float scale);
 
-    public void saveLeft() {
+    protected void saveLeft() {
         rect.set(rect.left + x, rect.top, rect.right + x, rect.bottom);
         x = 0;
 
     }
 
-    public void saveTop() {
+    protected void saveTop() {
         rect.set(rect.left, rect.top + y, rect.right, rect.bottom + y);
         y = 0;
 

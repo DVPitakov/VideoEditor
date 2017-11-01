@@ -1,4 +1,4 @@
-package com.example.dmitry.videoeditor.Vidgets;
+package com.example.dmitry.videoeditor.Items;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,7 +15,7 @@ import com.example.dmitry.videoeditor.Tools;
  * Created by dmitry on 11.09.17.
  */
 
-public class TextImage extends ImageElement {
+public class TextItem extends BaseItem {
     private String text = "Новый текст";
     private int textSize = 60;
     private int textSizeD = 60;
@@ -24,7 +24,7 @@ public class TextImage extends ImageElement {
     private boolean isItalic = false;
     private int textType = 0;
 
-    public TextImage(View view, String text, int left, int bottom) {
+    public TextItem(View view, String text, int left, int bottom) {
         super(view);
         rect = new Rect();
         rect.set(left - textSizeD / 4  * text.length(), bottom - textSizeD, left + textSizeD / 4 * text.length(), bottom);
@@ -107,8 +107,7 @@ public class TextImage extends ImageElement {
         fontPaint.setTextSize(textSizeD);
         canvas.setMatrix(matrix);
         canvas.drawText(text, 0, - rect.top + rect.bottom, fontPaint);
-        //fontPaint.setStyle(Paint.Style.STROKE);
-        //canvas.drawRect( 0, - rect.top + rect.bottom, rect.right - rect.left, 0, fontPaint);
+        drawFrame(canvas);
 
 
     }

@@ -1,9 +1,7 @@
-package com.example.dmitry.videoeditor.Vidgets;
+package com.example.dmitry.videoeditor.Items;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-
-import com.example.dmitry.videoeditor.Vidgets.ImageElement;
 
 import java.util.ArrayList;
 
@@ -12,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public class ImageEditorQueue {
-    ArrayList<ImageElement> images = new ArrayList<>();
+    ArrayList<BaseItem> images = new ArrayList<>();
     private static ImageEditorQueue instance;
     private ImageEditorQueue() {}
 
@@ -25,8 +23,8 @@ public class ImageEditorQueue {
 
 
 
-    public void addElement(ImageElement imageElement) {
-        images.add(imageElement);
+    public void addElement(BaseItem baseItem) {
+        images.add(baseItem);
 
     }
 
@@ -37,24 +35,24 @@ public class ImageEditorQueue {
         }
         Bitmap freshBitmap = bitmap.copy(config, true);
         Canvas canvas = new Canvas(freshBitmap);
-        for(ImageElement imageElement: images) {
-            imageElement.draw(canvas);
+        for(BaseItem baseItem : images) {
+            baseItem.draw(canvas);
         }
         return freshBitmap;
 
     }
 
 
-    public ImageElement find(int x, int y) {
+    public BaseItem find(int x, int y) {
         int action;
-        for(ImageElement imageElement: images) {
-            action = imageElement.contains(x, y);
+        for(BaseItem baseItem : images) {
+            action = baseItem.contains(x, y);
             if (action > 0) {
                 if(action == 3) {
-                    deleteElement(imageElement);
+                    deleteElement(baseItem);
                     return null;
                 }
-                return imageElement;
+                return baseItem;
 
             }
         }
@@ -63,14 +61,13 @@ public class ImageEditorQueue {
     }
 
     public void moveAll(int dx, int dy) {
-        for(ImageElement imageElement: images) {
-            imageElement.move(dx, dy);
-            imageElement.saveLeft();
-            imageElement.saveTop();
+        for(BaseItem baseItem : images) {
+            baseItem.move(dx, dy);
+            baseItem.moveEnd();
         }
     }
 
-    public void deleteElement(ImageElement element) {
+    public void deleteElement(BaseItem element) {
         for(int i = 0; i < images.size(); i++) {
             if (images.get(i) == element) {
                 images.remove(i);

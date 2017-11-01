@@ -1,16 +1,11 @@
-package com.example.dmitry.videoeditor.Vidgets;
+package com.example.dmitry.videoeditor.Items;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
 
-import com.example.dmitry.videoeditor.R;
 import com.example.dmitry.videoeditor.Tools;
 
 import java.util.ArrayList;
@@ -20,7 +15,7 @@ import java.util.HashMap;
  * Created by dmitry on 21.10.17.
  */
 
-public class RisunocImage extends ImageElement {
+public class RisunocItem extends BaseItem {
     private int imageSize = 60;
     private int imageSizeD = 60;
     private int inheritedColor = 255 << 16 & 255 << 8;
@@ -36,7 +31,7 @@ public class RisunocImage extends ImageElement {
     HashMap<Integer, Integer> colors = new HashMap<>();
     HashMap<Integer, Integer> sizes = new HashMap<>();
 
-    public RisunocImage(View view, int left, int top) {
+    public RisunocItem(View view, int left, int top) {
         super(view);
         this.view = view;
         rect = new Rect();

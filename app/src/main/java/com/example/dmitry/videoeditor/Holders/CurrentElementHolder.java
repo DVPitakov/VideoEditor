@@ -1,6 +1,6 @@
 package com.example.dmitry.videoeditor.Holders;
 
-import com.example.dmitry.videoeditor.Vidgets.ImageElement;
+import com.example.dmitry.videoeditor.Items.BaseItem;
 
 /**
  * Created by dmitry on 21.10.17.
@@ -9,7 +9,7 @@ import com.example.dmitry.videoeditor.Vidgets.ImageElement;
 public class CurrentElementHolder {
     private static CurrentElementHolder instance;
     private CurrentElementHolder() {}
-    private ImageElement imageElement;
+    private BaseItem baseItem;
     public static CurrentElementHolder getInstance() {
         if(instance == null) {
             instance = new CurrentElementHolder();
@@ -17,18 +17,27 @@ public class CurrentElementHolder {
         return instance;
     }
 
-    public void setCurrentElement(ImageElement imageElement) {
-        this.imageElement = imageElement;
+    public void setCurrentElement(BaseItem baseItem) {
+        BaseItem buf = this.baseItem;
+        if (buf != baseItem) {
+            if (this.baseItem != null) {
+                this.baseItem.focusLosed();
+            }
+            this.baseItem = baseItem;
+            if (this.baseItem != null) {
+                this.baseItem.setFocus();
+            }
+        }
 
     }
 
     public void removeCurrentElement() {
-        this.imageElement = null;
+        this.baseItem = null;
 
     }
 
-    public ImageElement getCurrentElement() {
-        return imageElement;
+    public BaseItem getCurrentElement() {
+        return baseItem;
 
     }
 
