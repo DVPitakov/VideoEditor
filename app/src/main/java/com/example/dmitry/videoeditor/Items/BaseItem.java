@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 
 import com.example.dmitry.videoeditor.R;
@@ -23,6 +24,9 @@ public abstract class BaseItem {
 
     protected float rotate_button_width;
     protected float rotate_button_height;
+
+    protected int touchX = 0;
+    protected int touchY = 0;
 
     protected Rect rect;
     protected int x = 0;
@@ -80,6 +84,8 @@ public abstract class BaseItem {
     }
 
     public int contains(int x, int y) {
+        touchX = x;
+        touchY = y;
         float points[] = new float[2];
         points[0] = (float)x;
         points[1] = (float)y;
@@ -93,8 +99,6 @@ public abstract class BaseItem {
                 && points[0] < rotate_button_width/2
                 && points[1] < rotate_button_height/2) {
             action = 2;
-            p1 = Tools.getCenter(0, rect.right - rect.left);
-            p2 =Tools.getCenter(0, rect.bottom - rect.top);
         }
         if(points[0] < rect.right - rect.left + rotate_button_width/2
                 && points[1] < rect.bottom - rect.top + rotate_button_width/2
@@ -130,6 +134,7 @@ public abstract class BaseItem {
 
     public void setAlpha(float alpha) {
         this.alpha = alpha;
+
     }
 
     public void saveAlpha() {
@@ -143,10 +148,23 @@ public abstract class BaseItem {
             this.y = y;
         }
         else if (action == 2){
-            setAlpha(Tools.getAlpha(0, 0, p1, p2, x, y, p1, p2));
+            float points[] = new float[2];
+            points[0] = (float)(x +touchX);
+            points[1] = (float)(y + touchY);
+            inverseMatrix.mapPoints(points);
+            p1 = Tools.getCenter(0, rect.right - rect.left);
+            p2 =Tools.getCenter(0, rect.bottom - rect.top);
+            Log.d("2240", "" + p1 + " " +  p2);
+            Log.d("2240", "" + x + " " + y);
+            setAlpha(Tools.getAlpha(0, 0, p1, p2, points[0], points[1], p1, p2));
+            saveAlpha();
         }
         else if (action == 4) {
-            scale(1.0f * (x + (previosWidth))/ (previosWidth));
+            float points[] = new float[2];
+            points[0] = (float)(x +touchX);
+            points[1] = (float)(y + touchY);
+            inverseMatrix.mapPoints(points);
+            scale(1.0f * (points[0]/ (previosWidth)));
         }
 
     }
@@ -167,7 +185,6 @@ public abstract class BaseItem {
     protected void saveLeft() {
         rect.set(rect.left + x, rect.top, rect.right + x, rect.bottom);
         x = 0;
-
     }
 
     protected void saveTop() {
