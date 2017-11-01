@@ -43,8 +43,9 @@ public class TextItem extends BaseItem {
     }
 
     public void setTextSize(float loupe) {
+        timeScale = loupe * savedScale;
         Log.d("step", "setTextSize");
-        textSizeD = (int)(textSize * loupe * 1.3);
+        textSizeD = (int)(textSize * timeScale);
         rect.set(rect.left,
                 rect.bottom - (int)(textSizeD * 1),
                 (int)(rect.left + textSizeD / 1.8 * text.length()),
