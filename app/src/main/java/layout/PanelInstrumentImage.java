@@ -50,7 +50,7 @@ public class PanelInstrumentImage extends ImageAdapter{
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
         arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
         arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
-        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Фон"));
+       // arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Фон"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             int i = 0;
             @Override

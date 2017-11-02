@@ -37,6 +37,7 @@ public class Rest {
     private final static String METHOD_URL = "http://gpu-external01.i.smailru.net:12177";
     private static Rest instance;
 
+
     private Rest(){};
 
     public static Rest getInstance() {
