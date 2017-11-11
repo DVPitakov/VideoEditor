@@ -1,21 +1,21 @@
 package layout;
 
-import android.app.Fragment;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.example.dmitry.videoeditor.Adapters.StickerAdapter;
-import com.example.dmitry.videoeditor.EditorActivity;
-import com.example.dmitry.videoeditor.Holders.ImageHolder;
-import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import com.example.dmitry.videoeditor.MySurfaceView;
-import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Items.ImageItem;
+import edu.example.dmitry.videoeditor.Adapters.StickerAdapter;
+import edu.example.dmitry.videoeditor.EditorActivity;
+import edu.example.dmitry.videoeditor.Holders.ImageHolder;
+import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.R;
+import edu.example.dmitry.videoeditor.Items.ImageItem;
 
 import java.util.ArrayList;
 
@@ -49,6 +49,14 @@ public class PanelStckers extends Fragment {
 
     };
     public PanelStckers() {
+        arrayList.add( R.drawable.shapka1);
+        arrayList.add( R.drawable.shapka2);
+        arrayList.add( R.drawable.usi);
+        arrayList.add( R.drawable.boroda_i_usi);
+        arrayList.add( R.drawable.gepard);
+        arrayList.add( R.drawable.automat);
+        arrayList.add( R.drawable.vodka);
+        arrayList.add( R.drawable.happy);
         arrayList.add( R.drawable.s1);
         arrayList.add( R.drawable.s2);
         arrayList.add( R.drawable.s3);
@@ -65,6 +73,20 @@ public class PanelStckers extends Fragment {
         arrayList.add( R.drawable.s14);
         arrayList.add( R.drawable.s15);
         arrayList.add( R.drawable.s16);
+        arrayList.add( R.drawable.s17);
+        arrayList.add( R.drawable.s18);
+        arrayList.add( R.drawable.s19);
+        arrayList.add( R.drawable.s20);
+        arrayList.add( R.drawable.s21);
+        arrayList.add( R.drawable.s22);
+        arrayList.add( R.drawable.s23);
+        arrayList.add( R.drawable.s24);
+        arrayList.add( R.drawable.s25);
+        arrayList.add( R.drawable.s26);
+        arrayList.add( R.drawable.s27);
+        arrayList.add( R.drawable.s28);
+        arrayList.add( R.drawable.s29);
+
 
     }
 
@@ -76,6 +98,12 @@ public class PanelStckers extends Fragment {
                 , R.layout.item_image_with_text
                 , arrayList);
         GridView gridView = new GridView(container.getContext());
+        ViewGroup.LayoutParams layoutParams
+                = new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                        , (int)getResources().getDimension(R.dimen.view_with_stickers_height));
+        gridView.setLayoutParams(layoutParams);
+        gridView.setBackgroundColor(0xA0000000);
         gridView.setNumColumns(5);
         gridView.setAdapter(dataAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

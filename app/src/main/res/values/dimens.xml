@@ -17,4 +17,5 @@
     <dimen name="item_rotate_button_width">25dp</dimen>
     <dimen name="item_rotate_button_height">25dp</dimen>
     <dimen name="frame">3dp</dimen>
+    <dimen name="view_with_stickers_height">200dp</dimen>
 </resources>

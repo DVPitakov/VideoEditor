@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dmitry.videoeditor.EditorActivity">
+    tools:context="edu.example.dmitry.videoeditor.EditorActivity">
     <EditText
         android:id="@+id/edutText"
         android:layout_width="0dp"
@@ -17,12 +17,23 @@
         android:layout_height="match_parent">
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/header_pos"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#A0000000">
-    </FrameLayout>
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:id="@+id/header_pos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#A0000000">
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/_shared_header_pos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#A0000000">
+        </FrameLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/footer_pos"
@@ -36,6 +47,12 @@
         android:id="@+id/message_pos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/settings_pos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     </FrameLayout>
 
 

@@ -2,23 +2,23 @@ package layout;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 
-import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
-import com.example.dmitry.videoeditor.Holders.ImageHolder;
-import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import com.example.dmitry.videoeditor.Models.IconWithText;
-import com.example.dmitry.videoeditor.MySurfaceView;
-import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Items.RisunocItem;
-import com.example.dmitry.videoeditor.Items.TextItem;
-import com.example.dmitry.videoeditor.Views.HorizontalImagesScrallFragment;
-import com.example.dmitry.videoeditor.Views.Rest;
+import edu.example.dmitry.videoeditor.Holders.CurrentElementHolder;
+import edu.example.dmitry.videoeditor.Holders.ImageHolder;
+import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import edu.example.dmitry.videoeditor.Models.IconWithText;
+import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.R;
+import edu.example.dmitry.videoeditor.Items.TextItem;
+import edu.example.dmitry.videoeditor.Views.HorizontalImagesScrallFragment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -32,14 +32,28 @@ public class PanelInstrumentImage extends ImageAdapter{
         super.onStart();
         getActivity().findViewById(R.id.fragment_image_ok_button).setVisibility(View.GONE);
         getActivity().findViewById(R.id.fragment_image_send_button).setVisibility(View.VISIBLE);
-
     }
+
+    @Override
+    public void onPause() {
+        Fragment sharedPanel = editorActivity
+                .getSupportFragmentManager()
+                .findFragmentByTag(PanelInstrumentImageShared.class.getName());
+        if (sharedPanel != null) {
+            editorActivity
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(sharedPanel)
+                    .commit();
+        }
+        super.onPause();
+    }
+
 
     public final static int KROP_BUTTON = 0;
     public final static int TEXT_BUTTON = 1;
     public final static int EFFECT_BUTTON = 2;
     static boolean b = false;
-    final int MY_PERMISION = 1;
 
     public PanelInstrumentImage() {
         super();
@@ -49,9 +63,9 @@ public class PanelInstrumentImage extends ImageAdapter{
         arrayList.add(new IconWithText(R.drawable.ic_photo_filter_white_24dp, "Эффект"));
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
         arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
-        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
-       // arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Фон"));
+        arrayList.add(new IconWithText(R.drawable.ic_keyboard_arrow_down_white_24dp, "InDev"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            boolean sharedOpen = false;
             int i = 0;
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -90,28 +104,25 @@ public class PanelInstrumentImage extends ImageAdapter{
                         break;
                     }
                     case 5: {
-                        CurrentElementHolder.getInstance().removeCurrentElement();
-                        mySurfaceView.addImageElement(
-                                new RisunocItem(SurfaceViewHolder.getInstance().getMySurfaceView()
-                                        , 0
-                                        , 0));
-                        ImageHolder.getInstance().setBitmapWithElements(null);
-                        mySurfaceView.draw();
-                        editorActivity.showColors();
-                        editorActivity.showFragment(PanelRisunoc.class, R.id.header_pos);
-                        break;
-                    }
-                    case 6: {
-
-                        try {
-
-                            Rest.getInstance()
-                                    .sendRequest(ImageHolder
-                                            .getInstance()
-                                            .getDefaultBitmap());
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (sharedOpen) {
+                            Fragment f = editorActivity
+                                    .getSupportFragmentManager()
+                                    .findFragmentByTag(PanelInstrumentImageShared.class.getName());
+                            if (f != null) {
+                                editorActivity
+                                        .getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .remove(f)
+                                        .commit();
+                                ((ImageView)(view.findViewById(R.id.image_with_text_icon))).setImageResource(R.drawable.ic_keyboard_arrow_down_white_24dp);
+                            }
+                        } else {
+                        editorActivity
+                                .showFragment(PanelInstrumentImageShared.class, R.id._shared_header_pos);
+                            ((ImageView)(view.findViewById(R.id.image_with_text_icon))).setImageResource(R.drawable.ic_keyboard_arrow_up_white_24dp);
                         }
+                        sharedOpen = !sharedOpen;
+                        break;
                     }
                 }
             }

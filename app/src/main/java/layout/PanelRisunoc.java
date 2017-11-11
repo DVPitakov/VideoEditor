@@ -3,14 +3,14 @@ package layout;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.example.dmitry.videoeditor.EditorActivity;
-import com.example.dmitry.videoeditor.Holders.CurrentElementHolder;
-import com.example.dmitry.videoeditor.Holders.ImageHolder;
-import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import com.example.dmitry.videoeditor.Models.IconWithText;
-import com.example.dmitry.videoeditor.MySurfaceView;
-import com.example.dmitry.videoeditor.R;
-import com.example.dmitry.videoeditor.Items.RisunocItem;
+import edu.example.dmitry.videoeditor.EditorActivity;
+import edu.example.dmitry.videoeditor.Holders.CurrentElementHolder;
+import edu.example.dmitry.videoeditor.Holders.ImageHolder;
+import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import edu.example.dmitry.videoeditor.Models.IconWithText;
+import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.R;
+import edu.example.dmitry.videoeditor.Items.RisunocItem;
 
 import java.util.ArrayList;
 

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dmitry.videoeditor.Views.ElementRedactorFragment">
+    tools:context="com.example.dmitry.videoeditor.edu.example.dmitry.videoeditor.Views.ElementRedactorFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

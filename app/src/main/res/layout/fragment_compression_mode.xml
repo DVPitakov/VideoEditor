@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Views.CompressionModeFragment">
+    tools:context="edu.example.dmitry.videoeditor.Views.CompressionModeFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout

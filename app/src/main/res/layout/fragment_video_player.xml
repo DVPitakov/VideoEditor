@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.dmitry.videoeditor.Views.VideoPlayerFragment">
+    tools:context="com.example.dmitry.videoeditor.edu.example.dmitry.videoeditor.Views.VideoPlayerFragment">
 
     <!-- TODO: Update blank fragment layout -->
         <LinearLayout

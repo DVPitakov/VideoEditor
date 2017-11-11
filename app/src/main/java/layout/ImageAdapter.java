@@ -1,27 +1,19 @@
 package layout;
 
-import android.app.ActionBar;
 import android.content.Context;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.util.Log;
+
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
 
-import com.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
-import com.example.dmitry.videoeditor.EditorActivity;
-import com.example.dmitry.videoeditor.Models.IconWithText;
-import com.example.dmitry.videoeditor.R;
+import edu.example.dmitry.videoeditor.Adapters.ImageWithTextAdapter;
+import edu.example.dmitry.videoeditor.EditorActivity;
+import edu.example.dmitry.videoeditor.Models.IconWithText;
+import edu.example.dmitry.videoeditor.R;
 
 import java.util.ArrayList;
 
@@ -29,6 +21,7 @@ import java.util.ArrayList;
 public class ImageAdapter extends Fragment {
     public ArrayList<IconWithText> arrayList = new ArrayList<>();
     protected int layout = R.layout.fragment_instrumen_panel_list;
+    protected View root;
     protected int id = R.id.gridPanelImage;
     protected int itemSize = R.dimen.imageAdapterImageSize;
     //protected Context mContext;
@@ -98,6 +91,7 @@ public class ImageAdapter extends Fragment {
                 }
             }
         });
+        root = listView;
         return listView;
 
     }

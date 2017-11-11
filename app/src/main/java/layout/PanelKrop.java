@@ -3,10 +3,10 @@ package layout;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import com.example.dmitry.videoeditor.Models.IconWithText;
-import com.example.dmitry.videoeditor.MySurfaceView;
-import com.example.dmitry.videoeditor.R;
+import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import edu.example.dmitry.videoeditor.Models.IconWithText;
+import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.R;
 
 import java.util.ArrayList;
 
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by alexandr on 10.09.17.
  */
 
-public class PanelKrop extends ImageAdapter{
+public class PanelKrop extends ImageAdapter {
     public final static int KROP_BUTTON = 0;
     public final static int TEXT_BUTTON = 1;
     public final static int EFFECT_BUTTON = 2;

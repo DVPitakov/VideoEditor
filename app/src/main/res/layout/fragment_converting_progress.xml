@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.example.dmitry.videoeditor.Views.ConvertingProgressFragment">
+    tools:context="com.example.dmitry.videoeditor.edu.example.dmitry.videoeditor.Views.ConvertingProgressFragment">
 
     <TextView
         android:layout_width="match_parent"
