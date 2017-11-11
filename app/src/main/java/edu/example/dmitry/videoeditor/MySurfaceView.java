@@ -405,6 +405,9 @@ public class MySurfaceView extends SurfaceView implements
         imageEditorQueue.addElement(baseItem);
         HistoryHolder.getInstance().addAction(new HistoryHolder.AddItem(baseItem));
         CurrentElementHolder.getInstance().setCurrentElement(baseItem);
+        if (baseItem instanceof RisunocItem) {
+            ((RisunocItem) baseItem).beginNewLineGroop(0xFFFFFFFF, 1);
+        }
         focusListener.focusTaken();
 
     }
@@ -422,7 +425,7 @@ public class MySurfaceView extends SurfaceView implements
 
     public void setImageSize(int imgSize) {
         if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
-            ((RisunocItem)CurrentElementHolder.getInstance().getCurrentElement()).beginNewLineGroop(0, imgSize);
+            ((RisunocItem)CurrentElementHolder.getInstance().getCurrentElement()).beginNewLineGroop(null, imgSize);
             draw();
 
         }
@@ -515,7 +518,7 @@ public class MySurfaceView extends SurfaceView implements
             ((TextItem) CurrentElementHolder.getInstance().getCurrentElement()).setColor(color);
         }
         if (CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocItem) {
-            ((RisunocItem) CurrentElementHolder.getInstance().getCurrentElement()).beginNewLineGroop(color);
+            ((RisunocItem) CurrentElementHolder.getInstance().getCurrentElement()).beginNewLineGroop(color, null);
         }
     }
 
