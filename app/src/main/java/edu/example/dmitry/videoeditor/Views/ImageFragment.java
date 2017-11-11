@@ -80,15 +80,9 @@ public class ImageFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= 23) {
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
-                }
-                else {
-                    Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
-                    MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "image" , null);
-                    Tools.saveAndSendImage(bitmap, getActivity());}
+                Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
+                MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "image" , null);
+                Tools.saveAndSendImage(bitmap, getActivity());
             }
         });
         rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_image_ok_button).setVisibility(View.GONE);

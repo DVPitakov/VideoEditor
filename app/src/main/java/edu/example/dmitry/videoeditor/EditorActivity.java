@@ -230,18 +230,5 @@ public class EditorActivity extends FragmentActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    final int MY_PERMISION = 1;
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
-                Tools.saveAndSendImage(bitmap, this);
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
 }
 
