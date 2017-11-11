@@ -11,6 +11,7 @@ import edu.example.dmitry.videoeditor.Models.IconWithText;
 import edu.example.dmitry.videoeditor.MySurfaceView;
 import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.Items.RisunocItem;
+import edu.example.dmitry.videoeditor.Tools;
 
 import java.util.ArrayList;
 
@@ -23,13 +24,14 @@ public class PanelRisunoc extends ImageAdapter{
         super();
         arrayList = new ArrayList<IconWithText>();
         arrayList.add(new IconWithText(R.drawable.ic_check_white_24dp, "Принять"));
-        arrayList.add(new IconWithText(R.drawable.ic_paint_size_white_24dp, "Размер"));
+        arrayList.add(new IconWithText(R.drawable.paint_size_minus_24dp, "Уменьшить\nкисть"));
+        arrayList.add(new IconWithText(R.drawable.ic_paint_size_plus_24dp, "Увеличить\nкисть"));
         arrayList.add(new IconWithText(R.drawable.ic_delete_white_24dp, "Удалить"));
 
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             boolean b = false;
             int i = 0;
-            int j = 0;
+            int j = 2;
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 MySurfaceView mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
@@ -47,10 +49,17 @@ public class PanelRisunoc extends ImageAdapter{
                         SurfaceViewHolder.getInstance().getMySurfaceView().setImageSize(j);
                         ImageHolder.getInstance().setBitmapWithElements(null);
                         SurfaceViewHolder.getInstance().getMySurfaceView().draw();
-                        j = (j + 1) % 5;
+                        j = Tools.min(1, (j - 1) % 8);
                         break;
                     }
                     case 2: {
+                        SurfaceViewHolder.getInstance().getMySurfaceView().setImageSize(j);
+                        ImageHolder.getInstance().setBitmapWithElements(null);
+                        SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                        j = (j + 1) % 8;
+                        break;
+                    }
+                    case 3: {
                         ((RisunocItem) CurrentElementHolder.getInstance().getCurrentElement()).setReady(true);
                         mySurfaceView.deleteCurrentItem();
                         CurrentElementHolder.getInstance().removeCurrentElement();
