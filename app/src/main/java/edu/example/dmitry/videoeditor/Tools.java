@@ -29,6 +29,12 @@ public class Tools {
         if (v1 > v2) return v2;
         return v1;
     }
+
+    public static int max(int v1, int v2) {
+        if (v1 < v2) return v2;
+        return v1;
+    }
+
     public static float normalizator(float val, float maxVal, float minVal) {
         if (val > maxVal) {
             return maxVal;

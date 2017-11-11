@@ -46,17 +46,17 @@ public class PanelRisunoc extends ImageAdapter{
                         break;
                     }
                     case 1: {
+                        j = Tools.max(1, (j - 1));
                         SurfaceViewHolder.getInstance().getMySurfaceView().setImageSize(j);
                         ImageHolder.getInstance().setBitmapWithElements(null);
                         SurfaceViewHolder.getInstance().getMySurfaceView().draw();
-                        j = Tools.min(1, (j - 1) % 8);
                         break;
                     }
                     case 2: {
+                        j = Tools.min(8, (j + 1));
                         SurfaceViewHolder.getInstance().getMySurfaceView().setImageSize(j);
                         ImageHolder.getInstance().setBitmapWithElements(null);
                         SurfaceViewHolder.getInstance().getMySurfaceView().draw();
-                        j = (j + 1) % 8;
                         break;
                     }
                     case 3: {
