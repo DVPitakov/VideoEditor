@@ -5,8 +5,7 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/image_pos"
-        android:scaleType="fitStart"
-        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:minHeight="100dp" />
