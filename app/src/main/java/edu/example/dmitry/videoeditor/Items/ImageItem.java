@@ -57,9 +57,17 @@ public class ImageItem extends BaseItem {
     }
 
     public void setImageSize(float loupe) {
-        timeScale = savedScale * loupe;
-        int imageSizeDxOld = imageSizeDx;
-        int imageSizeDyOld = imageSizeDy;
+        if (savedScale * loupe > 10) {
+            timeScale = 10f;
+        }
+        else if(savedScale * loupe < 0.1) {
+            timeScale = 0.1f;
+        }
+        else {
+            timeScale = savedScale * loupe;
+        }
+        int imageSizeDxOld = bitmapSource.getWidth();
+        int imageSizeDyOld = bitmapSource.getHeight();
         imageSizeDx = (int)(imageSizex * timeScale);
         imageSizeDy = (int)(imageSizey * timeScale);
         bitmapSource = Bitmap.createScaledBitmap(originalBitmapSource, imageSizeDx, imageSizeDy, false);

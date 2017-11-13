@@ -23,8 +23,6 @@ public class RisunocItem extends BaseItem {
     private int inheritedColor = 255 << 16 & 255 << 8;
     private int inheritedSize = 15;
     private boolean ready = false;
-    private float oldScale = 1;
-    private float newScale = 1;
 
 
     View view;
