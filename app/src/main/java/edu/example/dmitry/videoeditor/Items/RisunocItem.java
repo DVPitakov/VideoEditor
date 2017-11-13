@@ -152,7 +152,7 @@ public class RisunocItem extends BaseItem {
             }
         }
 
-        if(focused) {
+        if(focused && isReady()) {
             drawFrame(canvas);
         }
     }

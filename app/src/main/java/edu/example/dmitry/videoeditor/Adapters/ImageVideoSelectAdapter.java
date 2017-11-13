@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import edu.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.ImageEditor;
 import edu.example.dmitry.videoeditor.Models.IconWithText;
 import edu.example.dmitry.videoeditor.R;
@@ -39,16 +42,20 @@ public class ImageVideoSelectAdapter  extends ArrayAdapter<String> {
         this.activity = activity;
     }
 
+    MyTask myTask = null;
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (true) {
+            if (myTask == null) {
+                myTask = new MyTask();
+            }
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.photo_video_tip_rect
                             , parent
                             , false);
             convertView.setTag(strings.get(strings.size() - 1 - position));
-            (new MyTask()).execute(new ViewAndString(convertView, strings.get(strings.size() - 1 - position), null));
+            new MyTask().execute(new ViewAndString(convertView, strings.get(strings.size() - 1 - position), null));
 
 
         }
@@ -66,7 +73,7 @@ public class ImageVideoSelectAdapter  extends ArrayAdapter<String> {
         public String string;
         public Bitmap bm;
     }
-    private class MyTask extends AsyncTask<ViewAndString, Bitmap, ViewAndString> {
+    private class MyTask extends AsyncTask<ViewAndString, ViewAndString, ViewAndString> {
 
         @Override
         protected void onPreExecute() {
@@ -74,29 +81,33 @@ public class ImageVideoSelectAdapter  extends ArrayAdapter<String> {
         }
 
         @Override
+        protected void onProgressUpdate(ViewAndString... result) {
+            super.onProgressUpdate(result);
+            ((ImageView)result[0].view.findViewById(R.id.image_pos)).setImageBitmap(result[0].bm);
+        }
+
+        @Override
         protected ViewAndString doInBackground(ViewAndString... params) {
             Bitmap bm = null;
             try {
-                    File imageFile = new File(params[0].string);
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 8;
-                    if (imageFile.exists()) {
-                        try {
-                            bm = BitmapFactory.decodeFile(params[0].string, options);
-                        }
-                        catch (OutOfMemoryError oushit) {
-                            Log.d("err", oushit.toString());
-                        }
+                File imageFile = new File(params[0].string);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                if (imageFile.exists()) {
+                    try {
+                        bm = BitmapFactory.decodeFile(params[0].string, options);
+                    } catch (OutOfMemoryError oushit) {
+                        Log.d("err", oushit.toString());
                     }
-                    else {
-                        throw new IOException();
-                    }
-            } catch (IOException e) {
-                    bm = null;
+                } else {
+                    throw new IOException();
+                }
+            } catch(IOException e){
+                bm = null;
             }
-
             params[0].bm = bm;
             return params[0];
+
         }
 
         @Override
@@ -104,5 +115,33 @@ public class ImageVideoSelectAdapter  extends ArrayAdapter<String> {
             super.onPostExecute(result);
             ((ImageView)result.view.findViewById(R.id.image_pos)).setImageBitmap(result.bm);
         }
+/*
+        ViewAndString viewAndString = null;
+        public void go() {
+            ExecutorService service = Executors.newFixedThreadPool(2);
+            service.submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        File imageFile = new File(params[0].string);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 8;
+                        if (imageFile.exists()) {
+                            try {
+                                bm = BitmapFactory.decodeFile(params[0].string, options);
+                            } catch (OutOfMemoryError oushit) {
+                                Log.d("err", oushit.toString());
+                            }
+                        } else {
+                            throw new IOException();
+                        }
+                    } catch(IOException e){
+                        bm = null;
+                    }
+                    params[0].bm = bm;
+                }
+            })
+        }*/
     }
+
 }

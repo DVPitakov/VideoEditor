@@ -1,6 +1,11 @@
 package edu.example.dmitry.videoeditor.Views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -10,12 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
+
+import edu.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
+import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
+import edu.example.dmitry.videoeditor.Holders.UrlHolder;
+import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.R;
+import edu.example.dmitry.videoeditor.SettingsVideo;
 
 
 /**
@@ -39,7 +53,6 @@ public class VideoPlayerFragment extends Fragment {
     private int cur = 0;
     private boolean redyForUpdating = false;
     private View rootView;
-    private SeekBar seekBar;
     private boolean isPlaying = false;
     ImageButton playButton;
     ImageButton convertButton;
@@ -50,6 +63,8 @@ public class VideoPlayerFragment extends Fragment {
     LinearLayout mainLinearLayout;
     Button assertButton;
     Button cancelButton;
+    VideoCropView vc;
+
     private OnVideoPlayerFragmentInteractionListener mListener;
 
     public VideoPlayerFragment() {
@@ -91,14 +106,48 @@ public class VideoPlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_video_player, container, false);
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        Bitmap bitmap = null;
+        long videolen = 0;
+        try {
+            retriever.setDataSource(getContext(), UrlHolder._getInputUri());
+            String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            videolen = 1000;
+        } catch (IllegalArgumentException ex) {
+            // Assume this is a corrupt video file
+        } catch (RuntimeException ex) {
+            // Assume this is a corrupt video file.
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+                // Ignore failures while cleaning up.
+            }
+        }
+        videolen = 20000;
+        Log.d("GHGH", "bitmap" + bitmap);
+        vc = new VideoCropView(rootView.getContext(), 0, 100);
+        vc.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT
+                , FrameLayout.LayoutParams.MATCH_PARENT));
+
+        ((FrameLayout)rootView.findViewById(R.id.test_pos)).addView(vc);
+
+        float counter = 7;// (int)vc.calculateShownVideoMoments(new BitmapDrawable(getResources(), bitmap));
+
+        float step =  1.0f * videolen / counter;
+        for (int i = 0; i - 1 < counter; i++) {
+            MyTask myTask = new MyTask();
+            myTask.execute((float)i, step);
+        }
+
         mainLinearLayout = (LinearLayout)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_video_player_main_linear_layout));
         assertButton = (Button)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_video_player_assert_button));
         cancelButton = (Button)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_video_player_cancel_button));
         buttonsLayout = (LinearLayout)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_video_player_buttons));
         playButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.playButton));
         convertButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.show_convert_menu));
-        seekBar = (SeekBar)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.videoProgress));
-        rangebar = (RangeSeekBar)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.rangebar1));
+       // rangebar = (RangeSeekBar)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.rangebar1));
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,22 +186,6 @@ public class VideoPlayerFragment extends Fragment {
                 }
             }
         });
-        showKroper = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.show_kroper));
-        showKroper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (rangebar.getVisibility() == View.GONE) {
-                    rangebar.setVisibility(View.VISIBLE);
-                    buttonsLayout.setVisibility(View.VISIBLE);
-                    mainLinearLayout.setVisibility(View.GONE);
-                }
-                else {
-                    rangebar.setVisibility(View.GONE);
-                    buttonsLayout.setVisibility(View.GONE);
-                    mainLinearLayout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,9 +213,8 @@ public class VideoPlayerFragment extends Fragment {
     }
 
 
-    public void updateProgess(int cur, int max) {
-        seekBar.setMax(max);
-        seekBar.setProgress(cur);
+    public void updateProgess(float cur) {
+        vc.setProgress(cur);
 
     }
 
@@ -231,5 +263,44 @@ public class VideoPlayerFragment extends Fragment {
         void ready(Object object);
         void show_compression_menu_request();
         void doVideoKrop(int leftCur, int rightCur, int leftMax, int curMax);
+    }
+
+    private class BitmapAndInteger {
+        BitmapAndInteger(Bitmap bitmap, Integer integer) {
+            this.bitmap = bitmap;
+            this.integer = integer;
+        }
+        public Bitmap bitmap;
+        public Integer integer;
+    }
+    private class MyTask extends AsyncTask<Float, BitmapAndInteger, BitmapAndInteger> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected BitmapAndInteger doInBackground(Float... v) {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            Bitmap bitmap = null;
+            try {
+                retriever.setDataSource(getContext(), SettingsVideo.getInput());
+                bitmap = retriever.getFrameAtTime((int)(1000 * v[1] * v[0]));
+                Log.d("2317", "1000v0 " + (int)(v[1] * v[0]));
+                Log.d("2317", "v1" + (v[1]));
+                Log.d("2317", "v0" + (v[0]));
+            } catch (IllegalArgumentException e) {
+            }
+            retriever.release();
+            Log.d("BITMAAP:", "bitmaap:" + bitmap);
+            return new BitmapAndInteger(bitmap, (v[0]).intValue());
+        }
+
+        @Override
+        protected void onPostExecute(BitmapAndInteger result) {
+            super.onPostExecute(result);
+            vc.addVideoMoment(result.integer, result.bitmap);
+        }
     }
 }

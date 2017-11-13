@@ -8,7 +8,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.TimedMetaData;
 import android.net.Uri;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -451,6 +453,7 @@ public class MySurfaceView extends SurfaceView implements
 
     }
 
+
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         SurfaceViewHolder.getInstance().setMySurfaceView(this);
@@ -458,7 +461,6 @@ public class MySurfaceView extends SurfaceView implements
         this.surfaceHolder = surfaceHolder;
         try {
             if (Tools.isVideo(SettingsVideo.getInput(""))) {
-
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(context, SettingsVideo.getInput());
                 mediaPlayer.setSurface(surfaceHolder.getSurface());

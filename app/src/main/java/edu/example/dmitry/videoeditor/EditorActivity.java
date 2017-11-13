@@ -205,8 +205,8 @@ public class EditorActivity extends FragmentActivity {
                                         });
         FontHolder.getInstance(getBaseContext());
         if(Tools.isVideo(SettingsVideo.getInput(""))) {
-            showDefaultVideoHeader();
             showVideoBody();
+            showDefaultVideoHeader();
         }
         else {
             showImageBody();

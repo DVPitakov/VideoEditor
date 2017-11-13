@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:clickable="true"
+    tools:context="edu.example.dmitry.videoeditor.Views.SettingsFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="left|center"
+            android:gravity="left|center"
+            android:text="Показывать рамку"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <CheckBox
+            android:id="@+id/show_frame"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="right|center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="left|center"
+            android:gravity="left|center"
+            android:text="Включить историю"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+        <CheckBox
+            android:id="@+id/show_history"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="right|center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+</LinearLayout>

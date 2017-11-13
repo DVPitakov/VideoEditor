@@ -17,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ import java.util.Date;
 
 import edu.example.dmitry.videoeditor.Adapters.ImageVideoSelectAdapter;
 import edu.example.dmitry.videoeditor.Holders.ImageHolder;
+import edu.example.dmitry.videoeditor.Views.VideoCropView;
 
 
 public class MainActivity extends FragmentActivity {

@@ -104,6 +104,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
+
     <GridView
         android:id="@+id/image_video_grid_view"
         android:numColumns="3"

@@ -1,9 +1,12 @@
 package edu.example.dmitry.videoeditor.Views;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -17,6 +20,7 @@ import edu.example.dmitry.videoeditor.DecodeVideo;
 import edu.example.dmitry.videoeditor.Decoder;
 import edu.example.dmitry.videoeditor.Holders.ImageHolder;
 import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.SettingsVideo;
 
 /**
@@ -68,6 +72,8 @@ public class VideoFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_video, container, false);
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inSampleSize = 1;
         decoder = new Decoder();
         imageHolder = ImageHolder.getInstance();
         imageHolder.tryInit(getActivity());
@@ -137,8 +143,11 @@ public class VideoFragment extends Fragment
                @Override
                public void run() {
                    if(videoPlayerFragment != null)
-                       videoPlayerFragment.updateProgess(mySurfaceView.getMediaPlayerCurrentPosition(),
-                               (int) CurrentVideoHolder.getInstance().getVideoLen());
+                       videoPlayerFragment.updateProgess(
+                               100f *
+                                       mySurfaceView.getMediaPlayerCurrentPosition()/
+                               CurrentVideoHolder.getInstance().getVideoLen()
+                               );
                        handler.postDelayed(this, 100);
                }
            });
