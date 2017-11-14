@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -40,7 +41,7 @@ import edu.example.dmitry.videoeditor.SettingsVideo;
  * Use the {@link VideoPlayerFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VideoPlayerFragment extends Fragment {
+public class VideoPlayerFragment extends Fragment implements VideoCropView.VideoCropViewListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -54,6 +55,7 @@ public class VideoPlayerFragment extends Fragment {
     private boolean redyForUpdating = false;
     private View rootView;
     private boolean isPlaying = false;
+    private boolean isUpdatable = true;
     ImageButton playButton;
     ImageButton convertButton;
     ImageButton crosButton;
@@ -130,10 +132,13 @@ public class VideoPlayerFragment extends Fragment {
         vc.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT
                 , FrameLayout.LayoutParams.MATCH_PARENT));
+        vc.setVideoCropViewListener(this);
 
         ((FrameLayout)rootView.findViewById(R.id.test_pos)).addView(vc);
 
-        float counter = 7;// (int)vc.calculateShownVideoMoments(new BitmapDrawable(getResources(), bitmap));
+        float counter = (int)vc.calculateShownVideoMoments(new BitmapDrawable(getResources(), bitmap),
+                getActivity().getWindowManager().getDefaultDisplay().getWidth(),
+                (int)getResources().getDimension(R.dimen.video_crop_view_height));
 
         float step =  1.0f * videolen / counter;
         for (int i = 0; i - 1 < counter; i++) {
@@ -214,7 +219,9 @@ public class VideoPlayerFragment extends Fragment {
 
 
     public void updateProgess(float cur) {
-        vc.setProgress(cur);
+        if (isUpdatable) {
+            vc.setProgress(cur);
+        }
 
     }
 
@@ -246,6 +253,61 @@ public class VideoPlayerFragment extends Fragment {
         mListener = listener;
 
     }
+
+    @Override
+    public void onPolzunocMove(float newPos) {
+        isUpdatable = false;
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        videoEnd();
+    }
+
+    @Override
+    public void onLeftCurMove(float newPos) {
+        isUpdatable = false;
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        videoEnd();
+    }
+
+    @Override
+    public void onRightCurMove(float newPos) {
+        isUpdatable = true;
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        videoEnd();
+    }
+
+    @Override
+    public void onPolzunocMoveEnd(float newPos) {
+        isUpdatable = true;
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
+    }
+
+    @Override
+    public void onLeftCurMoveEnd(float newPos) {
+        isUpdatable = true;
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
+    }
+
+    @Override
+    public void onRightCurMoveEnd(float newPos) {
+        isUpdatable = true;
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
+        videoEnd();
+    }
+
+    @Override
+    public void leftOverflow(float newPos) {
+        SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
+    }
+
+    @Override
+    public void rightOverflow(float newPos) {
+        SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
+        videoEnd();
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

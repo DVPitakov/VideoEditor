@@ -32,32 +32,40 @@ import edu.example.dmitry.videoeditor.R;
  */
 
 public class VideoCropView extends View {
-    float leftest;
-    float rightest;
-    float leftCur;
-    float rightCur;
-    float polzunoc;
-    float polzunocClickable = 0;
-    float leftCurTemp = 0;
-    float rightCurTemp = 0;
-    float polzunocTemp = 0;
-    int selected = 0;
-    Drawable imgleftCur;
-    Drawable imgRightCur;
-    Drawable imagePos;
-    HashMap<Integer, Drawable> videoMoments = new HashMap<>();
-    Matrix bitmapMatrix;
+    private float leftest;
+    private float rightest;
+    private float leftCur;
+    private float rightCur;
+    private float polzunoc;
+    private float polzunocClickable = 0;
+    private float leftCurTemp = 0;
+    private float rightCurTemp = 0;
+    private float polzunocTemp = 0;
+    private int selected = 0;
+    private Drawable imgleftCur;
+    private Drawable imgRightCur;
+    private Drawable imagePos;
+    private HashMap<Integer, Drawable> videoMoments = new HashMap<>();
+    private Matrix bitmapMatrix;
 
-    Paint shadowPaint;
-    Paint framePaint;
-    Paint polzunocPaint;
-    float borderWidth;
-    VideoCropViewListener videoCropViewListener = null;
+    private Paint shadowPaint;
+    private Paint framePaint;
+    private Paint polzunocPaint;
+    private float borderWidth;
+    private VideoCropViewListener videoCropViewListener = null;
+
 
     public interface VideoCropViewListener {
         void onPolzunocMove(float newPos);
         void onLeftCurMove(float newPos);
         void onRightCurMove(float newPos);
+
+        void onPolzunocMoveEnd(float newPos);
+        void onLeftCurMoveEnd(float newPos);
+        void onRightCurMoveEnd(float newPos);
+
+        void leftOverflow(float newPos);
+        void rightOverflow(float newPos);
     }
 
     public VideoCropView(@NonNull Context context, float leftest, float rightest) {
@@ -91,6 +99,15 @@ public class VideoCropView extends View {
                 * (float)getHeight() * 3f / 4f
                 / dr.getIntrinsicHeight();
     }
+
+    public float calculateShownVideoMoments(Drawable dr, int vWidth, int vHeight) {
+        return (float)vWidth
+                / dr.getIntrinsicWidth()
+                / (float)vHeight * 3f / 4f
+                * dr.getIntrinsicHeight();
+    }
+
+
 
     protected void initDrawObjects() {
         polzunocClickable = getResources().getDimension(R.dimen.video_crop_view_frame_polzunoc_clichable);
@@ -209,14 +226,45 @@ public class VideoCropView extends View {
                 leftCurTemp = 0;
                 rightCurTemp = 0;
                 polzunocTemp = 0;
+                if (selected == 1) {
+                    videoCropViewListener.onLeftCurMoveEnd(leftCur);
+                }
+                else if(selected == 2) {
+                    videoCropViewListener.onRightCurMoveEnd(rightCur);
+                }
+                else if(selected == 3) {
+                    videoCropViewListener.onPolzunocMoveEnd(polzunoc);
+                }
+                if (rightCur < polzunoc || leftCur > polzunoc) {
+                    videoCropViewListener.onPolzunocMoveEnd(polzunoc);
+                }
+                invalidate();
+
                 break;
             }
         }
         return true;
     }
     void setProgress(float progress) {
-        Log.d("PROGRESS", "" + progress);
-        polzunoc = progress;
+        float vWidth = getWidth() - 2 * borderWidth;
+        float vLeftCur = (leftCur+leftCurTemp - leftest) / (rightest - leftest) * (vWidth);
+        float vRightCur = (rightCur+rightCurTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;
+        if (polzunoc < leftCur) {
+           //if(videoCropViewListener != null) {
+           //    progress = leftCur;
+          //     videoCropViewListener.leftOverflow(progress);
+           //}
+        }
+       else if (progress > rightCur) {
+          if (videoCropViewListener != null) {
+              progress = rightCur;
+              videoCropViewListener.rightOverflow(progress);
+          }
+       }
+      //  }
+      //  else {
+            polzunoc = progress;
+      //  }
         invalidate();
     }
     @Override

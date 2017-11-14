@@ -47,6 +47,7 @@ public class MySurfaceView extends SurfaceView implements
     private KropFrame kropFrame;
     private int iw;
     private int ih;
+    private int startPlay = 0;
 
     @Override
     public void showNewVideo() {
@@ -78,6 +79,11 @@ public class MySurfaceView extends SurfaceView implements
             focusListener.focusLosed();
         }
     }
+
+    public void setStartPlay(int startPlay) {
+        this.startPlay = startPlay;
+    }
+
 
     public interface FocusListener {
         void focusLosed();
@@ -315,7 +321,6 @@ public class MySurfaceView extends SurfaceView implements
     }
     public int getMediaPlayerCurrentPosition() {
         if(mediaPlayer != null) {
-            mediaPlayer.getDuration();
             return mediaPlayer.getCurrentPosition();
         }
         else {
@@ -376,6 +381,8 @@ public class MySurfaceView extends SurfaceView implements
 
     }
 
+
+
     public void mediaPlayerPause() {
         if(mediaPlayer != null) {
             mediaPlayer.pause();
@@ -433,26 +440,22 @@ public class MySurfaceView extends SurfaceView implements
         }
     }
 
-    public void updateVideo(Uri uri) {
-        mediaPlayer.stop();
-        mediaPlayer.reset();
-        try {
-            mediaPlayer.setDataSource(context, Uri.parse(SettingsVideo.getInput("")));
-            mediaPlayer.setSurface(surfaceHolder.getSurface());
-            mediaPlayer.setLooping(true);
-            mediaPlayer.prepare();
+    public void pauseVideo() {
+        mediaPlayerPause();
+    }
+
+    public void continueVideo(float pos) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo((int) (pos / 100f * mediaPlayer.getDuration()));
             mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                 @Override
                 public void onSeekComplete(MediaPlayer mediaPlayer) {
-                    Log.d("db", "next");
+                    //;
                 }
             });
-        } catch (IOException e) {
-            e.printStackTrace();
+
         }
-
     }
-
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -464,9 +467,11 @@ public class MySurfaceView extends SurfaceView implements
                 mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(context, SettingsVideo.getInput());
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
-                mediaPlayer.setLooping(true);
+                mediaPlayer.setLooping(false);
                 mediaPlayer.prepare();
                 CurrentVideoHolder.getInstance().setVideoLen(mediaPlayer.getDuration());
+                mediaPlayer.start();
+                mediaPlayer.pause();
                 mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
                     @Override
                     public void onSeekComplete(MediaPlayer mediaPlayer) {
@@ -486,8 +491,6 @@ public class MySurfaceView extends SurfaceView implements
 
                 alignLeftOld = alignLeft;
                 alignTopOld = alignTop;
-
-
                 draw(surfaceHolder);
             }
         }

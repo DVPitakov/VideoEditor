@@ -136,19 +136,21 @@ public class VideoFragment extends Fragment
             }
     }
 
+    boolean updatable = true;
 
     @Override
     public void ready(Object object) {
            getActivity().runOnUiThread(new Runnable() {
                @Override
                public void run() {
-                   if(videoPlayerFragment != null)
+                   if(videoPlayerFragment != null) {
                        videoPlayerFragment.updateProgess(
                                100f *
-                                       mySurfaceView.getMediaPlayerCurrentPosition()/
-                               CurrentVideoHolder.getInstance().getVideoLen()
-                               );
-                       handler.postDelayed(this, 100);
+                                       mySurfaceView.getMediaPlayerCurrentPosition() /
+                                       CurrentVideoHolder.getInstance().getVideoLen()
+                       );
+                   }
+                   handler.postDelayed(this, 10);
                }
            });
     }
