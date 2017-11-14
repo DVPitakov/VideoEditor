@@ -27,14 +27,18 @@ import com.example.dmitry.videoeditor.Vidgets.ImageElement;
 import com.example.dmitry.videoeditor.Vidgets.RisunocImage;
 import com.example.dmitry.videoeditor.Vidgets.TextImage;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -42,6 +46,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.ExoPlaybackException;
 
 import java.io.IOException;
 
@@ -129,6 +136,7 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     SimpleExoPlayer mediaPlayer;
+    boolean durationSet = false;
     Context context;
     SurfaceHolder surfaceHolder;
     ContentResolver cR;
@@ -191,8 +199,10 @@ public class MySurfaceView extends SurfaceView implements
     }
     public long getMediaPlayerCurrentPosition() {
         if(mediaPlayer != null) {
-            mediaPlayer.getDuration();
-            return mediaPlayer.getContentPosition();
+            //mediaPlayer.getDuration();
+            //return mediaPlayer.getContentPosition();
+            long position = mediaPlayer.getCurrentPosition();
+            return position;
         }
         else {
             return -1;
@@ -332,6 +342,51 @@ public class MySurfaceView extends SurfaceView implements
                         dataSourceFactory, extractorsFactory, null, null);
                 // Prepare the player with the source.
                 mediaPlayer.prepare(videoSource);
+                mediaPlayer.addListener(new Player.EventListener() {
+                    @Override
+                    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                        if (playbackState == Player.STATE_READY && !durationSet) {
+                            long realDurationMillis = mediaPlayer.getDuration();
+                            CurrentVideoHolder.getInstance().setVideoLen(realDurationMillis);
+                            durationSet = true;
+                        }
+
+                    }
+
+                    /*@Override
+                    public void onPlayWhenReadyCommitted() {
+                        // No op.
+                    }*/
+                    @Override
+                    public void onRepeatModeChanged(@Player.RepeatMode int repeatMode) {
+                        // Do nothing
+                    }
+                    @Override
+                    public void onTimelineChanged(Timeline timeline, Object manifest) {
+                        // Do nothing
+                    }
+                    @Override
+                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                        // Do nothing
+                    }
+                    @Override
+                    public void onPositionDiscontinuity() {
+                        // Do nothing
+                    }
+                    @Override
+                    public void onPlayerError(ExoPlaybackException error) {
+                        // No op.
+                    }
+                    @Override
+                    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+                        // No op.
+                    }
+                    @Override
+                    public void onLoadingChanged(boolean isLoading) {
+
+                    }
+                });
+                CurrentVideoHolder.getInstance().setVideoLen(mediaPlayer.getDuration());
                 /*mediaPlayer = new MediaPlayer();
                 mediaPlayer.setDataSource(context, UrlHolder._getInputUri());
                 mediaPlayer.setSurface(surfaceHolder.getSurface());
