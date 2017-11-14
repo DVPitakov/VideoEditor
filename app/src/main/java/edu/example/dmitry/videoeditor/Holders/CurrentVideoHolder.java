@@ -22,7 +22,7 @@ public class CurrentVideoHolder {
     private long videoLen;
     private long updatedVideoLen;
     private VideoShower mediaPlayer;
-    private DecodeVideo.Type compressType;
+    private DecodeVideo.Type compressType = DecodeVideo.Type.MEDIUM_QUALITY;
 
     public DecodeVideo.Type getCompressType() {
         return compressType;
@@ -66,10 +66,6 @@ public class CurrentVideoHolder {
 
     public void setCurrentMediaPlayer(VideoShower mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
-    }
-
-    public void removeCurrentVideoPlayer() {
-        this.mediaPlayer = null;
     }
 
     public void showNewVideo() {

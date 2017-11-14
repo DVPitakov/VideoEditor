@@ -72,7 +72,7 @@
                     android:layout_gravity="end">
                     <ImageButton
                         android:layout_margin="10dp"
-                        android:id="@+id/crosButton2"
+                        android:id="@+id/send_button"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:layout_gravity="center"

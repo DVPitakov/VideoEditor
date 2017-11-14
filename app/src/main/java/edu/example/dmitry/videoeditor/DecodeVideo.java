@@ -39,7 +39,7 @@ public class DecodeVideo {
         Decoder decoder = new Decoder();
         */
         _context = context;
-        long size = 1000000;
+        long size = 1000;
         long scale = 1;
         setDuration((end - start)*scale);
         VideoController.setStartTime((long) start*size);

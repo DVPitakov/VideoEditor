@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
+import edu.example.dmitry.videoeditor.DecodeVideo;
 import edu.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.Holders.UrlHolder;
@@ -33,14 +34,7 @@ import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.SettingsVideo;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link VideoPlayerFragment.OnVideoPlayerFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link VideoPlayerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class VideoPlayerFragment extends Fragment implements VideoCropView.VideoCropViewListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,11 +50,10 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
     private View rootView;
     private boolean isPlaying = false;
     private boolean isUpdatable = true;
+    ImageButton sendButton;
     ImageButton playButton;
     ImageButton convertButton;
     ImageButton crosButton;
-    ImageButton showKroper;
-    RangeSeekBar rangebar;
     LinearLayout buttonsLayout;
     LinearLayout mainLinearLayout;
     Button assertButton;
@@ -69,29 +62,8 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
 
     private OnVideoPlayerFragmentInteractionListener mListener;
 
-    public VideoPlayerFragment() {
-        // Required empty public constructor
-    }
+    public VideoPlayerFragment() {}
 
-
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment VideoPlayerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static VideoPlayerFragment newInstance(String param1, String param2) {
-        VideoPlayerFragment fragment = new VideoPlayerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,11 +74,9 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_video_player, container, false);
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         Bitmap bitmap = null;
@@ -152,11 +122,24 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         buttonsLayout = (LinearLayout)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_video_player_buttons));
         playButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.playButton));
         convertButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.show_convert_menu));
-       // rangebar = (RangeSeekBar)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.rangebar1));
+        sendButton = (ImageButton)(rootView.findViewById(R.id.send_button));
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ConvertingProgressFragment().show(getActivity().getSupportFragmentManager()
+                        , ConvertingProgressFragment.class.getName());
+                Log.d("2010", "leftCur" + leftCur);
+                Log.d("2010", "rightCur" + rightCur);
+                new DecodeVideo(getActivity(), leftCur,rightCur
+                        , CurrentVideoHolder.getInstance().getCompressType());
+
+            }
+        });
+
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("1996", "I am here 0849");
                 isPlaying = !isPlaying;
                 if(isPlaying) {
                     playButton.setImageDrawable(rootView.getResources().getDrawable(edu.example.dmitry.videoeditor.R.drawable.ic_pause_circle_filled_black_24dp));
@@ -165,7 +148,6 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
                     playButton.setImageDrawable(rootView.getResources().getDrawable(edu.example.dmitry.videoeditor.R.drawable.ic_play_circle_outline_black_24dp));
                 }
                 if (mListener != null) {
-                    Log.d("1996", "I am here 1524");
                     mListener.onVideoPlayerFragmentInteraction(isPlaying);
                 }
             }
@@ -179,22 +161,10 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
             }
         });
         crosButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.crosButton));
-        crosButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mListener != null) {
-                    int ll = rangebar.getSelectedMinValue().intValue();
-                    int rr = rangebar.getSelectedMaxValue().intValue();
-                    int left = rangebar.getAbsoluteMinValue().intValue();
-                    int right = rangebar.getAbsoluteMaxValue().intValue();
-                    mListener.doVideoKrop(ll, rr, left, right);
-                }
-            }
-        });
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rangebar.setVisibility(View.GONE);
                 buttonsLayout.setVisibility(View.GONE);
                 mainLinearLayout.setVisibility(View.VISIBLE);
             }
@@ -202,7 +172,6 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         assertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                rangebar.setVisibility(View.GONE);
                 buttonsLayout.setVisibility(View.GONE);
                 mainLinearLayout.setVisibility(View.VISIBLE);
             }
@@ -282,11 +251,14 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
     }
 
+    public float leftCur = 0;
+    public float rightCur = 0;
     @Override
     public void onLeftCurMoveEnd(float newPos) {
         isUpdatable = true;
         SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
         SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
+        leftCur = newPos / 100 * CurrentVideoHolder.getInstance().getVideoLen();
     }
 
     @Override
@@ -295,6 +267,7 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         SurfaceViewHolder.getInstance().getMySurfaceView().pauseVideo();
         SurfaceViewHolder.getInstance().getMySurfaceView().continueVideo(newPos);
         videoEnd();
+        rightCur = newPos / 100 * CurrentVideoHolder.getInstance().getVideoLen();
     }
 
     @Override
@@ -309,16 +282,6 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
     }
 
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnVideoPlayerFragmentInteractionListener {
         // TODO: Update argument type and name
         void onVideoPlayerFragmentInteraction(boolean bul);

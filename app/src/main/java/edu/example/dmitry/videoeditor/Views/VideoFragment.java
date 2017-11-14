@@ -127,16 +127,12 @@ public class VideoFragment extends Fragment
     @Override
     public void onVideoPlayerFragmentInteraction(boolean bul) {
             if(mySurfaceView.mediaPlayerIsPlaying()) {
-                Log.d("1999", "mySurfaceView.mediaPlayerIsPlaying() true");
                 mySurfaceView.mediaPlayerPause();
             }
             else {
-                Log.d("1999", "mySurfaceView.mediaPlayerIsPlaying() false");
                 mySurfaceView.mediaPlayerStart();
             }
     }
-
-    boolean updatable = true;
 
     @Override
     public void ready(Object object) {
@@ -184,17 +180,12 @@ public class VideoFragment extends Fragment
                 .show(getFragmentManager(), ConvertingProgressFragment.class.getName());
         new DecodeVideo(getActivity(), time_start,time_end
                 , CurrentVideoHolder.getInstance().getCompressType());
-        Log.d("1312", "START TIME: " +  String.valueOf(time_start));
-        Log.d("1312", "END TIME: " +  String.valueOf(time_end));
     }
 
     @Override
     public void onConvertingFragmentInteraction(Uri uri) {
 
     }
-
-    //TODO
-    //            convertingProgressFragment.setProgess(); - отображает прогресс
 
     //TODO устанавливает режим конвертации видео
     @Override

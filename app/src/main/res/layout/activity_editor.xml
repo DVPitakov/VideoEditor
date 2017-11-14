@@ -44,6 +44,7 @@
 
     <FrameLayout
         android:background="@drawable/dialog_background"
+        android:translationZ="10dp"
         android:id="@+id/message_pos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
