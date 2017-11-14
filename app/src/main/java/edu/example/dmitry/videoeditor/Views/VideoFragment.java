@@ -109,13 +109,6 @@ public class VideoFragment extends Fragment
     @Override
     public void onDetach() {
         super.onDetach();
-        android.support.v4.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (videoPlayerFragment != null) {
-            fragmentTransaction.remove(videoPlayerFragment);
-        }
-        fragmentTransaction.commit();
-        mListener = null;
         mListener = null;
     }
 
@@ -134,12 +127,19 @@ public class VideoFragment extends Fragment
             }
     }
 
+    private boolean deleted = false;
+    @Override
+    public void onDestroy() {
+        deleted = true;
+        super.onDestroy();
+    }
+
     @Override
     public void ready(Object object) {
            getActivity().runOnUiThread(new Runnable() {
                @Override
                public void run() {
-                   if(videoPlayerFragment != null) {
+                   if(videoPlayerFragment != null && !deleted) {
                        videoPlayerFragment.updateProgess(
                                100f *
                                        mySurfaceView.getMediaPlayerCurrentPosition() /
