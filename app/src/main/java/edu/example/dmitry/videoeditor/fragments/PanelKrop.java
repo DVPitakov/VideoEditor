@@ -6,7 +6,7 @@ import android.widget.AdapterView;
 import edu.example.dmitry.videoeditor.adapters.ImageAdapter;
 import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.models.IconWithText;
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.R;
 
 import java.util.ArrayList;

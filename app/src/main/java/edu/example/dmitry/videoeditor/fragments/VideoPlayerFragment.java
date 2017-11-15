@@ -23,7 +23,7 @@ import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.holders.UrlHolder;
 import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.SettingsVideo;
-
+import edu.example.dmitry.videoeditor.views.VideoCropView;
 
 
 public class VideoPlayerFragment extends Fragment implements VideoCropView.VideoCropViewListener {

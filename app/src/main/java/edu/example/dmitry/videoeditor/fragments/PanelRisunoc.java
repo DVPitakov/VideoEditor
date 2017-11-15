@@ -9,7 +9,7 @@ import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
 import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.models.IconWithText;
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.items.RisunocItem;
 import edu.example.dmitry.videoeditor.Tools;

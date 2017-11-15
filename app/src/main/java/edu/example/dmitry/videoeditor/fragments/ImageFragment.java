@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 import edu.example.dmitry.videoeditor.EditorActivity;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.items.RisunocItem;
 import edu.example.dmitry.videoeditor.items.TextItem;
 import edu.example.dmitry.videoeditor.Tools;

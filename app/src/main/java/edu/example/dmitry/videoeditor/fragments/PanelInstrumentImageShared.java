@@ -10,12 +10,14 @@ import android.widget.EditText;
 
 import edu.example.dmitry.videoeditor.adapters.ImageAdapter;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
+import edu.example.dmitry.videoeditor.holders.HistoryHolder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
 import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.items.RisunocItem;
 import edu.example.dmitry.videoeditor.items.TextItem;
 import edu.example.dmitry.videoeditor.models.IconWithText;
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.models.SettingsData;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.R;
 
 
@@ -40,8 +42,8 @@ public class PanelInstrumentImageShared extends ImageAdapter {
         arrayList.add(new IconWithText(R.drawable.ic_account_box_white_24dp, "Фон"));
         arrayList.add(new IconWithText(R.drawable.ic_photo_camera_white_24dp, "Камера"));
         arrayList.add(new IconWithText(R.drawable.ic_settings_black_24dp, "Настрой"));
-        arrayList.add(new IconWithText(R.drawable.white_24dp, ""));
-        arrayList.add(new IconWithText(R.drawable.white_24dp, ""));
+        arrayList.add(new IconWithText(R.drawable.ic_chevron_left_white_24dp, "Отмена"));
+        arrayList.add(new IconWithText(R.drawable.ic_chevron_right_white_24dp, "Вперед"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             int i = 0;
             @Override
@@ -80,6 +82,20 @@ public class PanelInstrumentImageShared extends ImageAdapter {
                     case 3: {
                         Log.d("1216", "i am here");
                         editorActivity.showFragment(SettingsFragment.class, R.id.settings_pos);
+                        break;
+                    }
+                    case 4: {
+                         if(SettingsData.getInstance(getContext()).isHistory() &&  HistoryHolder.getInstance().back()) {
+                             SurfaceViewHolder.getInstance().getMySurfaceView().focusLose();
+                             SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                         }
+                        break;
+                    }
+                    case 5: {
+                        if(HistoryHolder.getInstance().future()) {
+                            SurfaceViewHolder.getInstance().getMySurfaceView().focusLose();
+                            SurfaceViewHolder.getInstance().getMySurfaceView().draw();
+                        }
                         break;
                     }
                 }

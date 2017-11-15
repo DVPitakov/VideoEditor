@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
 
+import edu.example.dmitry.videoeditor.holders.HistoryHolder;
 import edu.example.dmitry.videoeditor.models.SettingsData;
 import edu.example.dmitry.videoeditor.Tools;
 
@@ -27,6 +28,7 @@ public abstract class BaseItem {
 
     protected int touchX = 0;
     protected int touchY = 0;
+    private float spsificAlpha = 0;
 
     protected Rect rect;
     protected int x = 0;
@@ -45,6 +47,9 @@ public abstract class BaseItem {
     float p1;
     float p2;
 
+    public int getActionType() {
+        return action;
+    }
     public BaseItem(View view) {
         this.view = view;
         //if (rot == null) {
@@ -164,6 +169,7 @@ public abstract class BaseItem {
             Log.d("2240", "" + p1 + " " +  p2);
             Log.d("2240", "" + x + " " + y);
             setAlpha(Tools.getAlpha(0, 0, p1, p2, points[0], points[1], p1, p2));
+            spsificAlpha += this.alpha;
             saveAlpha();
         }
         else if (action == 4) {
@@ -176,11 +182,20 @@ public abstract class BaseItem {
 
     }
 
-    public void moveEnd() {
+    public HistoryHolder.Action moveEnd() {
+        HistoryHolder.Action action = null;
+        if(this.action == 2) {
+            action = new HistoryHolder.RotateAndScale(this, spsificAlpha + alpha, 1);
+        }
+        else if(this.action == 4) {
+            action = new HistoryHolder.RotateAndScale(this, 0, timeScale);
+        }
         saveLeft();
         saveTop();
         saveAlpha();
         saveScale();
+        spsificAlpha = 0; //O_o
+        return action;
     }
 
     protected void saveScale() {

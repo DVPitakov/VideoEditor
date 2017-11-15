@@ -1,4 +1,4 @@
-package edu.example.dmitry.videoeditor;
+package edu.example.dmitry.videoeditor.views;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -17,6 +17,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import edu.example.dmitry.videoeditor.ImageEditor;
+import edu.example.dmitry.videoeditor.ImageEventTransformator;
+import edu.example.dmitry.videoeditor.SettingsVideo;
+import edu.example.dmitry.videoeditor.Tools;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
 import edu.example.dmitry.videoeditor.holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.holders.HistoryHolder;
@@ -208,6 +212,9 @@ public class MySurfaceView extends SurfaceView implements
             else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof ImageItem) {
                 ((ImageItem) CurrentElementHolder.getInstance().getCurrentElement()).saveImageSize();
             }
+            HistoryHolder.getInstance().addAction(new HistoryHolder.RotateAndScale(CurrentElementHolder.getInstance().getCurrentElement(), 0, scale));
+
+
 
         }
     };
@@ -265,8 +272,13 @@ public class MySurfaceView extends SurfaceView implements
             alignLeftOld = alignLeft;
             alignTopOld = alignTop;
             if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
-                HistoryHolder.getInstance().addAction(new HistoryHolder.Move(CurrentElementHolder.getInstance().getCurrentElement(), (int)dx, (int)dy));
-                CurrentElementHolder.getInstance().getCurrentElement().moveEnd();
+                if (CurrentElementHolder.getInstance().getCurrentElement().getActionType() == 1) {
+                    HistoryHolder.getInstance().addAction(new HistoryHolder.Move(CurrentElementHolder.getInstance().getCurrentElement(), (int) dx, (int) dy));
+                }
+                HistoryHolder.Action action = CurrentElementHolder.getInstance().getCurrentElement().moveEnd();
+                if(action != null) {
+                    HistoryHolder.getInstance().addAction(action);
+                }
                 ImageHolder.getInstance().setBitmapWithElements(null);
                 if(CurrentElementHolder.getInstance().getCurrentElement() instanceof RisunocItem) {
                     ((RisunocItem) CurrentElementHolder.getInstance().getCurrentElement()).newLine();
@@ -290,7 +302,12 @@ public class MySurfaceView extends SurfaceView implements
         @Override
         public void onRotateEnd(float alphaNotDegree) {
             if (CurrentElementHolder.getInstance().getCurrentElement() != null) {
-                CurrentElementHolder.getInstance().getCurrentElement().moveEnd();
+                HistoryHolder.Action action = CurrentElementHolder.getInstance().getCurrentElement().moveEnd();
+                if(action != null) {
+                    HistoryHolder.getInstance().addAction(action);
+                }
+                HistoryHolder.getInstance().addAction(new HistoryHolder.RotateAndScale(CurrentElementHolder.getInstance().getCurrentElement(), alphaNotDegree, 1));
+
             }
         }
     };

@@ -1,4 +1,4 @@
-package edu.example.dmitry.videoeditor.fragments;
+package edu.example.dmitry.videoeditor.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -235,7 +235,7 @@ public class VideoCropView extends View {
         }
         return true;
     }
-    void setProgress(float progress) {
+    public void setProgress(float progress) {
         float vWidth = getWidth() - 2 * borderWidth;
         float vLeftCur = (leftCur+leftCurTemp - leftest) / (rightest - leftest) * (vWidth);
         float vRightCur = (rightCur+rightCurTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;

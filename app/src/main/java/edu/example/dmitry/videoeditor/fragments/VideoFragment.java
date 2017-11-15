@@ -16,7 +16,7 @@ import edu.example.dmitry.videoeditor.holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.DecodeVideo;
 import edu.example.dmitry.videoeditor.Decoder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.SettingsVideo;
 
 /**

@@ -1,6 +1,6 @@
 package edu.example.dmitry.videoeditor.holders;
 
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 
 /**
  * Created by dmitry on 21.10.17.

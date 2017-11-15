@@ -13,7 +13,7 @@ import edu.example.dmitry.videoeditor.adapters.StickerAdapter;
 import edu.example.dmitry.videoeditor.EditorActivity;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
 import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
-import edu.example.dmitry.videoeditor.MySurfaceView;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.items.ImageItem;
 

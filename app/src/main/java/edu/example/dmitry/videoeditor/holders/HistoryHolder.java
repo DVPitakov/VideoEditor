@@ -16,8 +16,11 @@ import java.util.Stack;
 
 public class HistoryHolder {
     public int lastEffect = 0;
+    public int futureEffect = 0;
     public Rect lastKrop = null;
+    public Rect futureKrop = null;
     private Stack<Action> actions = new Stack<>();
+    private Stack<Action> futureActions = new Stack<>();
     private static HistoryHolder instance;
     private HistoryHolder() {};
     public static HistoryHolder getInstance() {
@@ -31,9 +34,27 @@ public class HistoryHolder {
         actions.push(action);
     }
 
+
+    public boolean clear() {
+        actions = new Stack<>();
+        return false;
+    }
+
+    public boolean future() {
+        if(futureActions.size() > 0) {
+            Action action = futureActions.pop();
+            actions.add(action);
+            action.forward();
+            return true;
+        }
+        return false;
+    }
+
     public boolean back() {
         if(actions.size() > 0) {
             Action action = actions.pop();
+            Log.d("action_class", action.getClass().toString());
+            futureActions.add(action);
             action.back();
             return true;
         }
@@ -41,6 +62,7 @@ public class HistoryHolder {
     }
     public static abstract class Action {
         public abstract void back();
+        public void forward(){}
     }
 
     public static class Krop extends Action{
@@ -56,6 +78,13 @@ public class HistoryHolder {
                     begin.left, begin.top, begin.right, begin.bottom));
             HistoryHolder.getInstance().lastKrop = begin;
         }
+
+        @Override
+        public void forward() {
+            ImageHolder.getInstance().setKropedBitmap(ImageEditor.krop(ImageHolder.getInstance().getDefaultBitmap(),
+                    end.left, end.top, end.right, end.bottom));
+            HistoryHolder.getInstance().futureKrop = end;
+        }
     }
 
     public static class Effect extends Action{
@@ -68,7 +97,6 @@ public class HistoryHolder {
 
         @Override
         public void back() {
-            Log.d("0209", "" + begin + " " + end);
             Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
             if(kropedBitmap == null) {
                 kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
@@ -76,6 +104,17 @@ public class HistoryHolder {
             }
             HistoryHolder.getInstance().lastEffect = begin;
             ImageHolder.getInstance().setFreshBitmap(ImageEditor.getEffectByNum(begin, kropedBitmap));
+        }
+
+        @Override
+        public void forward() {
+            Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
+            if(kropedBitmap == null) {
+                kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
+                ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
+            }
+            HistoryHolder.getInstance().futureEffect = end;
+            ImageHolder.getInstance().setFreshBitmap(ImageEditor.getEffectByNum(end, kropedBitmap));
         }
 
     }
@@ -90,6 +129,11 @@ public class HistoryHolder {
             ImageEditorQueue.getInstance().deleteElement(item);
             ImageHolder.getInstance().setBitmapWithElements(null);
         }
+        @Override
+        public void forward() {
+            ImageEditorQueue.getInstance().addElement(item);
+            ImageHolder.getInstance().setBitmapWithElements(null);
+        }
     }
 
     public static class DeleteItem extends Action {
@@ -102,13 +146,18 @@ public class HistoryHolder {
             ImageEditorQueue.getInstance().addElement(item);
             ImageHolder.getInstance().setBitmapWithElements(null);
         }
+        @Override
+        public void forward() {
+            ImageEditorQueue.getInstance().deleteElement(item);
+            ImageHolder.getInstance().setBitmapWithElements(null);
+        }
     }
 
     public static class RotateAndScale extends Action {
         BaseItem item;
         float alph;
         float scale;
-        RotateAndScale(BaseItem item, float alph, float scale) {
+        public RotateAndScale(BaseItem item, float alph, float scale) {
             this.item = item;
             this.alph = alph;
             this.scale = scale;
@@ -116,7 +165,14 @@ public class HistoryHolder {
         @Override
         public void back() {
             item.setAlpha(- alph);
-            item.scale(1 / scale);
+            item.scale(1f / scale);
+            item.moveEnd();
+            ImageHolder.getInstance().setBitmapWithElements(null);
+        }
+        @Override
+        public void forward() {
+            item.setAlpha(alph);
+            item.scale(scale);
             item.moveEnd();
             ImageHolder.getInstance().setBitmapWithElements(null);
         }

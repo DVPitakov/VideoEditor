@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import edu.example.dmitry.videoeditor.fragments.PanelColors;
 import edu.example.dmitry.videoeditor.fragments.PanelInstrumentImage;
 import edu.example.dmitry.videoeditor.fragments.PanelStckers;
+import edu.example.dmitry.videoeditor.models.SettingsData;
 
 public class EditorActivity extends FragmentActivity {
     public final static String INPUT_URI = "inputUri";
@@ -48,11 +49,12 @@ public class EditorActivity extends FragmentActivity {
                     .remove(f)
                     .commit();
         }
-        else if(HistoryHolder.getInstance().back()) {
+        else if(SettingsData.getInstance(getApplicationContext()).isHistory() &&  HistoryHolder.getInstance().back()) {
             SurfaceViewHolder.getInstance().getMySurfaceView().focusLose();
             SurfaceViewHolder.getInstance().getMySurfaceView().draw();
         }
         else {
+            HistoryHolder.getInstance().clear();
             super.onBackPressed();
         }
     }

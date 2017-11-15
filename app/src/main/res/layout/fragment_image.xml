@@ -44,12 +44,13 @@
             android:layout_height="wrap_content">
         </FrameLayout>
         <FrameLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_gravity="right|bottom"
             android:layout_width="60dp"
             android:layout_height="60dp">
             <ImageButton
-                android:layout_marginRight="3dp"
-                android:layout_marginBottom="3dp"
+
                 android:id="@+id/fragment_image_send_button"
                 android:background="@drawable/round_24dp"
                 android:paddingLeft="3dp"
@@ -58,12 +59,12 @@
                 android:layout_height="60dp" />
         </FrameLayout>
         <FrameLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_gravity="left|bottom"
             android:layout_width="60dp"
             android:layout_height="60dp">
             <ImageButton
-                android:layout_marginLeft="3dp"
-                android:layout_marginBottom="3dp"
                 android:id="@+id/fragment_image_ok_button"
                 android:background="@drawable/round_24dp"
                 android:paddingLeft="3dp"
