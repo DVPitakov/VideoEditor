@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@android:color/white"
     android:clickable="true"
-    tools:context="edu.example.dmitry.videoeditor.Views.SettingsFragment">
+    tools:context="edu.example.dmitry.videoeditor.fragments.SettingsFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

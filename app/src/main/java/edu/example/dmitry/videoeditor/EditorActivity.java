@@ -3,30 +3,27 @@ package edu.example.dmitry.videoeditor;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import edu.example.dmitry.videoeditor.Holders.FontHolder;
-import edu.example.dmitry.videoeditor.Holders.HistoryHolder;
-import edu.example.dmitry.videoeditor.Holders.ImageHolder;
-import edu.example.dmitry.videoeditor.Holders.SurfaceViewHolder;
-import edu.example.dmitry.videoeditor.Views.ElementRedactorFragment;
-import edu.example.dmitry.videoeditor.Views.ImageFragment;
-import edu.example.dmitry.videoeditor.Views.SettingsFragment;
-import edu.example.dmitry.videoeditor.Views.VideoFragment;
+import edu.example.dmitry.videoeditor.holders.FontHolder;
+import edu.example.dmitry.videoeditor.holders.HistoryHolder;
+import edu.example.dmitry.videoeditor.holders.ImageHolder;
+import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
+import edu.example.dmitry.videoeditor.fragments.ElementRedactorFragment;
+import edu.example.dmitry.videoeditor.fragments.ImageFragment;
+import edu.example.dmitry.videoeditor.fragments.SettingsFragment;
+import edu.example.dmitry.videoeditor.fragments.VideoFragment;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import layout.PanelColors;
-import layout.PanelInstrumentImage;
-import layout.PanelStckers;
+import edu.example.dmitry.videoeditor.fragments.PanelColors;
+import edu.example.dmitry.videoeditor.fragments.PanelInstrumentImage;
+import edu.example.dmitry.videoeditor.fragments.PanelStckers;
 
 public class EditorActivity extends FragmentActivity {
     public final static String INPUT_URI = "inputUri";

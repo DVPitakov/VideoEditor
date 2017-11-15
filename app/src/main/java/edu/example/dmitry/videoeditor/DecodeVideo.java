@@ -2,7 +2,7 @@ package edu.example.dmitry.videoeditor;
 
 import android.content.Context;
 
-import edu.example.dmitry.videoeditor.Holders.CurrentVideoHolder;
+import edu.example.dmitry.videoeditor.holders.CurrentVideoHolder;
 //import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 //import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 //import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;

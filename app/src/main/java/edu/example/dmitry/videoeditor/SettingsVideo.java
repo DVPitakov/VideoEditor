@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import edu.example.dmitry.videoeditor.Holders.UrlHolder;
+import edu.example.dmitry.videoeditor.holders.UrlHolder;
 
 /**
  * Created by alexandr on 22.10.17.
