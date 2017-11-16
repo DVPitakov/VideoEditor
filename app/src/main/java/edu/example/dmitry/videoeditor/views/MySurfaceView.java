@@ -212,9 +212,9 @@ public class MySurfaceView extends SurfaceView implements
             else if (CurrentElementHolder.getInstance().getCurrentElement() instanceof ImageItem) {
                 ((ImageItem) CurrentElementHolder.getInstance().getCurrentElement()).saveImageSize();
             }
-            HistoryHolder.getInstance().addAction(new HistoryHolder.RotateAndScale(CurrentElementHolder.getInstance().getCurrentElement(), 0, scale));
-
-
+            if (CurrentElementHolder.getInstance().getCurrentElement() != null)  {
+                HistoryHolder.getInstance().addAction(new HistoryHolder.RotateAndScale(CurrentElementHolder.getInstance().getCurrentElement(), 0, scale));
+            }
 
         }
     };
