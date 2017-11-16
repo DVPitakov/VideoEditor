@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import edu.example.dmitry.videoeditor.fragments.PanelColors;
 import edu.example.dmitry.videoeditor.fragments.PanelInstrumentImage;
 import edu.example.dmitry.videoeditor.fragments.PanelStckers;
+import edu.example.dmitry.videoeditor.items.ImageEditorQueue;
 import edu.example.dmitry.videoeditor.models.SettingsData;
 
 public class EditorActivity extends FragmentActivity {
@@ -173,11 +174,25 @@ public class EditorActivity extends FragmentActivity {
 
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int state = 0;
+        if (savedInstanceState != null) {
+            state = savedInstanceState.getInt(EDITOR_STATE);
+
+        }
         setContentView(R.layout.activity_editor);
-        ImageHolder.getInstance().clear();
+        if (state == 1) {
+            ImageHolder.getInstance().setFreshBitmap(null);
+        }
+        else {
+            ImageHolder.getInstance().clear();
+            HistoryHolder.getInstance().clear();
+            ImageEditorQueue.getInstance().clear();
+        }
         editText = (EditText)findViewById(R.id.edutText);
         editText.addTextChangedListener(new TextWatcher() {
                                             @Override
@@ -213,6 +228,8 @@ public class EditorActivity extends FragmentActivity {
         }
     }
 
+    private final String EDITOR_STATE = "ImageHolder.editor_state";
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -224,6 +241,10 @@ public class EditorActivity extends FragmentActivity {
         if (videoFragment != null) {
             fragmentTransaction.remove(videoFragment);
         }
+
+        savedInstanceState.putInt(EDITOR_STATE, 1);
+
+
         SurfaceViewHolder.getInstance().setMySurfaceView(null);
         fragmentTransaction.commit();
         super.onSaveInstanceState(savedInstanceState);

@@ -91,11 +91,13 @@ public class ImageFragment extends Fragment {
         mySurfaceView.setFocusListener(
                 new MySurfaceView.FocusListener() {
             @Override
-            public void focusLosed() {
+            public void focusLosed(boolean setDefaultMenu) {
                 editText.setText("");
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                ((EditorActivity)(getActivity())).showDefaultImageHeader();
+                if (setDefaultMenu) {
+                    ((EditorActivity) (getActivity())).showDefaultImageHeader();
+                }
                 ((EditorActivity)(getActivity())).removeFragment(PanelColors.class);
 
             }

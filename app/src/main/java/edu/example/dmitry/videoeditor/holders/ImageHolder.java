@@ -3,6 +3,7 @@ package edu.example.dmitry.videoeditor.holders;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -15,10 +16,6 @@ import java.io.IOException;
  */
 
 public class ImageHolder {
-    public void setDefaultBitmap(Bitmap defaultBitmap) {
-        this.defaultBitmap = defaultBitmap;
-    }
-
     private  Bitmap defaultBitmap;
 
     private  Bitmap kropedBitmap;
@@ -59,8 +56,9 @@ public class ImageHolder {
         }
     }
 
-    public Bitmap getSmallImage(Activity activity) {
 
+
+    public Bitmap getSmallImage(Activity activity) {
         return Bitmap
                 .createScaledBitmap(kropedBitmap,
                         (int)activity.getResources().getDimension(edu.example.dmitry.videoeditor.R.dimen.small_img_width)

@@ -78,7 +78,7 @@ public class MySurfaceView extends SurfaceView implements
         imageEditorQueue.deleteElement(CurrentElementHolder.getInstance().getCurrentElement());
         CurrentElementHolder.getInstance().removeCurrentElement();
         if(focusListener != null) {
-            focusListener.focusLosed();
+            focusListener.focusLosed(true);
         }
     }
 
@@ -88,7 +88,7 @@ public class MySurfaceView extends SurfaceView implements
 
 
     public interface FocusListener {
-        void focusLosed();
+        void focusLosed(boolean setDefaultMenu);
         void focusTaken();
         void doubleClick();
     }
@@ -99,7 +99,7 @@ public class MySurfaceView extends SurfaceView implements
     }
     private void focusLosed() {
         if(focusListener != null) {
-            focusListener.focusLosed();
+            focusListener.focusLosed(true);
             oldClickTime = 0;
         }
     }
@@ -600,7 +600,7 @@ public class MySurfaceView extends SurfaceView implements
 
     public void focusLose() {
         if (focusListener != null) {
-            focusListener.focusLosed();
+            focusListener.focusLosed(true);
         }
     }
 

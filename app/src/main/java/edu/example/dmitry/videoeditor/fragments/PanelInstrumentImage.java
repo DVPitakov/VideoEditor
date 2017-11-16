@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import edu.example.dmitry.videoeditor.adapters.ImageAdapter;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
+import edu.example.dmitry.videoeditor.holders.HistoryHolder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
 import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.models.IconWithText;
@@ -57,11 +58,11 @@ public class PanelInstrumentImage extends ImageAdapter {
     public PanelInstrumentImage() {
         super();
         arrayList = new ArrayList<IconWithText>();
-        arrayList.add(new IconWithText(R.drawable.ic_crop_white_24dp, "Кроп"));
+        arrayList.add(new IconWithText(R.drawable.ic_crop_white_24dp, "Обрезать"));
         arrayList.add(new IconWithText(R.drawable.ic_text_fields_white_24dp, "Текст"));
         arrayList.add(new IconWithText(R.drawable.ic_photo_filter_white_24dp, "Эффект"));
         arrayList.add(new IconWithText(R.drawable.ic_image_white_24dp, "Стикер"));
-        arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Отмена"));
+        arrayList.add(new IconWithText(R.drawable.ic_cancel_black_24dp, "Сброс"));
         arrayList.add(new IconWithText(R.drawable.ic_keyboard_arrow_down_white_24dp, "InDev"));
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             boolean sharedOpen = false;
@@ -99,6 +100,7 @@ public class PanelInstrumentImage extends ImageAdapter {
                     case 4: {
                         ImageHolder.getInstance().setKropedBitmap(null);
                         mySurfaceView.imageEditorQueue.clear();
+                        HistoryHolder.getInstance().clear();
                         mySurfaceView.draw();
                         break;
                     }

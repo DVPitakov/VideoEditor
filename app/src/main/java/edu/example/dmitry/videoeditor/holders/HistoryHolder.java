@@ -37,6 +37,8 @@ public class HistoryHolder {
 
     public boolean clear() {
         actions = new Stack<>();
+        futureActions = new Stack<>();
+        lastEffect = 0;
         return false;
     }
 
