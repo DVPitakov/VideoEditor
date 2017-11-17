@@ -154,6 +154,13 @@ public abstract class BaseItem {
     public void __force_set_action_1() {
         action = 1;
     }
+
+    public void move(int x, int y, int action) {
+
+        this.action = action;
+        move(x, y);
+    }
+
     public void move(int x, int y) {
         if (action == 1) {
             this.x = x;

@@ -2,6 +2,7 @@ package edu.example.dmitry.videoeditor.items;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import edu.example.dmitry.videoeditor.holders.HistoryHolder;
 
@@ -65,8 +66,10 @@ public class ImageEditorQueue {
     }
 
     public void moveAll(int dx, int dy) {
+        Log.d("gooding", "dx: " + dx);
+        Log.d("gooding", "dy: " + dy);
         for(BaseItem baseItem : images) {
-            baseItem.move(dx, dy);
+            baseItem.move(dx, dy, 1);
             baseItem.moveEnd();
         }
     }

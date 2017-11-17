@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 
+import edu.example.dmitry.videoeditor.ImageEditor;
 import edu.example.dmitry.videoeditor.adapters.ImageAdapter;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
 import edu.example.dmitry.videoeditor.holders.HistoryHolder;
@@ -38,9 +39,9 @@ public class PanelInstrumentImageShared extends ImageAdapter {
 
     public PanelInstrumentImageShared() {
         super();
-        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисовать"));
-        arrayList.add(new IconWithText(R.drawable.ic_account_box_white_24dp, "Фон"));
-        arrayList.add(new IconWithText(R.drawable.ic_photo_camera_white_24dp, "Камера"));
+        arrayList.add(new IconWithText(R.drawable.ic_mode_edit_white_24dp, "Рисунок"));
+        arrayList.add(new IconWithText(R.drawable.ic_otrozit_white_24dp, "Отразить"));
+        arrayList.add(new IconWithText(R.drawable.ic_crop_rotate_white_24dp, "Поворот"));
         arrayList.add(new IconWithText(R.drawable.ic_settings_black_24dp, "Настрой"));
         arrayList.add(new IconWithText(R.drawable.ic_chevron_left_white_24dp, "Отмена"));
         arrayList.add(new IconWithText(R.drawable.ic_chevron_right_white_24dp, "Вперед"));
@@ -63,20 +64,17 @@ public class PanelInstrumentImageShared extends ImageAdapter {
                         break;
                     }
                     case 1: {
-                        CurrentElementHolder.getInstance().removeCurrentElement();
-                        ((EditText)(editorActivity.findViewById(R.id.edutText))).setText("");
-                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(((EditText)(editorActivity.findViewById(R.id.edutText))), InputMethodManager.SHOW_FORCED);
-                        PointF pf = SurfaceViewHolder.getInstance().getMySurfaceView().getCenter();
-                        mySurfaceView.addImageElement(new TextItem(SurfaceViewHolder.getInstance().getMySurfaceView(),"Новый текст", (int)pf.x, (int)pf.y));
-                        ImageHolder.getInstance().setBitmapWithElements(null);
-                        mySurfaceView.draw();
-                        editorActivity.showColors();
-                        editorActivity.showRedactorItemHeader();
+                        ImageHolder.getInstance().setKropedBitmap(ImageEditor.mirror(
+                                ImageHolder.getInstance().getKropedBitmap()
+                        ));
+                        SurfaceViewHolder.getInstance().getMySurfaceView().draw();
                         break;
                     }
                     case 2: {
-                        editorActivity.showFragment(HorizontalImagesScrallFragment.class, R.id.header_pos);
+                        ImageHolder.getInstance().setKropedBitmap(ImageEditor.rotate(
+                                ImageHolder.getInstance().getKropedBitmap()
+                        ));
+                        SurfaceViewHolder.getInstance().getMySurfaceView().draw();
                         break;
                     }
                     case 3: {

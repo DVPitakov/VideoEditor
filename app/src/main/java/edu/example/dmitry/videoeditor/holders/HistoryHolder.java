@@ -76,6 +76,7 @@ public class HistoryHolder {
         }
         @Override
         public void back() {
+            ImageEditorQueue.getInstance().moveAll( end.left - begin.left, end.top - begin.top);
             ImageHolder.getInstance().setKropedBitmap(ImageEditor.krop(ImageHolder.getInstance().getDefaultBitmap(),
                     begin.left, begin.top, begin.right, begin.bottom));
             HistoryHolder.getInstance().lastKrop = begin;
@@ -83,6 +84,7 @@ public class HistoryHolder {
 
         @Override
         public void forward() {
+            ImageEditorQueue.getInstance().moveAll(begin.left - end.left, begin.top - end.top);
             ImageHolder.getInstance().setKropedBitmap(ImageEditor.krop(ImageHolder.getInstance().getDefaultBitmap(),
                     end.left, end.top, end.right, end.bottom));
             HistoryHolder.getInstance().futureKrop = end;

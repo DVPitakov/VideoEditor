@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 /**
@@ -57,6 +58,26 @@ public class ImageEditor {
         return freshBitmap;
 
     }
+
+    public static Bitmap mirror(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1, 1);
+        android.graphics.Bitmap.Config config = bitmap.getConfig();
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+        return rotatedBitmap;
+
+    }
+
+
+    public static Bitmap rotate(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        android.graphics.Bitmap.Config config = bitmap.getConfig();
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return rotatedBitmap;
+
+    }
+
 
     public static Bitmap inversion(Bitmap bitmap) {
         ColorMatrix colorMatrix_Inverted =
