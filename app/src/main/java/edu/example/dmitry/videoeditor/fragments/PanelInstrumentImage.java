@@ -101,6 +101,7 @@ public class PanelInstrumentImage extends ImageAdapter {
                         ImageHolder.getInstance().setKropedBitmap(null);
                         mySurfaceView.imageEditorQueue.clear();
                         HistoryHolder.getInstance().clear();
+                        mySurfaceView.reset();
                         mySurfaceView.draw();
                         break;
                     }

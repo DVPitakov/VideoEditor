@@ -85,5 +85,6 @@ public class ImageEditorQueue {
     public void clear() {
         images = new ArrayList<>();
 
+
     }
 }

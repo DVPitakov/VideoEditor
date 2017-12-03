@@ -66,6 +66,12 @@ public class MySurfaceView extends SurfaceView implements
         }
     }
 
+    public void reset() {
+        loupeY = 1;
+        loupeX = 1;
+        savedLoupe = 1;
+    }
+
     public void canselKrop() {
         isKrop = false;
         kropFrame = null;
@@ -159,8 +165,9 @@ public class MySurfaceView extends SurfaceView implements
             BaseItem baseItem = CurrentElementHolder.getInstance().getCurrentElement();
             CurrentElementHolder
                     .getInstance()
-                    .setCurrentElement(imageEditorQueue.find((int)((dx/loupeX - alignLeft)),
-                    (int)((dy/loupeY - alignTop))));
+                    .setCurrentElement(imageEditorQueue.find(
+                            (int)((dx/loupeX - alignLeft)),
+                            (int)((dy/loupeY - alignTop))));
 
             if(CurrentElementHolder.getInstance().getCurrentElement() == null && !isKrop) {
                 if(baseItem instanceof RisunocItem
@@ -182,6 +189,7 @@ public class MySurfaceView extends SurfaceView implements
         }
     };
 
+    private float savedLoupe = 1;
     private ImageEventTransformator.OnScaleListener scaleListener = new ImageEventTransformator.OnScaleListener() {
         @Override
         public void onScale(float scale) {
@@ -196,8 +204,8 @@ public class MySurfaceView extends SurfaceView implements
                 }
             }
             else {
-                loupeX = scale;
-                loupeY = loupeX;
+                loupeX = savedLoupe * scale;
+                loupeY = savedLoupe * scale;
                 loupeX = Tools.normalizator(loupeX, 4, (float)0.2);
                 loupeY = Tools.normalizator(loupeY, 4, (float)0.2);
                 ImageHolder.getInstance().setScaledBitmap(null);
@@ -215,6 +223,9 @@ public class MySurfaceView extends SurfaceView implements
             if (CurrentElementHolder.getInstance().getCurrentElement() != null)  {
                 HistoryHolder.getInstance().addAction(new HistoryHolder.RotateAndScale(CurrentElementHolder.getInstance().getCurrentElement(), 0, scale));
             }
+            else {
+                savedLoupe = loupeX;
+            }
 
         }
     };
@@ -222,7 +233,7 @@ public class MySurfaceView extends SurfaceView implements
     public PointF getCenter() {
         PointF p = new PointF();
         p.x = getWidth()  / loupeX / 2 - alignLeft;
-        p.y = getHeight()  / loupeY / 2.5f - alignTop ;
+        p.y = getHeight()  / loupeY / 2.5f - alignTop;
         return p;
     }
 
@@ -315,6 +326,7 @@ public class MySurfaceView extends SurfaceView implements
     public MySurfaceView(Context context) {
         super(context);
         getHolder().addCallback(this);
+        savedLoupe = 1;
         this.cR = context.getContentResolver();
         this.context = context;
         this.setOnTouchListener(this);
@@ -584,6 +596,7 @@ public class MySurfaceView extends SurfaceView implements
                 scaledBitmap = bitmapWithElements;
             }
             canvas.scale(loupeX, loupeY);
+           // canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
             canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
 
             paint.setARGB(128, 255, 0, 0);

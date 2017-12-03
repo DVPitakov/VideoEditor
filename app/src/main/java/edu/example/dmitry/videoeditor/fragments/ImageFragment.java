@@ -44,14 +44,6 @@ public class ImageFragment extends Fragment {
 
     public ImageFragment() {}
 
-
-    public static ImageFragment newInstance(String param1, String param2) {
-        ImageFragment fragment = new ImageFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
