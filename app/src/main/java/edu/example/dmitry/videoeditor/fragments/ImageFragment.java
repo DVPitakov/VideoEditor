@@ -52,11 +52,15 @@ public class ImageFragment extends Fragment {
 
         sendButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_image_send_button));
         sendButton.setOnClickListener(new View.OnClickListener() {
+            long lastCallTime = 0;
             @Override
             public void onClick(View view) {
-                Bitmap bitmap =  ImageHolder.getInstance().getBitmapWithElements();
-                MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bitmap, "image" , null);
-                Tools.saveAndSendImage(bitmap, getActivity());
+                long callTime = System.currentTimeMillis();
+                if (callTime - lastCallTime > 1500) {
+                    Bitmap bitmap = ImageHolder.getInstance().getBitmapWithElements();
+                    Tools.saveAndSendImage(bitmap, getActivity());
+                }
+                lastCallTime = callTime;
             }
         });
         rootView.findViewById(edu.example.dmitry.videoeditor.R.id.fragment_image_ok_button).setVisibility(View.GONE);
