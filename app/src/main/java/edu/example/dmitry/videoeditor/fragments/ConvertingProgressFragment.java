@@ -75,6 +75,7 @@ public class ConvertingProgressFragment extends DialogFragment implements Curren
         progressBar = (ProgressBar) (rootView.findViewById(edu.example.dmitry.videoeditor.R.id.converting_progress_bar));
 
         builder.setView(rootView);
+        setCancelable(false);
         // Add action buttons
         return builder.create();
     }

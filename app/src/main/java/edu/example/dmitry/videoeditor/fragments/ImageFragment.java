@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,20 +17,12 @@ import android.widget.ImageButton;
 
 import edu.example.dmitry.videoeditor.EditorActivity;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
+import edu.example.dmitry.videoeditor.holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
 import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.items.RisunocItem;
 import edu.example.dmitry.videoeditor.items.TextItem;
 import edu.example.dmitry.videoeditor.Tools;
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ImageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ImageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 
 
 public class ImageFragment extends Fragment {
@@ -49,6 +42,7 @@ public class ImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    Handler handler;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -113,6 +107,21 @@ public class ImageFragment extends Fragment {
             }
         });
 
+        handler = new Handler();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(mySurfaceView != null) {
+                        mySurfaceView.draw();
+                    }
+                }
+                catch (Exception e) {
+                }
+
+                handler.postDelayed(this, 500);
+            }
+        });
 
         return rootView;
     }

@@ -369,6 +369,7 @@ public class MySurfaceView extends SurfaceView implements
     }
 
     public void doKrop() {
+
         kropUnset();
         Rect rect = getKropRect();
         Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
@@ -423,6 +424,13 @@ public class MySurfaceView extends SurfaceView implements
 
     public void kropSet() {
         isKrop = true;
+        BaseItem tg = CurrentElementHolder.getInstance().getCurrentElement();
+        if (tg != null) {
+            CurrentElementHolder.getInstance().getCurrentElement().focusLosed();
+            CurrentElementHolder.getInstance().setCurrentElement(null);
+            ImageHolder.getInstance().setBitmapWithElements(null);
+        }
+
         kropFrame = new KropFrame(
                 (int)alignLeft
                 ,(int)alignTop
@@ -539,6 +547,8 @@ public class MySurfaceView extends SurfaceView implements
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
+        //canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
+
         eventTransformator.onTouch(view, motionEvent);
         draw(surfaceHolder);
         return true;
@@ -578,10 +588,10 @@ public class MySurfaceView extends SurfaceView implements
                             kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
                             ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
                         }
-                        alignLeft = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
-                        alignTop = getHeight() / loupeY / 2 - kropedBitmap.getHeight() / 2;
+                        alignLeft = getWidth()  / loupeX/ 2 - kropedBitmap.getWidth() / 2;
+                        alignTop = getHeight()  / loupeY / 2 - kropedBitmap.getHeight() / 2;
                         alignLeftOld = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
-                        alignTopOld = getHeight() /loupeY / 2 - kropedBitmap.getHeight() / 2;
+                        alignTopOld = getHeight()  / loupeY / 2 - kropedBitmap.getHeight() / 2;
                         freshBitmap = ImageEditor.getEffectByNum(HistoryHolder.getInstance().lastEffect
                                 , kropedBitmap);
                         ImageHolder.getInstance().setFreshBitmap(freshBitmap);
@@ -596,7 +606,7 @@ public class MySurfaceView extends SurfaceView implements
                 scaledBitmap = bitmapWithElements;
             }
             canvas.scale(loupeX, loupeY);
-           // canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
+            //canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
             canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
 
             paint.setARGB(128, 255, 0, 0);

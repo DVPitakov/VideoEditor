@@ -81,7 +81,18 @@ public class ImageEventTransformator implements View.OnTouchListener {
     private HashMap<Integer, Float> fingerDetouchX = new HashMap<>();
     private HashMap<Integer, Float> fingerDetouchY = new HashMap<>();
 
+    private int dx = 0;
+    private int dy = 0;
 
+    public boolean onTouch(View view, MotionEvent motionEvent, int dx, int dy) {
+        this.dx = dx;
+        this.dy = dy;
+        boolean res = onTouch(view, motionEvent);
+        this.dx = 0;
+        this.dy = 0;
+        return res;
+
+    }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -95,8 +106,8 @@ public class ImageEventTransformator implements View.OnTouchListener {
                 Log.d("1130", "ACTION_DOWN");
                 fingerTouchsCount = 1;
                 for (int i = 0; i < count; i++) {
-                    fingerTouchX.put(i, motionEvent.getX(i));
-                    fingerTouchY.put(i, motionEvent.getY(i));
+                    fingerTouchX.put(i, motionEvent.getX(i) + dx);
+                    fingerTouchY.put(i, motionEvent.getY(i) + dy);
                 }
                 if(clickListener != null && count == 1) {
                     clickListener.onClick(fingerTouchX.get(0), fingerTouchY.get(0));
@@ -108,8 +119,8 @@ public class ImageEventTransformator implements View.OnTouchListener {
                 Log.d("1130", "ACTION_POINTER_DOWN");
                 fingerTouchsCount++;
                 for (int i = 0; i < count; i++) {
-                    fingerTouchX.put(i, motionEvent.getX(i));
-                    fingerTouchY.put(i, motionEvent.getY(i));
+                    fingerTouchX.put(i, motionEvent.getX(i) + dx);
+                    fingerTouchY.put(i, motionEvent.getY(i) + dy);
                 }
                 break;
             }
@@ -117,8 +128,8 @@ public class ImageEventTransformator implements View.OnTouchListener {
             case MotionEvent.ACTION_MOVE: {
                 Log.d("1130", "ACTION_MOVE");
                 for (int i = 0; i < count; i++) {
-                    fingerMoveX.put(i, motionEvent.getX(i));
-                    fingerMoveY.put(i, motionEvent.getY(i));
+                    fingerMoveX.put(i, motionEvent.getX(i) + dx);
+                    fingerMoveY.put(i, motionEvent.getY(i) + dy);
                 }
                 if(moveListener != null && count == 1) {
                     moveListener.onMove(fingerMoveX.get(0) - fingerTouchX.get(0)
@@ -145,8 +156,8 @@ public class ImageEventTransformator implements View.OnTouchListener {
             case MotionEvent.ACTION_POINTER_UP: {
                 Log.d("1130", "ACTION_POINTER_UP");
                 for (int i = 0; i < count; i++) {
-                    fingerMoveX.put(i, motionEvent.getX(i));
-                    fingerMoveY.put(i, motionEvent.getY(i));
+                    fingerMoveX.put(i, motionEvent.getX(i) + dx);
+                    fingerMoveY.put(i, motionEvent.getY(i) + dy);
                 }
                 if(scaleListener != null) {
                     scaleListener.onScaleEnd(Tools.getLoupe(
@@ -168,10 +179,10 @@ public class ImageEventTransformator implements View.OnTouchListener {
             case MotionEvent.ACTION_CANCEL: {
                 Log.d("1130", "ACTION_UP");
                 for (int i = 0; i < count; i++) {
-                    fingerMoveX.put(i, motionEvent.getX(i));
-                    fingerMoveY.put(i, motionEvent.getY(i));
-                    fingerDetouchX.put(i, motionEvent.getX(i));
-                    fingerDetouchY.put(i, motionEvent.getY(i));
+                    fingerMoveX.put(i, motionEvent.getX(i) + dx);
+                    fingerMoveY.put(i, motionEvent.getY(i) + dy);
+                    fingerDetouchX.put(i, motionEvent.getX(i) + dx);
+                    fingerDetouchY.put(i, motionEvent.getY(i) + dy);
                 }
                 if (moveListener != null) {
                     moveListener.onMoveEnd(fingerMoveX.get(0) - fingerTouchX.get(0)

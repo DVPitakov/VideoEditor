@@ -149,9 +149,9 @@ public class KropFrame {
         dark.setStyle(Paint.Style.FILL);
         dark.setColor(0xA0000000);
 
-        canvas.drawRect(0, 0, mright+ timeX, top, dark);
-        canvas.drawRect(0, bottom, mright+ timeX, mbotton + timeY, dark);
-        canvas.drawRect(0, top, left, bottom, dark);
+        canvas.drawRect(-600000, -600000, mright+ timeX, top, dark);
+        canvas.drawRect(-600000, bottom, mright+ timeX, mbotton + timeY, dark);
+        canvas.drawRect(-600000, top, left, bottom, dark);
         canvas.drawRect(right, top, mright + timeX, bottom, dark);
 
         Paint paint = new Paint();

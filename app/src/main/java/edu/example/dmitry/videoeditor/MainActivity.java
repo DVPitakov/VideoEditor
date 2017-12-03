@@ -73,11 +73,10 @@ public class MainActivity extends FragmentActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Tools.setForceVideo(false);
-            Log.d("debugshit", "inputUri " + inputUri);
             outputUri = inputUri;
             inputPathView.setText(inputUri.toString());
             outputPathView.setText(outputUri.toString());
-            SettingsVideo.setInput(inputUri);
+            SettingsVideo.setInput(inputUri, this);
             SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");
             Intent intent = new Intent(MainActivity.this, EditorActivity.class);
             intent.putExtra(EditorActivity.INPUT_URI, inputUri);
@@ -86,11 +85,10 @@ public class MainActivity extends FragmentActivity {
         }
         else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Tools.setForceVideo(true);
-            Log.d("debugshit", "inputUri " + inputUri);
             outputUri = inputUri;
             inputPathView.setText(inputUri.toString());
             outputPathView.setText(outputUri.toString());
-            SettingsVideo.setInput(inputUri);
+            SettingsVideo.setInput(inputUri, this);
             SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");
             Intent intent = new Intent(MainActivity.this, EditorActivity.class);
             intent.putExtra(EditorActivity.INPUT_URI, inputUri);
@@ -104,8 +102,8 @@ public class MainActivity extends FragmentActivity {
                 outputUri = data.getData();
                 outputPathView.setText(outputUri.toString());
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                SettingsVideo.setInput(inputUri);
-                SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");
+                SettingsVideo.setInput(inputUri, this);
+                SettingsVideo.generateOutput();
                 intent.putExtra(EditorActivity.INPUT_URI, inputUri);
                 intent.putExtra(EditorActivity.OUTPUT_URI, outputUri);
                 startActivityForResult(intent, 3);
@@ -204,7 +202,7 @@ public class MainActivity extends FragmentActivity {
                 inputPathView.setText(inputUri.toString());
                 outputPathView.setText(outputUri.toString());
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                SettingsVideo.setInput(inputUri);
+                SettingsVideo.setInput(inputUri, MainActivity.this);
                 SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");
                 intent.putExtra(EditorActivity.INPUT_URI, inputUri);
                 intent.putExtra(EditorActivity.OUTPUT_URI, outputUri);

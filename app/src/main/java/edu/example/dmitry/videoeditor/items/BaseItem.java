@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.View;
 
+import edu.example.dmitry.videoeditor.R;
 import edu.example.dmitry.videoeditor.holders.HistoryHolder;
 import edu.example.dmitry.videoeditor.models.SettingsData;
 import edu.example.dmitry.videoeditor.Tools;
@@ -22,6 +23,7 @@ public abstract class BaseItem {
     protected static Bitmap rot = null;
     protected static Bitmap scale = null;
     protected static Bitmap delete = null;
+    protected static Bitmap ok = null;
 
     protected float rotate_button_width;
     protected float rotate_button_height;
@@ -59,6 +61,11 @@ public abstract class BaseItem {
             rot = BitmapFactory.decodeResource(view.getResources(), edu.example.dmitry.videoeditor.R.drawable.refresh_button);
             rot = Bitmap.createScaledBitmap(rot, (int)rotate_button_width, (int)rotate_button_height, false);
         //}
+            rotate_button_width = view.getResources().getDimension(R.dimen.item_rotate_button_width);
+            rotate_button_height = view.getResources().getDimension(R.dimen.item_rotate_button_height);
+            ok = BitmapFactory.decodeResource(view.getResources(), R.drawable.check);
+            ok = Bitmap.createScaledBitmap(ok, (int)rotate_button_width, (int)rotate_button_height, false);
+        //
         //if (scale == null) {
             rotate_button_width = view.getResources().getDimension(edu.example.dmitry.videoeditor.R.dimen.item_rotate_button_width);
             rotate_button_height = view.getResources().getDimension(edu.example.dmitry.videoeditor.R.dimen.item_rotate_button_height);
@@ -244,7 +251,7 @@ public abstract class BaseItem {
                     , rect.bottom - rect.top
                     , rotate_button_width / 2
                     , fontPaint);
-            canvas.drawBitmap(scale, -rotate_button_width / 2, rect.bottom - rect.top - rotate_button_height / 2, fontPaint);
+            canvas.drawBitmap(ok, -rotate_button_width / 2, rect.bottom - rect.top - rotate_button_height / 2, fontPaint);
             canvas.drawCircle(rect.right - rect.left
                     , 0
                     , rotate_button_width / 2

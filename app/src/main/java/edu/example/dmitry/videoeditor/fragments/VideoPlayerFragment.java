@@ -120,8 +120,6 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
             public void onClick(View view) {
                 new ConvertingProgressFragment().show(getActivity().getSupportFragmentManager()
                         , ConvertingProgressFragment.class.getName());
-                Log.d("2010", "leftCur" + leftCur);
-                Log.d("2010", "rightCur" + rightCur);
                 new DecodeVideo(getActivity(), leftCur,rightCur
                         , CurrentVideoHolder.getInstance().getCompressType());
 
@@ -152,6 +150,12 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
             }
         });
         crosButton = (ImageButton)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.crosButton));
+        crosButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

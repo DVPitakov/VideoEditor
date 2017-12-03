@@ -27,7 +27,7 @@ public class TextItem extends BaseItem {
     public TextItem(View view, String text, int left, int bottom) {
         super(view);
         rect = new Rect();
-        rect.set(left - textSizeD / 4  * text.length(), bottom - textSizeD, left + textSizeD / 4 * text.length(), bottom + textSizeD / 2);
+        rect.set(left - textSizeD / 4  * text.length(), bottom - 2*textSizeD, left + textSizeD / 4 * text.length(), bottom + textSizeD);
         setTextSize(1);
         this.text = text;
 
@@ -55,7 +55,7 @@ public class TextItem extends BaseItem {
         Log.d("step", "setTextSize");
         textSizeD = (int)(textSize * timeScale);
         rect.set(rect.left,
-                rect.bottom - (int)(textSizeD * 1),
+                rect.bottom - (int)(textSizeD * 1.3),
                 (int)(rect.left + textSizeD / 1.8 * text.length()),
                 rect.bottom);
 

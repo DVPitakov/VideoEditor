@@ -1,8 +1,12 @@
 package edu.example.dmitry.videoeditor;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
+
+import java.io.File;
 
 import edu.example.dmitry.videoeditor.holders.UrlHolder;
 
@@ -20,17 +24,24 @@ public class SettingsVideo {
     static private float compression_ratio;
     static private Context context;
 
-    public static void setInput(Uri uri){
+    public static void setInput(Uri uri, Activity a){
         SettingsVideo._input_uri = uri;
         try {
-            SettingsVideo._input_path = UrlHolder.getFilePath(context,_input_uri);
+            SettingsVideo._input_path = UrlHolder.getFilePath(a,_input_uri);
         }
         catch (Exception e) {
+
             SettingsVideo._input_path = uri.toString();
             Log.d(":-(", ":-(");
         }
 
     }
+
+    public static void generateOutput() {
+        SettingsVideo._output_path = SettingsVideo.getInput("") + "tmp.mp4";
+    }
+
+
 
     public static void setInput(String path) {
         SettingsVideo._input_path = path;
