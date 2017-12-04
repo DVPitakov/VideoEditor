@@ -131,7 +131,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
                     fingerMoveX.put(i, motionEvent.getX(i) + dx);
                     fingerMoveY.put(i, motionEvent.getY(i) + dy);
                 }
-                if(moveListener != null && count == 1) {
+                if(moveListener != null && count == 1 && index == 0) {
                     moveListener.onMove(fingerMoveX.get(0) - fingerTouchX.get(0)
                             , fingerMoveY.get(0) - fingerTouchY.get(0));
                 }

@@ -19,6 +19,7 @@ import edu.example.dmitry.videoeditor.EditorActivity;
 import edu.example.dmitry.videoeditor.holders.CurrentElementHolder;
 import edu.example.dmitry.videoeditor.holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
+import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.items.RisunocItem;
 import edu.example.dmitry.videoeditor.items.TextItem;
@@ -30,11 +31,26 @@ public class ImageFragment extends Fragment {
     private FrameLayout surfaceViewPos;
     private OnFragmentInteractionListener mListener;
     private ImageButton sendButton;
+    private View rootView;
 
     ElementRedactorFragment elementRedactorHeader;
 
     MySurfaceView mySurfaceView;
 
+    public MySurfaceView updateSurface() {
+        surfaceViewPos = (FrameLayout)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.surface_view_pos));
+        surfaceViewPos.removeAllViews();
+        mySurfaceView = new MySurfaceView(surfaceViewPos.getContext());
+        SurfaceViewHolder.getInstance().setMySurfaceView(mySurfaceView);
+        mySurfaceView.setImageParceErrorListener(new MySurfaceView.ImageParceErrorListener() {
+            @Override
+            public void onImageEpsent() {
+                getActivity().showDialog(777);
+                // getActivity().onBackPressed();
+            }
+        });
+        return mySurfaceView;
+    }
     public ImageFragment() {}
 
     @Override
@@ -46,7 +62,7 @@ public class ImageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_image, container, false);
+        rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_image, container, false);
         ImageHolder.getInstance().tryInit(getActivity());
 
 
@@ -72,7 +88,17 @@ public class ImageFragment extends Fragment {
             }
         });
         surfaceViewPos = (FrameLayout)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.surface_view_pos));
+        surfaceViewPos.removeAllViews();
         mySurfaceView = new MySurfaceView(surfaceViewPos.getContext());
+        SurfaceViewHolder.getInstance().setMySurfaceView(mySurfaceView);
+        mySurfaceView.setImageParceErrorListener(new MySurfaceView.ImageParceErrorListener() {
+            @Override
+            public void onImageEpsent() {
+                getActivity().showDialog(777);
+               // getActivity().onBackPressed();
+            }
+        });
+
         surfaceViewPos.addView(mySurfaceView);
         editText = ((EditorActivity)(getActivity())).editText;
         mySurfaceView.setLayoutParams(
@@ -130,6 +156,12 @@ public class ImageFragment extends Fragment {
         return rootView;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        SurfaceViewHolder.getInstance().setMySurfaceView(mySurfaceView);
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

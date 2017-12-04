@@ -1,5 +1,8 @@
 package edu.example.dmitry.videoeditor;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 import edu.example.dmitry.videoeditor.holders.FontHolder;
@@ -26,6 +30,7 @@ import edu.example.dmitry.videoeditor.fragments.PanelInstrumentImage;
 import edu.example.dmitry.videoeditor.fragments.PanelStckers;
 import edu.example.dmitry.videoeditor.items.ImageEditorQueue;
 import edu.example.dmitry.videoeditor.models.SettingsData;
+import edu.example.dmitry.videoeditor.views.MySurfaceView;
 
 public class EditorActivity extends FragmentActivity {
     public final static String INPUT_URI = "inputUri";
@@ -51,6 +56,14 @@ public class EditorActivity extends FragmentActivity {
                     .commit();
         }
         else if(SettingsData.getInstance(getApplicationContext()).isHistory() &&  HistoryHolder.getInstance().back()) {
+            MySurfaceView surfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
+            if (surfaceView == null) {
+                ImageFragment imageFragment = (ImageFragment)
+                        getSupportFragmentManager().findFragmentByTag(ImageFragment.class.getName());
+                if (imageFragment != null) {
+                    imageFragment.updateSurface();
+                }
+            }
             SurfaceViewHolder.getInstance().getMySurfaceView().focusLose();
             SurfaceViewHolder.getInstance().getMySurfaceView().draw();
         }
@@ -174,11 +187,10 @@ public class EditorActivity extends FragmentActivity {
 
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("LIFE_CIRCLE", "editor_activity_created");
         int state = 0;
         if (savedInstanceState != null) {
             state = savedInstanceState.getInt(EDITOR_STATE);
@@ -218,6 +230,11 @@ public class EditorActivity extends FragmentActivity {
                                             }
                                         });
         FontHolder.getInstance(getBaseContext());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(Tools.isVideo(SettingsVideo.getInput(""))) {
             showVideoBody();
             showDefaultVideoHeader();
@@ -226,8 +243,8 @@ public class EditorActivity extends FragmentActivity {
             showImageBody();
             showDefaultImageHeader();
         }
-    }
 
+    }
     private final String EDITOR_STATE = "ImageHolder.editor_state";
 
     @Override
@@ -248,6 +265,24 @@ public class EditorActivity extends FragmentActivity {
         SurfaceViewHolder.getInstance().setMySurfaceView(null);
         fragmentTransaction.commit();
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if (id ==777) {
+            AlertDialog.Builder adb = new AlertDialog.Builder(this);
+            adb.setCancelable(false);
+            adb.setTitle("Картинка не подходит");
+            adb.setMessage("Возможно картинка повреждена или имеет неподдерживаемый формат");
+            adb.setPositiveButton("Понятно", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    onBackPressed();
+                }
+            });
+            return adb.create();
+        }
+        return super.onCreateDialog(id);
     }
 
 

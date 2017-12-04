@@ -92,6 +92,10 @@ public class MySurfaceView extends SurfaceView implements
         this.startPlay = startPlay;
     }
 
+    public void setImageParceErrorListener(ImageParceErrorListener imageParceErrorListener) {
+        this.imageParceErrorListener = imageParceErrorListener;
+    }
+
 
     public interface FocusListener {
         void focusLosed(boolean setDefaultMenu);
@@ -492,10 +496,18 @@ public class MySurfaceView extends SurfaceView implements
         }
     }
 
+    public interface ImageParceErrorListener {
+        void onImageEpsent();
+    }
+    private ImageParceErrorListener imageParceErrorListener = null;
+
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         SurfaceViewHolder.getInstance().setMySurfaceView(this);
         CurrentVideoHolder.getInstance().setCurrentMediaPlayer(this);
+        if (surfaceHolder == null) {
+
+        }
         this.surfaceHolder = surfaceHolder;
         try {
             if (Tools.isVideo(SettingsVideo.getInput(""))) {
@@ -531,6 +543,14 @@ public class MySurfaceView extends SurfaceView implements
         }
         catch (IOException e) {
             Log.d("exc", "IOExcepiton in MySurfaceView.surfaceCreated");
+        }
+        catch (NullPointerException e) {
+            if(imageParceErrorListener != null) {
+                imageParceErrorListener.onImageEpsent();
+            }
+            else {
+                throw e;
+            }
         }
 
     }
