@@ -178,13 +178,23 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
 
     public void videoEnd() {
         isPlaying = false;
+        oldCur = -1;
         playButton.setImageDrawable(rootView.getResources().getDrawable(edu.example.dmitry.videoeditor.R.drawable.ic_play_circle_outline_black_24dp));
     }
 
 
+    float oldCur = -1;
     public void updateProgess(float cur) {
         if (isUpdatable) {
-            vc.setProgress(cur);
+            try {
+                if (!SurfaceViewHolder.getInstance().getMySurfaceView().mediaPlayerIsPlaying()) {
+                    rightOverflow(cur);
+                }
+                oldCur = cur;
+                vc.setProgress(cur);
+            }
+            catch (NullPointerException e) {}
+            Log.d("PROGRESS03", "prog: " + cur);
         }
 
     }
@@ -195,9 +205,6 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         if (context instanceof OnVideoPlayerFragmentInteractionListener) {
             Log.d("1999", "I am 1521");
             mListener = (OnVideoPlayerFragmentInteractionListener) context;
-        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -310,7 +317,8 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
                 Log.d("2317", "1000v0 " + (int)(v[1] * v[0]));
                 Log.d("2317", "v1" + (v[1]));
                 Log.d("2317", "v0" + (v[0]));
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
+                Log.e("Ex", e.toString());
             }
             retriever.release();
             Log.d("BITMAAP:", "bitmaap:" + bitmap);
@@ -320,7 +328,12 @@ public class VideoPlayerFragment extends Fragment implements VideoCropView.Video
         @Override
         protected void onPostExecute(BitmapAndInteger result) {
             super.onPostExecute(result);
-            vc.addVideoMoment(result.integer, result.bitmap);
+            try {
+                vc.addVideoMoment(result.integer, result.bitmap);
+            }
+            catch (Exception e) {
+                Log.e("Ex", e.toString());
+            }
         }
     }
 }

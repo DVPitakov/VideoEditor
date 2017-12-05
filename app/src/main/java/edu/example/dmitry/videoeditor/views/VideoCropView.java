@@ -239,7 +239,8 @@ public class VideoCropView extends View {
         float vWidth = getWidth() - 2 * borderWidth;
         float vLeftCur = (leftCur+leftCurTemp - leftest) / (rightest - leftest) * (vWidth);
         float vRightCur = (rightCur+rightCurTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;
-        if (polzunoc < leftCur) {
+        float img_progress = 0;
+        if (progress < leftCur) {
            //if(videoCropViewListener != null) {
            //    progress = leftCur;
           //     videoCropViewListener.leftOverflow(progress);
@@ -253,13 +254,15 @@ public class VideoCropView extends View {
        }
       //  }
       //  else {
-            polzunoc = progress;
+
       //  }
+        polzunoc = progress;
         invalidate();
     }
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        float img_progress = leftCur - polzunoc;
         Log.d("debug1425", "i am here 9:" + leftCurTemp);
         float vWidth = getWidth() - 2 * borderWidth;
         float vHeight = getHeight();
@@ -267,7 +270,13 @@ public class VideoCropView extends View {
         float borderWidthHalf = borderWidth / 2.0f;
         float vLeftCur = (leftCur+leftCurTemp - leftest) / (rightest - leftest) * (vWidth);
         float vRightCur = (rightCur+rightCurTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;
-        float vPolzunoc = (polzunoc+polzunocTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;
+        float vPolzunoc = 0;
+        if (img_progress > 0) {
+            vPolzunoc = (polzunoc + img_progress + polzunocTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;
+        }
+        else {
+            vPolzunoc = (polzunoc + polzunocTemp - leftest) / (rightest - leftest) * (vWidth) + borderWidth;
+        }
 
         float imW = imagePos.getIntrinsicWidth();
         float loupe = 1.0f * getHeight() * 3 / 4/ imagePos.getIntrinsicHeight();

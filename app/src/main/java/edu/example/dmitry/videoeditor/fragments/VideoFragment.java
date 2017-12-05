@@ -16,6 +16,7 @@ import edu.example.dmitry.videoeditor.holders.CurrentVideoHolder;
 import edu.example.dmitry.videoeditor.DecodeVideo;
 import edu.example.dmitry.videoeditor.Decoder;
 import edu.example.dmitry.videoeditor.holders.ImageHolder;
+import edu.example.dmitry.videoeditor.holders.SurfaceViewHolder;
 import edu.example.dmitry.videoeditor.views.MySurfaceView;
 import edu.example.dmitry.videoeditor.SettingsVideo;
 
@@ -64,10 +65,11 @@ public class VideoFragment extends Fragment
         if (getArguments() != null) {}
     }
 
+    View rootView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_video, container, false);
+        rootView = inflater.inflate(edu.example.dmitry.videoeditor.R.layout.fragment_video, container, false);
         BitmapFactory.Options options=new BitmapFactory.Options();
         options.inSampleSize = 1;
         decoder = new Decoder();
@@ -130,21 +132,39 @@ public class VideoFragment extends Fragment
         super.onDestroy();
     }
 
+    boolean updaterCalled = false;
     @Override
     public void ready(Object object) {
-           getActivity().runOnUiThread(new Runnable() {
-               @Override
-               public void run() {
-                   if(videoPlayerFragment != null && !deleted) {
-                       videoPlayerFragment.updateProgess(
-                               100f *
-                                       mySurfaceView.getMediaPlayerCurrentPosition() /
-                                       CurrentVideoHolder.getInstance().getVideoLen()
-                       );
-                   }
-                   handler.postDelayed(this, 10);
-               }
-           });
+        if (!updaterCalled) {
+            updaterCalled = true;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (videoPlayerFragment != null && !deleted) {
+                        mySurfaceView = SurfaceViewHolder.getInstance().getMySurfaceView();
+                        if (mySurfaceView == null) {
+                            final float imageSize = getResources().getDimension(edu.example.dmitry.videoeditor.R.dimen.mySurfaceViewSize);
+                            surfaceViewPos = (FrameLayout)(rootView.findViewById(edu.example.dmitry.videoeditor.R.id.video_surface_view_pos));
+                            surfaceViewPos.removeAllViews();
+                            mySurfaceView = new MySurfaceView(getActivity().getBaseContext());
+                            mySurfaceView.setLayoutParams(
+                                    new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, (int)imageSize));
+                            SurfaceViewHolder.getInstance().setMySurfaceView(mySurfaceView);
+                            surfaceViewPos.addView(mySurfaceView);
+
+                        }
+
+                        videoPlayerFragment.updateProgess(
+                                100f *
+                                        SurfaceViewHolder.getInstance().getMySurfaceView()
+                                                .getMediaPlayerCurrentPosition() /
+                                        CurrentVideoHolder.getInstance().getVideoLen()
+                        );
+                    }
+                    handler.postDelayed(this, 20);
+                }
+            });
+        }
     }
 
 

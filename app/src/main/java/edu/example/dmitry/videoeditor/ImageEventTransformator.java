@@ -94,6 +94,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
 
     }
 
+    boolean doubleTouch = false;
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         int mark = motionEvent.getActionMasked();
@@ -103,6 +104,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
 
         switch (motionEvent.getActionMasked()) {
             case MotionEvent.ACTION_DOWN: {
+                doubleTouch = false;
                 Log.d("1130", "ACTION_DOWN");
                 fingerTouchsCount = 1;
                 for (int i = 0; i < count; i++) {
@@ -116,6 +118,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
 
             }
             case MotionEvent.ACTION_POINTER_DOWN: {
+                doubleTouch = true;
                 Log.d("1130", "ACTION_POINTER_DOWN");
                 fingerTouchsCount++;
                 for (int i = 0; i < count; i++) {
@@ -131,7 +134,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
                     fingerMoveX.put(i, motionEvent.getX(i) + dx);
                     fingerMoveY.put(i, motionEvent.getY(i) + dy);
                 }
-                if(moveListener != null && count == 1 && index == 0) {
+                if(moveListener != null && count == 1 && index == 0 && !doubleTouch) {
                     moveListener.onMove(fingerMoveX.get(0) - fingerTouchX.get(0)
                             , fingerMoveY.get(0) - fingerTouchY.get(0));
                 }
@@ -184,7 +187,7 @@ public class ImageEventTransformator implements View.OnTouchListener {
                     fingerDetouchX.put(i, motionEvent.getX(i) + dx);
                     fingerDetouchY.put(i, motionEvent.getY(i) + dy);
                 }
-                if (moveListener != null) {
+                if (moveListener != null && !doubleTouch) {
                     moveListener.onMoveEnd(fingerMoveX.get(0) - fingerTouchX.get(0)
                             , fingerMoveY.get(0) - fingerTouchY.get(0));
                 }

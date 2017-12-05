@@ -34,8 +34,6 @@ public class MainActivity extends FragmentActivity {
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
 
-    TextView inputPathView;
-    TextView outputPathView;
 
     Uri inputUri;
     Uri outputUri;
@@ -51,9 +49,6 @@ public class MainActivity extends FragmentActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_main);
-
-        inputPathView = (TextView)findViewById(R.id.inputPathView);
-        outputPathView = (TextView)findViewById(R.id.outputPathView);
         getPerrmisions();
     }
 
@@ -74,8 +69,6 @@ public class MainActivity extends FragmentActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Tools.setForceVideo(false);
             outputUri = inputUri;
-            inputPathView.setText(inputUri.toString());
-            outputPathView.setText(outputUri.toString());
             SettingsVideo.setInput(inputUri, this);
             SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");
             Intent intent = new Intent(MainActivity.this, EditorActivity.class);
@@ -86,8 +79,6 @@ public class MainActivity extends FragmentActivity {
         else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             Tools.setForceVideo(true);
             outputUri = inputUri;
-            inputPathView.setText(inputUri.toString());
-            outputPathView.setText(outputUri.toString());
             SettingsVideo.setInput(inputUri, this);
             SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");
             Intent intent = new Intent(MainActivity.this, EditorActivity.class);
@@ -98,9 +89,7 @@ public class MainActivity extends FragmentActivity {
         else if(requestCode == REQUEST_FILE_PICKED) {
             if (resultCode == RESULT_OK) {
                 inputUri = data.getData();
-                inputPathView.setText(inputUri.toString());
                 outputUri = data.getData();
-                outputPathView.setText(outputUri.toString());
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 SettingsVideo.setInput(inputUri, this);
                 SettingsVideo.generateOutput();
@@ -164,7 +153,12 @@ public class MainActivity extends FragmentActivity {
                         , bitmap
                         , "image.jpg"
                         , null);
-                inputUri = Uri.parse(str);
+                try {
+                    inputUri = Uri.parse(str);
+                }
+                catch (NullPointerException e) {
+                    Log.e("omg", e.toString());
+                }
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, inputUri);
                     startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
@@ -199,8 +193,6 @@ public class MainActivity extends FragmentActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 inputUri = Uri.parse((String) view.getTag());
                 outputUri = inputUri;
-                inputPathView.setText(inputUri.toString());
-                outputPathView.setText(outputUri.toString());
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 SettingsVideo.setInput(inputUri, MainActivity.this);
                 SettingsVideo.setOutput(SettingsVideo.getInput("") + "tmp.mp4");

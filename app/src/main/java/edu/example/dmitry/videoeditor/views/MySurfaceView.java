@@ -567,9 +567,10 @@ public class MySurfaceView extends SurfaceView implements
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        //canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
-
-        eventTransformator.onTouch(view, motionEvent);
+        eventTransformator.onTouch(view
+                , motionEvent
+                , (int)((loupeX - 1) * MySurfaceView.this.getWidth() / 2)
+                , (int)((loupeX - 1) * MySurfaceView.this.getHeight() / 2));
         draw(surfaceHolder);
         return true;
 
@@ -591,52 +592,63 @@ public class MySurfaceView extends SurfaceView implements
     private void draw(SurfaceHolder surfaceHolder) {
 
         if (Tools.isNotVideo(SettingsVideo.getInput(""))) {
-            Surface surface = surfaceHolder.getSurface();
-            Canvas canvas = surface.lockCanvas(null);
-            Paint paint = new Paint();
-            canvas.drawColor(Color.BLACK);
+            try {
+                Surface surface = surfaceHolder.getSurface();
+                Canvas canvas = surface.lockCanvas(null);
+                Paint paint = new Paint();
+                canvas.drawColor(Color.BLACK);
 
-            Bitmap scaledBitmap = ImageHolder.getInstance().getScaledBitmap();
-            Bitmap bitmapWithElements;
-            if (scaledBitmap == null) {
-                bitmapWithElements = ImageHolder.getInstance().getBitmapWithElements();
-                if(bitmapWithElements == null) {
-                    Bitmap freshBitmap = ImageHolder.getInstance().getFreshBitmap();
-                    if(freshBitmap == null) {
-                        Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
-                        if(kropedBitmap == null) {
-                            kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
-                            ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
+                Bitmap scaledBitmap = ImageHolder.getInstance().getScaledBitmap();
+                Bitmap bitmapWithElements;
+                if (scaledBitmap == null) {
+                    bitmapWithElements = ImageHolder.getInstance().getBitmapWithElements();
+                    if(bitmapWithElements == null) {
+                        Bitmap freshBitmap = ImageHolder.getInstance().getFreshBitmap();
+                        if(freshBitmap == null) {
+                            Bitmap kropedBitmap = ImageHolder.getInstance().getKropedBitmap();
+                            if(kropedBitmap == null) {
+                                kropedBitmap = ImageHolder.getInstance().getDefaultBitmap();
+                                ImageHolder.getInstance().setKropedBitmap(kropedBitmap);
+                            }
+                            alignLeft = getWidth()  / 2 - kropedBitmap.getWidth() / 2;
+                            alignTop = getHeight()   / 2 - kropedBitmap.getHeight() / 2;
+                            alignLeftOld = getWidth() / 2 - kropedBitmap.getWidth() / 2;
+                            alignTopOld = getHeight()  / 2 - kropedBitmap.getHeight() / 2;
+                            freshBitmap = ImageEditor.getEffectByNum(HistoryHolder.getInstance().lastEffect
+                                    , kropedBitmap);
+                            ImageHolder.getInstance().setFreshBitmap(freshBitmap);
                         }
-                        alignLeft = getWidth()  / loupeX/ 2 - kropedBitmap.getWidth() / 2;
-                        alignTop = getHeight()  / loupeY / 2 - kropedBitmap.getHeight() / 2;
-                        alignLeftOld = getWidth() / loupeX / 2 - kropedBitmap.getWidth() / 2;
-                        alignTopOld = getHeight()  / loupeY / 2 - kropedBitmap.getHeight() / 2;
-                        freshBitmap = ImageEditor.getEffectByNum(HistoryHolder.getInstance().lastEffect
-                                , kropedBitmap);
-                        ImageHolder.getInstance().setFreshBitmap(freshBitmap);
+                        bitmapWithElements = imageEditorQueue.draw(freshBitmap);
+                        ImageHolder.getInstance().setBitmapWithElements(bitmapWithElements);
                     }
-                    bitmapWithElements = imageEditorQueue.draw(freshBitmap);
-                    ImageHolder.getInstance().setBitmapWithElements(bitmapWithElements);
+                    iw = bitmapWithElements.getWidth();
+                    ih = bitmapWithElements.getHeight();
+                    //scaledBitmap = Bitmap.createScaledBitmap(bitmapWithElements, (int) (iw * loupeX), (int) (ih * loupeY), true);
+                    //ImageHolder.getInstance().setScaledBitmap(scaledBitmap);
+                    scaledBitmap = bitmapWithElements;
                 }
-                iw = bitmapWithElements.getWidth();
-                ih = bitmapWithElements.getHeight();
-                //scaledBitmap = Bitmap.createScaledBitmap(bitmapWithElements, (int) (iw * loupeX), (int) (ih * loupeY), true);
-                //ImageHolder.getInstance().setScaledBitmap(scaledBitmap);
-                scaledBitmap = bitmapWithElements;
-            }
-            canvas.scale(loupeX, loupeY);
-            //canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
-            canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
+                canvas.scale(loupeX, loupeY);
+                if (alignLeft * loupeX -(loupeX - 1) * getWidth() / 2 > getWidth()) {
+                    alignLeft = getWidth() / loupeX + (loupeX - 1) / loupeX * getWidth() / 2 - 5 * loupeX;
+                }
+                if (alignTop * loupeY - (loupeX - 1) * getHeight() / 2 > getHeight()) {
+                    alignTop = getHeight() / loupeY + (loupeX - 1) / loupeX * getHeight() / 2 - 5 * loupeY;
+                }
+                canvas.translate(-(loupeX - 1) / loupeX * getWidth() / 2,  - (loupeX - 1) / loupeX * getHeight() / 2);
+                canvas.drawBitmap(scaledBitmap, alignLeft, alignTop, paint);
 
-            paint.setARGB(128, 255, 0, 0);
-            paint.setStyle(Paint.Style.FILL);
-            paint.setAntiAlias(true);
-            if (isKrop) {
-                kropFrame.draw(canvas);
+                paint.setARGB(128, 255, 0, 0);
+                paint.setStyle(Paint.Style.FILL);
+                paint.setAntiAlias(true);
+                if (isKrop) {
+                    kropFrame.draw(canvas);
 
+                }
+                surface.unlockCanvasAndPost(canvas);
             }
-            surface.unlockCanvasAndPost(canvas);
+            catch (Exception e) {
+                Log.e("mySurfaceView.draw", e.toString());
+            }
         }
 
     }

@@ -38,7 +38,8 @@ public class SettingsVideo {
     }
 
     public static void generateOutput() {
-        SettingsVideo._output_path = SettingsVideo.getInput("") + "tmp.mp4";
+        SettingsVideo._output_path = _input_path + "tmp.mp4";
+        SettingsVideo._output_Uri = UrlHolder.getUri(SettingsVideo._output_path);
     }
 
 
